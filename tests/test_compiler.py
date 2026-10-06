@@ -42,6 +42,10 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(
             "skills/speckit-analyze/SKILL.md", package.manifest["source"]["path"]
         )
+        for path, content in package.files.items():
+            if path.endswith(".md"):
+                self.assertTrue(content.endswith("\n"), path)
+                self.assertFalse(content.endswith("\n\n"), path)
 
     def test_hook_optimization_is_explicit_and_fail_closed(self) -> None:
         baseline = ROOT / "skills" / "speckit-baseline" / "SKILL.md"

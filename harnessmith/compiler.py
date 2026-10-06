@@ -164,7 +164,11 @@ def verify_package(
             raise SkillCompilerError("missing provenance for extracted section: %s" % heading)
         output_path = str(transform["output"])
         output = package.files.get(output_path, "")
-        if section.text not in output and expected_extracted_section(ir, section) not in output:
+        source_section = _ensure_final_newline(section.text)
+        expected_section = _ensure_final_newline(
+            expected_extracted_section(ir, section)
+        )
+        if source_section not in output and expected_section not in output:
             raise SkillCompilerError(
                 "reference does not contain exact source section: %s" % heading
             )
@@ -182,7 +186,9 @@ def verify_package(
             and hashlib.sha256(section.text.encode("utf-8")).hexdigest()
             == source_sha256
         ]
-        if len(matches) != 1 or matches[0].text not in package.files.get(fallback, ""):
+        if len(matches) != 1 or _ensure_final_newline(
+            matches[0].text
+        ) not in package.files.get(fallback, ""):
             raise SkillCompilerError(
                 "hook optimization lost its exact fallback contract: %s"
                 % transform.get("event")
@@ -448,4 +454,4 @@ def _remove_empty_directories(root: Path) -> None:
 
 
 def _ensure_final_newline(text: str) -> str:
-    return text if text.endswith("\n") else text + "\n"
+    return text.rstrip("\n") + "\n"
