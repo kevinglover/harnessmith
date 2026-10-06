@@ -1,0 +1,70 @@
+"""Intermediate representation and output models."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+
+@dataclass(frozen=True)
+class FrontmatterField:
+    """One top-level YAML field, retained as source text."""
+
+    key: str
+    raw: str
+    start_line: int
+    end_line: int
+
+
+@dataclass(frozen=True)
+class Section:
+    """An ATX-heading section with source provenance."""
+
+    heading: str
+    level: int
+    start_line: int
+    end_line: int
+    start_offset: int
+    end_offset: int
+    text: str
+
+
+@dataclass(frozen=True)
+class SkillIR:
+    """Lossless source representation used by optimization passes."""
+
+    source_path: Path
+    source_id: str
+    source_text: str
+    source_sha256: str
+    frontmatter: Tuple[FrontmatterField, ...]
+    body: str
+    body_start_line: int
+    sections: Tuple[Section, ...]
+
+    def field(self, key: str) -> Optional[FrontmatterField]:
+        for item in self.frontmatter:
+            if item.key == key:
+                return item
+        return None
+
+
+@dataclass(frozen=True)
+class InvocationPolicy:
+    """Canonical invocation behavior independent of harness syntax."""
+
+    allow_model: bool = True
+    allow_user: bool = True
+
+
+@dataclass
+class CompiledPackage:
+    """Files and metadata produced by one compiler run."""
+
+    skill_name: str
+    target: str
+    files: Dict[str, str]
+    manifest: Dict[str, object]
+    metrics: Dict[str, int]
+    transformations: List[Dict[str, object]] = field(default_factory=list)
