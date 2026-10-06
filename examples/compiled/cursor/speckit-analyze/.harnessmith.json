@@ -1,0 +1,100 @@
+{
+  "compiler": {
+    "name": "harnessmith",
+    "version": "0.1.0"
+  },
+  "files": {
+    "SKILL.md": "171beb3dd6fabca675de5e579b0bf4f58eb79a6c13bc902b6ad55eec6e58bfea",
+    "references/4-detection-passes-token-efficient-analysis.md": "bd23fc2f9f5b34adbcaa0b3d1b683ea4b5fc55545490ad04a8799b0d288d5334",
+    "references/extension-hooks-fallback.md": "7bb367e4a642c8940d044391a3e57afb976e9e3664d7c29da34f6d74c72dd074",
+    "references/specification-analysis-report.md": "365b1e0e412b538acf4ae50f6857e75e5d0d3ca10693d9c6869cd82b92ef581c",
+    "scripts/resolve-extension-hooks.py": "f8773781b615e98935184bdc6c87dac3a8d9c9bad59ce0e57d5bd53f985631be"
+  },
+  "metrics": {
+    "compiled_root_chars": 6416,
+    "compiled_root_token_estimate": 1604,
+    "conditional_reference_chars": 4705,
+    "conditional_reference_token_estimate": 1177,
+    "mandatory_reference_chars": 3333,
+    "mandatory_reference_token_estimate": 834,
+    "normal_path_instruction_chars": 9749,
+    "normal_path_instruction_token_estimate": 2438,
+    "normal_path_reduction_percent": 21,
+    "packaged_instruction_chars": 14454,
+    "packaged_instruction_token_estimate": 3614,
+    "reference_chars": 8038,
+    "reference_token_estimate": 2011,
+    "root_char_reduction": 5847,
+    "root_reduction_percent": 48,
+    "script_chars": 10541,
+    "script_token_estimate": 2636,
+    "source_skill_chars": 12263,
+    "source_skill_token_estimate": 3066
+  },
+  "schema_version": 1,
+  "source": {
+    "path": "skills/speckit-analyze/SKILL.md",
+    "sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533"
+  },
+  "target": "cursor",
+  "transformations": [
+    {
+      "dropped": [
+        "argument-hint",
+        "user-invocable"
+      ],
+      "reason": "not supported by target; defaults or presentation-only metadata preserved behavior",
+      "type": "frontmatter-filter"
+    },
+    {
+      "heading": "4. Detection Passes (Token-Efficient Analysis)",
+      "output": "references/4-detection-passes-token-efficient-analysis.md",
+      "source_lines": [
+        125,
+        162
+      ],
+      "source_sha256": "7aa5bafaea9b7bbff97fb872e5198bb6becac70393b66a1c3bc064dfc3c1e8f5",
+      "type": "extract-section"
+    },
+    {
+      "heading": "Specification Analysis Report",
+      "output": "references/specification-analysis-report.md",
+      "source_lines": [
+        176,
+        251
+      ],
+      "source_sha256": "1b52ad62b44ddadde5f02356dba4af886d606334e417cf14c2c02d231c2eb900",
+      "type": "extract-section"
+    },
+    {
+      "event": "before_analyze",
+      "fallback": "references/extension-hooks-fallback.md",
+      "output": "SKILL.md",
+      "phase": "before",
+      "replacement_sha256": "1c2e3b5b58401df7729d2540e4b192270fc24bf2a9d4bc088ee1801e4df7cfc0",
+      "script": "scripts/resolve-extension-hooks.py",
+      "source_heading": "Pre-Execution Checks",
+      "source_lines": [
+        21,
+        61
+      ],
+      "source_sha256": "33f35bd94954558c4fd807701c62c05e47a6a63d0ce64a73f0e0ce9469a96048",
+      "type": "resolve-extension-hooks"
+    },
+    {
+      "event": "after_analyze",
+      "fallback": "references/extension-hooks-fallback.md",
+      "output": "references/specification-analysis-report.md",
+      "phase": "after",
+      "replacement_sha256": "b1325aea27121f3e67adfd635fcd2364b42c9a60da0abe2a683bfad19136dc48",
+      "script": "scripts/resolve-extension-hooks.py",
+      "source_heading": "9. Check for extension hooks",
+      "source_lines": [
+        214,
+        251
+      ],
+      "source_sha256": "9a49c1187b6240b7e4349d246dab18a1ba59aa4442252f37cb76856c2261a520",
+      "type": "resolve-extension-hooks"
+    }
+  ]
+}

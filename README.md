@@ -1,6 +1,6 @@
-# speckit-agent-skills
+# Harnessmith
 
-Agent skills and generated runtime entry points for [Spec Kit](https://github.com/github/spec-kit).
+Compile canonical Agent Skills into harness-aware packages, alongside generated runtime entry points for [Spec Kit](https://github.com/github/spec-kit).
 
 ## Overview
 
@@ -14,6 +14,43 @@ This repository tracks the current Spec Kit output together with a small set of 
 - **Spec Kit infrastructure** - `.specify/` contains integration state, manifests, scripts, and templates used by the generated skills and commands.
 
 The tracked Spec Kit version is recorded in [VERSION.md](./VERSION.md). CI checks the latest Spec Kit release and regenerates outputs only when that version changes.
+
+## Experimental harness-aware compiler
+
+This checkout includes a conservative compiler vertical slice for producing a
+harness-specific package from one canonical `SKILL.md`. It is intentionally
+separate from the Spec Kit-managed skill directories.
+
+```bash
+python3 -m harnessmith skills/speckit-analyze/SKILL.md \
+  --target cursor \
+  --output examples/compiled/cursor/speckit-analyze \
+  --source-id skills/speckit-analyze/SKILL.md \
+  --optimize-extension-hooks \
+  --extract-section '4. Detection Passes (Token-Efficient Analysis)' \
+  --extract-section 'Specification Analysis Report' \
+  --max-root-tokens 1700 \
+  --max-normal-path-tokens 2500
+```
+
+The compiler currently supports `generic`, `cursor`, `claude`, and `codex`
+frontmatter adapters. Section extraction is explicit and lossless unless an
+additional reviewed transform is selected. The hook optimization replaces only
+known Spec Kit hook contracts, bundles a read-only resolver, and retains the
+exact source instructions in a conditional fallback. A deterministic manifest
+records source and output hashes, normal-path context, packaged size, and every
+transformation. Compilation fails when a target cannot preserve behavior or an
+operator-supplied context budget.
+
+Run the test suite with:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+See [the investigation and design report](docs/harness-aware-skill-compilation.md)
+for the repository analysis, capability matrix, architecture, evaluation plan,
+measured example, upstream boundaries, and the404co linkage.
 
 ## Current integration model
 
@@ -45,8 +82,8 @@ Legacy layouts such as `.claude/commands/`, `.codex/prompts/`, and `.opencode/co
 1. Clone this repository.
 
    ```bash
-   git clone https://github.com/dceoy/speckit-agent-skills.git
-   cd speckit-agent-skills
+   git clone https://github.com/dceoy/harnessmith.git
+   cd harnessmith
    ```
 
 2. Install [Spec Kit](https://github.com/github/spec-kit).
