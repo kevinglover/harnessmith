@@ -181,7 +181,10 @@ def _fallback_reference(ir: SkillIR, sections: Sequence[Section]) -> str:
         "Use only the section for the current phase. These are the exact canonical "
         "instructions replaced by the deterministic resolver on its normal path.\n\n"
     )
-    return _ensure_final_newline(note + intro + "\n".join(section.text for section in sections))
+    section_text = "\n".join(
+        _ensure_final_newline(section.text) for section in sections
+    )
+    return _ensure_final_newline(note + intro + section_text)
 
 
 def _resolver_script(target: str) -> str:
