@@ -2,9 +2,16 @@
 
 Compile canonical Agent Skills into harness-aware packages, alongside generated runtime entry points for [Spec Kit](https://github.com/github/spec-kit).
 
+**Status:** Harnessmith is an experimental compiler prototype. Its command-line
+interface, package format, and optimization passes may change before a stable
+release.
+
 ## Overview
 
-This repository tracks the current Spec Kit output together with a small set of repository-specific skills.
+This repository began as an extension of
+[dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills).
+It retains the current Spec Kit output and repository-specific skills as
+real-world fixtures while developing the harness-aware compiler.
 
 - **Shared Agent Skills** - `skills/` contains the shared `speckit-*` skills plus repository-specific skills. Claude Code uses them through `.claude/skills`, while Codex CLI uses them through `.agents/skills`.
 - **Cursor Agent** - Spec Kit-generated skills live in `.cursor/skills/`.
@@ -13,7 +20,9 @@ This repository tracks the current Spec Kit output together with a small set of 
 - **Gemini CLI** - `.gemini/commands/` remains checked in, but Gemini is not part of the current CI regeneration set.
 - **Spec Kit infrastructure** - `.specify/` contains integration state, manifests, scripts, and templates used by the generated skills and commands.
 
-The tracked Spec Kit version is recorded in [VERSION.md](./VERSION.md). CI checks the latest Spec Kit release and regenerates outputs only when that version changes.
+The tracked Spec Kit version is recorded in [VERSION.md](./VERSION.md). The
+manually triggered update workflow checks the latest Spec Kit release and
+regenerates outputs only when that version changes.
 
 ## Experimental harness-aware compiler
 
@@ -50,11 +59,11 @@ python3 -m unittest discover -s tests -v
 
 See [the investigation and design report](docs/harness-aware-skill-compilation.md)
 for the repository analysis, capability matrix, architecture, evaluation plan,
-measured example, upstream boundaries, and the404co linkage.
+measured example, and upstream boundaries.
 
 ## Current integration model
 
-The repository CI currently runs `specify init --integration` for:
+The manual Spec Kit update workflow runs `specify init --integration` for:
 
 - `codex`
 - `agy`
@@ -82,7 +91,7 @@ Legacy layouts such as `.claude/commands/`, `.codex/prompts/`, and `.opencode/co
 1. Clone this repository.
 
    ```bash
-   git clone https://github.com/dceoy/harnessmith.git
+   git clone https://github.com/kevinglover/harnessmith.git
    cd harnessmith
    ```
 

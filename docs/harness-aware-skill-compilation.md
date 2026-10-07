@@ -15,7 +15,7 @@ creating a manually maintained fork, but only if compilation is conservative:
 The implemented vertical slice proves those mechanics for
 `skills/speckit-analyze/SKILL.md` and Cursor. The reviewed optimization reduces
 the root from an estimated 3,066 tokens to 1,604 tokens (48%). More importantly,
-the normal static path—root plus mandatory references—falls to 2,438 tokens,
+the normal static path—root plus mandatory references—falls to 2,437 tokens,
 21% below the canonical skill. The package also retains the exact original hook
 contracts as a conditional fallback. Estimates use a reproducible four
 characters per token; behavioral agent evals are still required before treating
@@ -338,49 +338,41 @@ Measured output:
 | --- | ---: | ---: | ---: |
 | Canonical root | 12,263 | 3,066 | — |
 | Compiled root | 6,416 | 1,604 | 48% smaller |
-| Mandatory references | 3,333 | 834 | Loaded by the normal path |
-| Normal static path | 9,749 | 2,438 | 21% smaller |
-| Conditional exact fallback | 4,705 | 1,177 | Loaded only when resolver reports `unavailable` |
-| All packaged Markdown | 14,454 | 3,614 | 18% larger, not normally all loaded |
+| Mandatory references | 3,331 | 833 | Loaded by the normal path |
+| Normal static path | 9,747 | 2,437 | 21% smaller |
+| Conditional exact fallback | 4,704 | 1,176 | Loaded only when resolver reports `unavailable` |
+| All packaged Markdown | 14,451 | 3,613 | 18% larger, not normally all loaded |
 | Resolver script | 10,541 | 2,636 | Executed without loading its implementation |
 
 The compiler reports both path-loaded and packaged size so a smaller root cannot
 hide a larger mandatory path. Runtime script output and actual tokenizer counts
 still require behavioral traces.
 
-## the404co linkage
+## Generalization beyond Spec Kit
 
-The existing `the404co-field-note-workflow` skill is a compelling second
-real-world fixture. It has the same compiler-relevant shape as the larger Spec
-Kit workflows:
+A second real-world fixture should come from a different domain and exercise the
+same compiler-relevant shape as the larger Spec Kit workflows:
 
-- global invariants: exactly one Field Note, preserve voice, avoid theme and
-  phrasing repetition, separate environment failures from content failures;
-- ordered stages: editorial inventory, angle selection, drafting, cleanup,
-  record updates, optional LinkedIn packaging, validation, handoff;
-- conditional material: the content-model read, automation-memory update, and
-  LinkedIn companion branch;
-- deterministic mechanics: archive/title scans, word-band calculation,
-  frontmatter validation, changed-file checks, and validation command selection;
-- detailed remediation material: Node resolution, font-network failure
-  classification, dirty-checkout verification, and rhetoric cleanup patterns.
+- global invariants and approval boundaries;
+- ordered stages with semantically meaningful sequencing;
+- conditional branches and supporting references;
+- deterministic validation or normalization mechanics;
+- detailed remediation material needed only after a specific failure.
 
-That makes it useful for proving this compiler is not secretly coupled to Spec
-Kit. A conservative the404co recipe would keep editorial identity, one-post
-scope, selection rules, approval boundaries, and the top-level procedure in
-`SKILL.md`; move branch-specific LinkedIn guidance and detailed failure
-remediation to references; and consider scripts only for mechanical checks.
+An editorial or publishing workflow would be a useful candidate because it
+combines qualitative judgment with mechanical validation. A conservative recipe
+would keep identity, scope, selection rules, approval boundaries, and the
+top-level procedure in `SKILL.md`; move branch-specific guidance and detailed
+failure remediation to references; and consider scripts only for mechanical
+checks.
 
-There is also an immediate portability finding: its current frontmatter combines
+A particularly useful portability test is a source skill that combines
 `disable-model-invocation: true` with `user-invocable: false`. Claude documents
-those as disabling model invocation and user invocation respectively, while
-Codex does not use those SKILL.md fields for invocation policy. Before compiling
-that skill, the intended policy must be made explicit. The compiler correctly
-refuses to map `user-invocable: false` to Cursor or Codex because no documented
-equivalent exists. That fail-closed behavior is the useful the404co linkage—not
-a special-case adapter.
-
-No the404co repository files are changed by this slice.
+those as separate model- and user-invocation controls, while Codex does not use
+those `SKILL.md` fields for invocation policy. The intended policy must therefore
+be explicit before compilation. The compiler correctly refuses to map
+`user-invocable: false` to Cursor or Codex when no documented equivalent exists;
+that fail-closed behavior is the generalizable result.
 
 ## What belongs upstream
 
