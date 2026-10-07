@@ -1,6 +1,6 @@
 # Harnessmith
 
-Compile canonical Agent Skills into harness-aware packages, alongside generated runtime entry points for [Spec Kit](https://github.com/github/spec-kit).
+Audit and compile Agent Skills into packages optimized for a target harness.
 
 **Status:** Harnessmith is an experimental compiler prototype. Its command-line
 interface, package format, and optimization passes may change before a stable
@@ -8,48 +8,62 @@ release.
 
 ## Overview
 
+Harnessmith treats `SKILL.md` as the source format and keeps harness
+compatibility, context budgets, and reviewed optimizations in one compiler. A
+source can be a local skill, an upstream checkout, or a generated skill such as
+Spec Kit output.
+
+The current workflow has three layers:
+
+- **Audit** measures any skill without changing it and identifies sections that
+  deserve human review.
+- **Recipe** records exact extraction choices, target policy, budgets, and the
+  reviewed source hash.
+- **Compile** applies only deterministic, selected transforms and emits a
+  provenance manifest.
+
 This repository began as an extension of
-[dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills).
-It retains the current Spec Kit output and repository-specific skills as
-real-world fixtures while developing the harness-aware compiler.
+[dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills), so
+its existing Spec Kit integrations remain useful fixtures. They are no longer
+the compiler's product boundary.
 
-- **Shared Agent Skills** - `skills/` contains the shared `speckit-*` skills plus repository-specific skills. Claude Code uses them through `.claude/skills`, while Codex CLI uses them through `.agents/skills`.
-- **Cursor Agent** - Spec Kit-generated skills live in `.cursor/skills/`.
-- **GitHub Copilot CLI** - Spec Kit-generated agents and prompt wrappers live in `.github/agents/` and `.github/prompts/`.
-- **OpenCode** - Spec Kit-generated commands live in `.opencode/commands/`.
-- **Gemini CLI** - `.gemini/commands/` remains checked in, but Gemini is not part of the current CI regeneration set.
-- **Spec Kit infrastructure** - `.specify/` contains integration state, manifests, scripts, and templates used by the generated skills and commands.
+## Audit any Agent Skill
 
-The tracked Spec Kit version is recorded in [VERSION.md](./VERSION.md). The
-manually triggered update workflow checks the latest Spec Kit release and
-regenerates outputs only when that version changes.
-
-## Experimental harness-aware compiler
-
-This checkout includes a conservative compiler vertical slice for producing a
-harness-specific package from one canonical `SKILL.md`. It is intentionally
-separate from the Spec Kit-managed skill directories.
+Pass either a skill directory or its `SKILL.md`:
 
 ```bash
-python3 -m harnessmith skills/speckit-analyze/SKILL.md \
+python3 -m harnessmith /path/to/example-skill \
   --target cursor \
-  --output examples/compiled/cursor/speckit-analyze \
-  --source-id skills/speckit-analyze/SKILL.md \
-  --optimize-extension-hooks \
-  --extract-section '4. Detection Passes (Token-Efficient Analysis)' \
-  --extract-section 'Specification Analysis Report' \
-  --max-root-tokens 1700 \
-  --max-normal-path-tokens 2500
+  --audit \
+  --json
 ```
 
-The compiler currently supports `generic`, `cursor`, `claude`, and `codex`
-frontmatter adapters. Section extraction is explicit and lossless unless an
-additional reviewed transform is selected. The hook optimization replaces only
-known Spec Kit hook contracts, bundles a read-only resolver, and retains the
-exact source instructions in a conditional fallback. A deterministic manifest
-records source and output hashes, normal-path context, packaged size, and every
-transformation. Compilation fails when a target cannot preserve behavior or an
-operator-supplied context budget.
+Audit mode is read-only. Its suggestions are review candidates, not automatic
+rewrites: heading names and size can reveal context pressure, but only a human
+or reviewed recipe can decide whether prose is safe to load conditionally.
+
+## Compile with a pinned recipe
+
+Recipes make optimization decisions reproducible and keep them separate from
+upstream skills:
+
+```bash
+python3 -m harnessmith skills/speckit-analyze \
+  --recipe recipes/speckit-analyze.cursor.json \
+  --output examples/compiled/cursor/speckit-analyze
+```
+
+A recipe pins the source SHA-256. If the upstream skill changes, compilation
+fails until the skill is audited and the recipe is reviewed again. Command-line
+options can still drive one-off compilation, but checked-in recipes are the
+preferred path for maintained outputs.
+
+The compiler supports `generic`, `cursor`, `claude`, and `codex` frontmatter
+adapters. Exact-heading extraction is explicit and lossless. Specialized
+optimizations are named and opt-in; the current Spec Kit extension-hook pass is
+one such transform, not a general assumption. A deterministic manifest records
+source, recipe, and output hashes, path-loaded context, packaged size, and every
+transformation.
 
 Run the test suite with:
 
@@ -59,7 +73,9 @@ python3 -m unittest discover -s tests -v
 
 See [the investigation and design report](docs/harness-aware-skill-compilation.md)
 for the repository analysis, capability matrix, architecture, evaluation plan,
-measured example, and upstream boundaries.
+measured example, and upstream boundaries. See the
+[cross-repository evaluation corpus](docs/evaluation-corpus.md) for pinned
+skills from other ecosystems that exercise the generic path.
 
 ## Current integration model
 
@@ -86,7 +102,7 @@ The generated files are therefore not all stored in the same layout:
 
 Legacy layouts such as `.claude/commands/`, `.codex/prompts/`, and `.opencode/command/` are intentionally not maintained.
 
-## Quickstart
+## Spec Kit fixture quickstart
 
 1. Clone this repository.
 
@@ -183,6 +199,10 @@ Most Spec Kit-managed skills are tracked by the manifests in `.specify/integrati
 
 ```text
 .
+├── benchmarks/                  # Pinned third-party evaluation inputs
+├── harnessmith/                 # Audit and compiler implementation
+├── recipes/                     # Reviewed, source-pinned optimizations
+├── examples/compiled/           # Deterministic generated packages
 ├── skills/                      # Shared and repository-specific Agent Skills
 ├── .agents/
 │   └── skills -> ../skills      # Codex CLI access to shared skills

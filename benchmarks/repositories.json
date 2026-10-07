@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-07",
+  "repositories": [
+    {
+      "repository": "anthropics/skills",
+      "revision": "683bc88e56f3e09ba94f7055977f3d3aa499f202",
+      "license": "NOASSERTION",
+      "skill_count": 20,
+      "candidates": [
+        {
+          "path": "skills/claude-api/SKILL.md",
+          "bytes": 103457
+        },
+        {
+          "path": "skills/skill-creator/SKILL.md",
+          "bytes": 33168
+        }
+      ]
+    },
+    {
+      "repository": "github/awesome-copilot",
+      "revision": "3a685010a7afdc0dbd4c83b7fbda6c316aa516e5",
+      "license": "MIT",
+      "skill_count": 445,
+      "candidates": [
+        {
+          "path": "skills/quality-playbook/SKILL.md",
+          "bytes": 294426
+        },
+        {
+          "path": "skills/doc-and-modernize/SKILL.md",
+          "bytes": 49934
+        }
+      ]
+    },
+    {
+      "repository": "microsoft/skills",
+      "revision": "354361d83247c76a1c21e802e0d4887c4d8323a3",
+      "license": "MIT",
+      "skill_count": 205,
+      "candidates": [
+        {
+          "path": ".github/skills/skill-creator/SKILL.md",
+          "bytes": 68147
+        },
+        {
+          "path": ".github/skills/copilot-sdk/SKILL.md",
+          "bytes": 28557
+        }
+      ]
+    },
+    {
+      "repository": "huggingface/skills",
+      "revision": "ca0325bb20b2d0a1b2efa893670c4c72f79e707b",
+      "license": "Apache-2.0",
+      "skill_count": 26,
+      "candidates": [
+        {
+          "path": "skills/hf-cli/SKILL.md",
+          "bytes": 33973
+        },
+        {
+          "path": "skills/huggingface-lora-space-builder/SKILL.md",
+          "bytes": 33828
+        }
+      ]
+    },
+    {
+      "repository": "vercel-labs/agent-skills",
+      "revision": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "license": "NOASSERTION",
+      "skill_count": 9,
+      "candidates": [
+        {
+          "path": "skills/vercel-optimize/SKILL.md",
+          "bytes": 17311
+        },
+        {
+          "path": "skills/react-view-transitions/SKILL.md",
+          "bytes": 14407
+        }
+      ]
+    }
+  ],
+  "smoke_test": {
+    "target": "cursor",
+    "result": "passed",
+    "token_estimate": "ceil(source characters / 4)",
+    "skills": [
+      {
+        "repository": "anthropics/skills",
+        "path": "skills/skill-creator/SKILL.md",
+        "source_token_estimate": 8247,
+        "review_candidate_count": 4
+      },
+      {
+        "repository": "github/awesome-copilot",
+        "path": "skills/doc-and-modernize/SKILL.md",
+        "source_token_estimate": 12386,
+        "review_candidate_count": 6
+      },
+      {
+        "repository": "microsoft/skills",
+        "path": ".github/skills/copilot-sdk/SKILL.md",
+        "source_token_estimate": 7118,
+        "review_candidate_count": 1
+      },
+      {
+        "repository": "huggingface/skills",
+        "path": "skills/hf-cli/SKILL.md",
+        "source_token_estimate": 8403,
+        "review_candidate_count": 2
+      },
+      {
+        "repository": "vercel-labs/agent-skills",
+        "path": "skills/vercel-optimize/SKILL.md",
+        "source_token_estimate": 4328,
+        "review_candidate_count": 2
+      }
+    ]
+  }
+}

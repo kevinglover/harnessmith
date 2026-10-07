@@ -235,9 +235,10 @@ They receive an `InvocationPolicy` and render it natively:
 | Infer that a command is explicit-only from `user-invocable: true` or `$ARGUMENTS` | Unsafe inference                                                      | Those signals do not disable model invocation                                                                                                                     |
 | Convert prose hooks to native runtime hooks                                       | Semantic judgment                                                     | Native lifecycle, permissions, and failure behavior differ                                                                                                        |
 
-This is why the CLI requires exact `--extract-section` selectors. A future recipe
-file can version reviewed extraction choices without teaching the compiler to
-guess from length.
+This is why the audit reports candidates without selecting them. Exact
+`--extract-section` selectors or a checked-in recipe version the reviewed
+choices without teaching the compiler to guess from length. Recipes also pin
+the audited source hash so upstream drift fails closed.
 
 ## Evaluation criteria
 
@@ -313,21 +314,17 @@ generation immediately. The slice includes:
    token budgets;
 7. normative-retention and exact-section verification;
 8. safe regeneration that refuses non-compiler output directories;
-9. unit, CLI, and generated-script tests;
-10. one checked-in Cursor example for `speckit-analyze`.
+9. a read-only audit for arbitrary skill files or directories;
+10. strict, source-pinned optimization recipes;
+11. unit, CLI, and generated-script tests; and
+12. one checked-in Cursor example for `speckit-analyze`.
 
 Example command:
 
 ```bash
-python3 -m harnessmith skills/speckit-analyze/SKILL.md \
-  --target cursor \
+python3 -m harnessmith skills/speckit-analyze \
+  --recipe recipes/speckit-analyze.cursor.json \
   --output examples/compiled/cursor/speckit-analyze \
-  --source-id skills/speckit-analyze/SKILL.md \
-  --optimize-extension-hooks \
-  --extract-section '4. Detection Passes (Token-Efficient Analysis)' \
-  --extract-section 'Specification Analysis Report' \
-  --max-root-tokens 1700 \
-  --max-normal-path-tokens 2500 \
   --json
 ```
 
@@ -349,21 +346,21 @@ still require behavioral traces.
 
 ## Generalization beyond Spec Kit
 
-A second real-world fixture should come from a different domain and exercise the
-same compiler-relevant shape as the larger Spec Kit workflows:
+The pinned evaluation corpus now covers Anthropic, GitHub, Microsoft, Hugging
+Face, and Vercel skill repositories. It deliberately spans short controls,
+large playbooks, nested layouts, domain-heavy workflows, and skills with bundled
+resources. The manifest records upstream revisions and candidate paths without
+vendoring their content.
 
-- global invariants and approval boundaries;
-- ordered stages with semantically meaningful sequencing;
-- conditional branches and supporting references;
-- deterministic validation or normalization mechanics;
-- detailed remediation material needed only after a specific failure.
+The generic audit accepts any local skill file or directory. It inventories
+resources, checks target-frontmatter compatibility, and highlights context
+pressure while preserving the boundary between deterministic evidence and
+semantic judgment. A safe generated recipe template selects no transformations.
 
-An editorial or publishing workflow would be a useful candidate because it
-combines qualitative judgment with mechanical validation. A conservative recipe
-would keep identity, scope, selection rules, approval boundaries, and the
-top-level procedure in `SKILL.md`; move branch-specific guidance and detailed
-failure remediation to references; and consider scripts only for mechanical
-checks.
+See [`evaluation-corpus.md`](evaluation-corpus.md) for the pinned sources,
+evaluation sequence, and licensing policy. The important next step is to add
+reviewed recipes and behavioral traces one skill shape at a time, not bulk
+conversion based on file size.
 
 A particularly useful portability test is a source skill that combines
 `disable-model-invocation: true` with `user-invocable: false`. Claude documents
@@ -405,9 +402,11 @@ same semantics.
 
 ## Current limitations
 
-- Section selection is reviewed/operator-supplied, not inferred.
-- The parser preserves arbitrary YAML blocks but only interprets simple scalar
-  fields needed for adapter decisions.
+- Audit recommendations are heuristic; section selection remains
+  reviewed/operator-supplied, not inferred.
+- The parser preserves arbitrary YAML blocks but only interprets scalar
+  string/bool/null fields needed for adapter decisions. String values support
+  quoted, literal, and folded forms.
 - Static normative checks are a guardrail, not a proof of behavioral
   equivalence.
 - There is no live Cursor/Claude/Codex behavioral runner in this repository yet.
