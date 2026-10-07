@@ -44,9 +44,9 @@ def optimize_extension_hooks(
         ("before", before, before_event),
         ("after", after, after_event),
     ):
-        output = _containing_document(documents, section)
+        output, source_text = _containing_document(documents, section)
         replacement = _hook_directive(section, event, phase)
-        documents[output] = documents[output].replace(section.text, replacement, 1)
+        documents[output] = documents[output].replace(source_text, replacement, 1)
         transforms.append(
             {
                 "type": "resolve-extension-hooks",
@@ -68,8 +68,11 @@ def optimize_extension_hooks(
     documents[FALLBACK_PATH] = fallback
 
     optimized_body = documents.pop("SKILL.md")
+    optimized_references = {
+        path: _ensure_final_newline(content) for path, content in documents.items()
+    }
     scripts = {SCRIPT_PATH: _resolver_script(target)}
-    return optimized_body, documents, scripts, transforms, {FALLBACK_PATH}
+    return optimized_body, optimized_references, scripts, transforms, {FALLBACK_PATH}
 
 
 def expected_extracted_section(ir: SkillIR, section: Section) -> str:
@@ -120,12 +123,17 @@ def _event_name(section: Section, phase: str) -> str:
     return matches[0]
 
 
-def _containing_document(documents: Dict[str, str], section: Section) -> str:
-    matches = []
+def _containing_document(
+    documents: Dict[str, str], section: Section
+) -> Tuple[str, str]:
+    matches: List[Tuple[str, str]] = []
+    normalized = _ensure_final_newline(section.text)
     for path, content in documents.items():
-        count = content.count(section.text)
-        if count:
-            matches.extend([path] * count)
+        for candidate in (section.text, normalized):
+            count = content.count(candidate)
+            if count:
+                matches.extend([(path, candidate)] * count)
+                break
     if len(matches) != 1:
         raise SkillCompilerError(
             "hook section '%s' occurs %d times after extraction"

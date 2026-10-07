@@ -41,4 +41,3 @@ Ask the user: "Would you like me to suggest concrete remediation edits for the t
 ### 9. Check for extension hooks
 
 After reporting, run the same packaged hook resolver for event `after_analyze`. Apply the status rules in Pre-Execution Checks; wait for every mandatory hook before finishing. On `unavailable`, read [the original after hook contract](references/extension-hooks-fallback.md#9-check-for-extension-hooks) completely and follow it.
-
