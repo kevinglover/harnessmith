@@ -20,12 +20,13 @@ on:
           - update
         description: Choose the workflow to run
         default: update
+permissions:
+  contents: read
+
 jobs:
   speckit-init:
     if: >
-      github.event_name == 'push'
-      || github.event_name == 'pull_request'
-      || (github.event_name == 'workflow_dispatch' && inputs.workflow == 'update')
+      github.event_name == 'workflow_dispatch' && inputs.workflow == 'update'
     permissions:
       contents: write
       pull-requests: write
@@ -35,6 +36,45 @@ jobs:
       version-md-file-to-write: VERSION.md
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  compiler-tests:
+    if: >
+      github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.9"
+          - "3.x"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Byte-compile sources
+        run: python -m compileall -q harnessmith tests
+      - name: Verify generated example
+        if: matrix.python-version == '3.x'
+        run: |
+          output="${RUNNER_TEMP}/speckit-analyze"
+          python -m harnessmith skills/speckit-analyze/SKILL.md \
+            --target cursor \
+            --output "${output}" \
+            --source-id skills/speckit-analyze/SKILL.md \
+            --optimize-extension-hooks \
+            --extract-section '4. Detection Passes (Token-Efficient Analysis)' \
+            --extract-section 'Specification Analysis Report' \
+            --max-root-tokens 1700 \
+            --max-normal-path-tokens 2500
+          diff -ru examples/compiled/cursor/speckit-analyze "${output}"
+
   markdown-lint:
     if: >
       github.event_name == 'push' || github.event_name == 'pull_request'
@@ -46,6 +86,7 @@ jobs:
       github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
     needs:
       - markdown-lint
+      - compiler-tests
     permissions:
       contents: write
       pull-requests: write
