@@ -36,8 +36,7 @@ The reusable workflow:
 2. installs that exact release of `specify-cli`;
 3. writes `specify --version` to `VERSION.md`;
 4. skips regeneration when that file is unchanged;
-5. runs `specify init --force --here --ignore-agent-tools --script sh
-   --integration <runtime>` for each configured integration;
+5. runs `specify init --force --here --ignore-agent-tools --script sh --integration <runtime>` for each configured integration;
 6. formats Markdown and JSON;
 7. commits regenerated output.
 
@@ -59,16 +58,16 @@ when a change is repository-specific.
 
 ### Canonical versus generated material
 
-| Material | Role | Maintenance rule |
-| --- | --- | --- |
-| Upstream `templates/commands/*.md` | Behavioral source for Spec Kit commands | Change upstream when behavior should change for all integrations |
-| `skills/speckit-*/SKILL.md` | Generated shared output | Do not hand-edit; regenerate |
-| `.cursor/skills/speckit-*/SKILL.md` | Generated Cursor copies | Do not hand-edit; regenerate or compile |
-| `.github/agents`, `.github/prompts`, `.opencode/commands`, `.gemini/commands` | Generated runtime entry points | Treat as outputs |
-| `.specify/scripts`, `.specify/templates`, `.specify/integrations/*.manifest.json` | Generated project infrastructure and integration state | Regenerate from Spec Kit |
-| `skills/speckit-baseline/SKILL.md` | Repository-specific skill | Maintained here |
-| `skills/claude-command-converter/SKILL.md` | Repository-specific conversion guidance | Maintained here |
-| `harnessmith/` | Experimental compiler implementation | Maintained here until an upstream home is chosen |
+| Material                                                                          | Role                                                   | Maintenance rule                                                 |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
+| Upstream `templates/commands/*.md`                                                | Behavioral source for Spec Kit commands                | Change upstream when behavior should change for all integrations |
+| `skills/speckit-*/SKILL.md`                                                       | Generated shared output                                | Do not hand-edit; regenerate                                     |
+| `.cursor/skills/speckit-*/SKILL.md`                                               | Generated Cursor copies                                | Do not hand-edit; regenerate or compile                          |
+| `.github/agents`, `.github/prompts`, `.opencode/commands`, `.gemini/commands`     | Generated runtime entry points                         | Treat as outputs                                                 |
+| `.specify/scripts`, `.specify/templates`, `.specify/integrations/*.manifest.json` | Generated project infrastructure and integration state | Regenerate from Spec Kit                                         |
+| `skills/speckit-baseline/SKILL.md`                                                | Repository-specific skill                              | Maintained here                                                  |
+| `skills/claude-command-converter/SKILL.md`                                        | Repository-specific conversion guidance                | Maintained here                                                  |
+| `harnessmith/`                                                                    | Experimental compiler implementation                   | Maintained here until an upstream home is chosen                 |
 
 ### What `claude-command-converter` actually does
 
@@ -107,17 +106,17 @@ discovery, invocation, and extensions. An empty cell below means the primary
 documentation does not establish the capability, not that the runtime can
 never implement it.
 
-| Capability | Agent Skills standard | Cursor | Claude Code | Codex |
-| --- | --- | --- | --- | --- |
-| Discovery paths | Not specified by the format | Project `.agents/skills`, `.cursor/skills`; matching user locations; compatibility paths for Claude/Codex | Project, nested, personal, enterprise `.claude/skills`; plugin `skills/` | Scans `.agents/skills` from CWD to repo root; user `$HOME/.agents/skills`; `/etc/codex/skills`; system skills; follows symlinks |
-| Required frontmatter | `name`, `description` | `name`, `description` | `description` recommended; `name` optional in Claude, though portable packages should keep both | `name`, `description`; standard-compatible |
-| Portable optional frontmatter | `license`, `compatibility`, `metadata`, experimental `allowed-tools` | Documents `metadata`; runtime handling of other portable optional fields is not described | Accepts `license`, `metadata`, `allowed-tools`; also many native extensions | Uses the open standard; runtime-specific invocation policy lives outside frontmatter |
-| Runtime frontmatter/extensions | None | `paths`, `disable-model-invocation`, `icon`, `color`; legacy `globs` fallback | `when_to_use`, arguments, invocation controls, tool controls, model/effort, `context: fork`, agent/background, hooks, paths, shell | `agents/openai.yaml` can declare presentation, dependencies, and `policy.allow_implicit_invocation` |
-| Explicit invocation | Not specified | `/skill-name` | `/skill-name` | `/skills` selector or `$skill-name` mention |
-| Model-driven invocation | Description-based activation is the common model, not a portable control field | Default; disabled by `disable-model-invocation: true` | Default; disabled by `disable-model-invocation: true` | Default; disabled by `agents/openai.yaml` with `allow_implicit_invocation: false` |
-| Progressive disclosure | Metadata, then full `SKILL.md`, then resources as needed | Yes; manual use attaches to one message, Custom Mode keeps it for the session | Description first; invoked body stays in conversation; supporting files should be loaded on demand | Name/description/path list first; full skill when selected; initial list is context-budgeted |
-| `references/`, `scripts/`, `assets/` | All defined as optional conventions | All documented | Supporting files and bundled scripts documented | Scripts, references, and assets documented |
-| Context-specific constraint | Root instructions under 5,000 tokens recommended; under 500 lines | `paths` and nested skill directories can scope discovery | Loaded skill persists across turns; compaction reattaches up to 5,000 tokens per skill within a 25,000-token combined budget | Initial skill list uses at most 2% of context or 8,000 characters when context is unknown; descriptions may be shortened or omitted |
+| Capability                           | Agent Skills standard                                                          | Cursor                                                                                                    | Claude Code                                                                                                                        | Codex                                                                                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Discovery paths                      | Not specified by the format                                                    | Project `.agents/skills`, `.cursor/skills`; matching user locations; compatibility paths for Claude/Codex | Project, nested, personal, enterprise `.claude/skills`; plugin `skills/`                                                           | Scans `.agents/skills` from CWD to repo root; user `$HOME/.agents/skills`; `/etc/codex/skills`; system skills; follows symlinks     |
+| Required frontmatter                 | `name`, `description`                                                          | `name`, `description`                                                                                     | `description` recommended; `name` optional in Claude, though portable packages should keep both                                    | `name`, `description`; standard-compatible                                                                                          |
+| Portable optional frontmatter        | `license`, `compatibility`, `metadata`, experimental `allowed-tools`           | Documents `metadata`; runtime handling of other portable optional fields is not described                 | Accepts `license`, `metadata`, `allowed-tools`; also many native extensions                                                        | Uses the open standard; runtime-specific invocation policy lives outside frontmatter                                                |
+| Runtime frontmatter/extensions       | None                                                                           | `paths`, `disable-model-invocation`, `icon`, `color`; legacy `globs` fallback                             | `when_to_use`, arguments, invocation controls, tool controls, model/effort, `context: fork`, agent/background, hooks, paths, shell | `agents/openai.yaml` can declare presentation, dependencies, and `policy.allow_implicit_invocation`                                 |
+| Explicit invocation                  | Not specified                                                                  | `/skill-name`                                                                                             | `/skill-name`                                                                                                                      | `/skills` selector or `$skill-name` mention                                                                                         |
+| Model-driven invocation              | Description-based activation is the common model, not a portable control field | Default; disabled by `disable-model-invocation: true`                                                     | Default; disabled by `disable-model-invocation: true`                                                                              | Default; disabled by `agents/openai.yaml` with `allow_implicit_invocation: false`                                                   |
+| Progressive disclosure               | Metadata, then full `SKILL.md`, then resources as needed                       | Yes; manual use attaches to one message, Custom Mode keeps it for the session                             | Description first; invoked body stays in conversation; supporting files should be loaded on demand                                 | Name/description/path list first; full skill when selected; initial list is context-budgeted                                        |
+| `references/`, `scripts/`, `assets/` | All defined as optional conventions                                            | All documented                                                                                            | Supporting files and bundled scripts documented                                                                                    | Scripts, references, and assets documented                                                                                          |
+| Context-specific constraint          | Root instructions under 5,000 tokens recommended; under 500 lines              | `paths` and nested skill directories can scope discovery                                                  | Loaded skill persists across turns; compaction reattaches up to 5,000 tokens per skill within a 25,000-token combined budget       | Initial skill list uses at most 2% of context or 8,000 characters when context is unknown; descriptions may be shortened or omitted |
 
 Primary sources:
 
@@ -147,14 +146,14 @@ byte-for-byte identical; only frontmatter differs.
 
 Representative cases:
 
-| Skill | Lines | Estimated root tokens | Observation |
-| --- | ---: | ---: | --- |
-| `speckit-baseline` | 114 | 1,121 | Small repository-specific skill and a useful control; splitting it would add navigation without meaningful savings |
-| `speckit-analyze` | 271 | 3,066 | Global read-only constraints must stay in root, but the detailed detection rubric and report/remediation/hook tail can be staged |
-| `speckit-implement` | 238 | 3,300 | Contains approval gates, checklist branching, mutation rules, and mandatory pre/post hooks; unsafe to summarize mechanically |
-| `speckit-checklist` | 395 | 5,674 | Exceeds the standard's recommended 5,000-token root size and contains long stage-specific rubrics |
-| `speckit-clarify` | 308 | 5,040 | Also crosses the recommended root token budget and mixes orchestration with detailed procedure |
-| `speckit-specify` | 360 | 4,662 | Near the budget and combines top-level safety with large detailed stages |
+| Skill               | Lines | Estimated root tokens | Observation                                                                                                                      |
+| ------------------- | ----: | --------------------: | -------------------------------------------------------------------------------------------------------------------------------- |
+| `speckit-baseline`  |   114 |                 1,121 | Small repository-specific skill and a useful control; splitting it would add navigation without meaningful savings               |
+| `speckit-analyze`   |   271 |                 3,066 | Global read-only constraints must stay in root, but the detailed detection rubric and report/remediation/hook tail can be staged |
+| `speckit-implement` |   238 |                 3,300 | Contains approval gates, checklist branching, mutation rules, and mandatory pre/post hooks; unsafe to summarize mechanically     |
+| `speckit-checklist` |   395 |                 5,674 | Exceeds the standard's recommended 5,000-token root size and contains long stage-specific rubrics                                |
+| `speckit-clarify`   |   308 |                 5,040 | Also crosses the recommended root token budget and mixes orchestration with detailed procedure                                   |
+| `speckit-specify`   |   360 |                 4,662 | Near the budget and combines top-level safety with large detailed stages                                                         |
 
 Ten skills repeat extension-hook instructions; five repeat a full Mandatory
 Post-Execution Hooks section. The repetition may still be necessary in a fully
@@ -223,18 +222,18 @@ They receive an `InvocationPolicy` and render it natively:
 
 ## Deterministic transformations versus semantic judgment
 
-| Transformation | Classification | Reason |
-| --- | --- | --- |
-| Parse frontmatter and ATX sections | Deterministic | Structural and lossless |
-| Map an explicitly declared invocation policy | Deterministic | Capability mapping with documented equivalents |
-| Copy a selected complete section to a reference | Deterministic after selection | Bytes and load directive are fixed; section choice still needs a human/configured recipe |
-| Record source/output hashes and line provenance | Deterministic | Content-derived, no timestamps |
-| Extract known parsing, validation, normalization, or filtering into a script | Deterministic only when the source already defines complete mechanics | The compiler must not invent edge-case behavior |
-| Resolve the reviewed Spec Kit hook contract | Deterministic with lossless fallback | The helper filters disabled/conditional hooks, formats target invocation, never executes commands, and routes unsupported YAML to the exact original instructions |
-| Decide which prose is globally necessary | Semantic judgment | Depends on safety, branching, and workflow meaning |
-| Summarize or rewrite a long procedure | Semantic judgment and out of scope | Can silently weaken requirements |
-| Infer that a command is explicit-only from `user-invocable: true` or `$ARGUMENTS` | Unsafe inference | Those signals do not disable model invocation |
-| Convert prose hooks to native runtime hooks | Semantic judgment | Native lifecycle, permissions, and failure behavior differ |
+| Transformation                                                                    | Classification                                                        | Reason                                                                                                                                                            |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parse frontmatter and ATX sections                                                | Deterministic                                                         | Structural and lossless                                                                                                                                           |
+| Map an explicitly declared invocation policy                                      | Deterministic                                                         | Capability mapping with documented equivalents                                                                                                                    |
+| Copy a selected complete section to a reference                                   | Deterministic after selection                                         | Bytes and load directive are fixed; section choice still needs a human/configured recipe                                                                          |
+| Record source/output hashes and line provenance                                   | Deterministic                                                         | Content-derived, no timestamps                                                                                                                                    |
+| Extract known parsing, validation, normalization, or filtering into a script      | Deterministic only when the source already defines complete mechanics | The compiler must not invent edge-case behavior                                                                                                                   |
+| Resolve the reviewed Spec Kit hook contract                                       | Deterministic with lossless fallback                                  | The helper filters disabled/conditional hooks, formats target invocation, never executes commands, and routes unsupported YAML to the exact original instructions |
+| Decide which prose is globally necessary                                          | Semantic judgment                                                     | Depends on safety, branching, and workflow meaning                                                                                                                |
+| Summarize or rewrite a long procedure                                             | Semantic judgment and out of scope                                    | Can silently weaken requirements                                                                                                                                  |
+| Infer that a command is explicit-only from `user-invocable: true` or `$ARGUMENTS` | Unsafe inference                                                      | Those signals do not disable model invocation                                                                                                                     |
+| Convert prose hooks to native runtime hooks                                       | Semantic judgment                                                     | Native lifecycle, permissions, and failure behavior differ                                                                                                        |
 
 This is why the CLI requires exact `--extract-section` selectors. A future recipe
 file can version reviewed extraction choices without teaching the compiler to
@@ -334,15 +333,15 @@ python3 -m harnessmith skills/speckit-analyze/SKILL.md \
 
 Measured output:
 
-| Metric | Characters | Estimated tokens | Versus canonical |
-| --- | ---: | ---: | ---: |
-| Canonical root | 12,263 | 3,066 | — |
-| Compiled root | 6,416 | 1,604 | 48% smaller |
-| Mandatory references | 3,331 | 833 | Loaded by the normal path |
-| Normal static path | 9,747 | 2,437 | 21% smaller |
-| Conditional exact fallback | 4,704 | 1,176 | Loaded only when resolver reports `unavailable` |
-| All packaged Markdown | 14,451 | 3,613 | 18% larger, not normally all loaded |
-| Resolver script | 10,541 | 2,636 | Executed without loading its implementation |
+| Metric                     | Characters | Estimated tokens |                                Versus canonical |
+| -------------------------- | ---------: | ---------------: | ----------------------------------------------: |
+| Canonical root             |     12,263 |            3,066 |                                               — |
+| Compiled root              |      6,416 |            1,604 |                                     48% smaller |
+| Mandatory references       |      3,331 |              833 |                       Loaded by the normal path |
+| Normal static path         |      9,747 |            2,437 |                                     21% smaller |
+| Conditional exact fallback |      4,703 |            1,176 | Loaded only when resolver reports `unavailable` |
+| All packaged Markdown      |     14,450 |            3,613 |             18% larger, not normally all loaded |
+| Resolver script            |     10,541 |            2,636 |     Executed without loading its implementation |
 
 The compiler reports both path-loaded and packaged size so a smaller root cannot
 hide a larger mandatory path. Runtime script output and actual tokenizer counts
