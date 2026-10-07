@@ -31,6 +31,10 @@
     "source_skill_chars": 12263,
     "source_skill_token_estimate": 3066
   },
+  "recipe": {
+    "path": "recipes/speckit-analyze.cursor.json",
+    "sha256": "31a6f5e15e81590fb26c0c59c5bb46b43e48ba71318b4b5c4211b07e638f7af7"
+  },
   "schema_version": 1,
   "source": {
     "path": "skills/speckit-analyze/SKILL.md",

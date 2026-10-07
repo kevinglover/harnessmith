@@ -29,6 +29,50 @@ class FrontmatterTests(unittest.TestCase):
         self.assertEqual(10, body_line)
         self.assertTrue(render_frontmatter(fields).startswith("---\nname: sample-skill\n"))
 
+    def test_folded_block_scalar_is_interpreted_and_preserved(self) -> None:
+        source = (
+            "---\n"
+            "name: sample-skill\n"
+            "description: >-\n"
+            "  First line of the description.\n"
+            "  Second line of the description.\n"
+            "---\n\n"
+            "# Sample\n"
+        )
+
+        fields, _, _ = split_frontmatter(source)
+
+        self.assertEqual(
+            "First line of the description. Second line of the description.",
+            scalar_value(fields[1]),
+        )
+        self.assertEqual(
+            source.split("---\n\n", 1)[0] + "---\n",
+            render_frontmatter(fields),
+        )
+
+    def test_literal_block_scalar_preserves_line_breaks(self) -> None:
+        fields, _, _ = split_frontmatter(
+            "---\n"
+            "name: sample\n"
+            "description: |\n"
+            "  First line.\n"
+            "  Second line.\n"
+            "---\n"
+        )
+
+        self.assertEqual(
+            "First line.\nSecond line.\n",
+            scalar_value(fields[1]),
+        )
+
+    def test_invalid_block_scalar_header_is_rejected(self) -> None:
+        fields, _, _ = split_frontmatter(
+            "---\nname: sample\ndescription: >bad\n  text\n---\n"
+        )
+        with self.assertRaisesRegex(SkillCompilerError, "block scalar header"):
+            scalar_value(fields[1])
+
     def test_duplicate_top_level_key_is_rejected(self) -> None:
         with self.assertRaisesRegex(SkillCompilerError, "duplicate"):
             split_frontmatter(

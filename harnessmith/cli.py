@@ -8,23 +8,37 @@ import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
+from .audit import audit_skill
 from .compiler import CompileOptions, compile_skill, write_package
 from .errors import SkillCompilerError
+from .recipe import load_recipe
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="harnessmith",
-        description="Compile one canonical Agent Skill into a harness-aware package.",
+        description="Audit or compile an Agent Skill for a target harness.",
     )
-    parser.add_argument("source", type=Path, help="Path to the canonical SKILL.md")
+    parser.add_argument(
+        "source", type=Path, help="Path to a SKILL.md or its containing directory"
+    )
     parser.add_argument(
         "--target",
-        required=True,
         choices=("generic", "cursor", "claude", "codex"),
+        help="Target harness; may instead be supplied by --recipe",
     )
     parser.add_argument(
-        "--output", type=Path, required=True, help="Exact output skill directory"
+        "--output", type=Path, help="Exact output skill directory (compile mode only)"
+    )
+    parser.add_argument(
+        "--audit",
+        action="store_true",
+        help="Analyze context pressure and review candidates without writing files",
+    )
+    parser.add_argument(
+        "--recipe",
+        type=Path,
+        help="Versioned JSON recipe with reviewed transformations and source hash",
     )
     parser.add_argument(
         "--extract-section",
@@ -36,15 +50,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--optimize-extension-hooks",
         action="store_true",
         help=(
-            "Replace reviewed Spec Kit hook contracts with a read-only resolver "
-            "and an exact fallback reference"
+            "Apply the specialized Spec Kit extension-hook optimization; equivalent "
+            "to the recipe optimization spec-kit-extension-hooks"
         ),
     )
     parser.add_argument(
         "--invocation",
         choices=("source", "explicit", "automatic"),
-        default="source",
-        help="Preserve source invocation semantics or apply an explicit operator policy",
+        default=None,
+        help=(
+            "Preserve source invocation semantics or apply an explicit operator policy"
+        ),
     )
     parser.add_argument(
         "--source-id",
@@ -69,16 +85,63 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        recipe = load_recipe(args.recipe) if args.recipe else None
+        target = args.target or (recipe.target if recipe else None)
+        if target is None:
+            raise SkillCompilerError("--target is required unless supplied by --recipe")
+        if args.target and recipe and recipe.target and args.target != recipe.target:
+            raise SkillCompilerError(
+                "--target %s conflicts with recipe target %s"
+                % (args.target, recipe.target)
+            )
+
+        if args.audit:
+            report = audit_skill(args.source, target, source_id=args.source_id)
+            if (
+                recipe
+                and recipe.source_sha256
+                and report["source"]["sha256"] != recipe.source_sha256
+            ):
+                report["warnings"].append(
+                    "source hash differs from the selected recipe; "
+                    "re-audit before compiling"
+                )
+            _print_audit(report, args.json)
+            return 0
+
+        if args.output is None:
+            raise SkillCompilerError("--output is required when compiling")
+        extract_sections = (
+            tuple(args.extract_section)
+            if args.extract_section
+            else (recipe.extract_sections if recipe else ())
+        )
+        optimizations = recipe.optimizations if recipe else ()
         package = compile_skill(
             args.source,
             CompileOptions(
-                target=args.target,
-                extract_sections=tuple(args.extract_section),
-                optimize_extension_hooks=args.optimize_extension_hooks,
-                invocation=args.invocation,
-                source_id=args.source_id or args.source.as_posix(),
-                max_root_tokens=args.max_root_tokens,
-                max_normal_path_tokens=args.max_normal_path_tokens,
+                target=target,
+                extract_sections=extract_sections,
+                optimize_extension_hooks=(
+                    args.optimize_extension_hooks
+                    or "spec-kit-extension-hooks" in optimizations
+                ),
+                invocation=args.invocation
+                or (recipe.invocation if recipe else "source"),
+                source_id=args.source_id,
+                max_root_tokens=(
+                    args.max_root_tokens
+                    if args.max_root_tokens is not None
+                    else (recipe.max_root_tokens if recipe else None)
+                ),
+                max_normal_path_tokens=(
+                    args.max_normal_path_tokens
+                    if args.max_normal_path_tokens is not None
+                    else (recipe.max_normal_path_tokens if recipe else None)
+                ),
+                expected_source_sha256=recipe.source_sha256 if recipe else None,
+                recipe_id=recipe.path.as_posix() if recipe else None,
+                recipe_sha256=recipe.sha256 if recipe else None,
             ),
         )
         write_package(package, args.output)
@@ -116,6 +179,44 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         print("Output: %s" % args.output)
     return 0
+
+
+def _print_audit(report: object, as_json: bool) -> None:
+    if as_json:
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return
+    assert isinstance(report, dict)
+    metrics = report["metrics"]
+    resources = report["bundled_resources"]
+    print(
+        "Audited %s for %s: %d estimated tokens, %d review candidate(s)"
+        % (
+            report["skill"],
+            report["target"],
+            metrics["source_token_estimate"],
+            metrics["review_candidate_count"],
+        )
+    )
+    print(
+        "Resources: %d references, %d scripts, %d assets"
+        % (
+            resources["references"]["files"],
+            resources["scripts"]["files"],
+            resources["assets"]["files"],
+        )
+    )
+    for candidate in report["review_candidates"]:
+        print(
+            "- %s (%d tokens): %s"
+            % (
+                candidate["heading"],
+                candidate["token_estimate"],
+                "; ".join(candidate["reasons"]),
+            )
+        )
+    for warning in report["warnings"]:
+        print("Warning: %s" % warning)
+    print("No files written.")
 
 
 if __name__ == "__main__":

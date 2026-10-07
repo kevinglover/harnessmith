@@ -144,6 +144,24 @@ class CompilerTests(unittest.TestCase):
                 write_package(package, output)
             self.assertEqual("user data\n", (output / "KEEP.txt").read_text())
 
+    def test_source_hash_pin_fails_closed(self) -> None:
+        with self.assertRaisesRegex(SkillCompilerError, "source hash changed"):
+            compile_skill(
+                ANALYZE,
+                CompileOptions(
+                    target="cursor",
+                    expected_source_sha256="0" * 64,
+                ),
+            )
+
+    def test_skill_directory_resolves_skill_markdown(self) -> None:
+        package = compile_skill(
+            ANALYZE.parent,
+            CompileOptions(target="generic"),
+        )
+        self.assertEqual("speckit-analyze", package.skill_name)
+        self.assertTrue(package.manifest["source"]["path"].endswith("/SKILL.md"))
+
 
 if __name__ == "__main__":
     unittest.main()

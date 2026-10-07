@@ -64,15 +64,9 @@ jobs:
         if: matrix.python-version == '3.x'
         run: |
           output="${RUNNER_TEMP}/speckit-analyze"
-          python -m harnessmith skills/speckit-analyze/SKILL.md \
-            --target cursor \
-            --output "${output}" \
-            --source-id skills/speckit-analyze/SKILL.md \
-            --optimize-extension-hooks \
-            --extract-section '4. Detection Passes (Token-Efficient Analysis)' \
-            --extract-section 'Specification Analysis Report' \
-            --max-root-tokens 1700 \
-            --max-normal-path-tokens 2500
+          python -m harnessmith skills/speckit-analyze \
+            --recipe recipes/speckit-analyze.cursor.json \
+            --output "${output}"
           diff -ru examples/compiled/cursor/speckit-analyze "${output}"
 
   markdown-lint:

@@ -17,6 +17,8 @@ _HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*#*[ \t]*(?:\r?\n)?$")
 
 def parse_skill(path: Path, source_id: Optional[str] = None) -> SkillIR:
     path = Path(path)
+    if path.is_dir():
+        path = path / "SKILL.md"
     text = path.read_text(encoding="utf-8")
     fields, body, body_start_line = split_frontmatter(text)
     name_field = next((item for item in fields if item.key == "name"), None)

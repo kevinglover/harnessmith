@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "target": "cursor",
+  "source_sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533",
+  "invocation": "source",
+  "extract_sections": [
+    "4. Detection Passes (Token-Efficient Analysis)",
+    "Specification Analysis Report"
+  ],
+  "optimizations": ["spec-kit-extension-hooks"],
+  "budgets": {
+    "root_tokens": 1700,
+    "normal_path_tokens": 2500
+  }
+}

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -15,6 +14,7 @@ from .adapters import adapt_frontmatter, source_invocation_policy
 from .errors import SkillCompilerError
 from .frontmatter import render_frontmatter, scalar_value
 from .hook_optimizer import expected_extracted_section, optimize_extension_hooks
+from .metrics import estimate_tokens
 from .model import CompiledPackage, InvocationPolicy, Section, SkillIR
 from .parser import parse_skill
 
@@ -28,12 +28,23 @@ class CompileOptions:
     source_id: Optional[str] = None
     max_root_tokens: Optional[int] = None
     max_normal_path_tokens: Optional[int] = None
+    expected_source_sha256: Optional[str] = None
+    recipe_id: Optional[str] = None
+    recipe_sha256: Optional[str] = None
 
 
 def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
     """Compile one canonical skill into a harness-specific package."""
 
     ir = parse_skill(Path(source), source_id=options.source_id)
+    if (
+        options.expected_source_sha256 is not None
+        and ir.source_sha256 != options.expected_source_sha256
+    ):
+        raise SkillCompilerError(
+            "source hash changed: recipe expects %s, got %s; re-audit before compiling"
+            % (options.expected_source_sha256, ir.source_sha256)
+        )
     target = options.target.lower()
     policy = _resolve_invocation(ir, options.invocation)
     adapted = adapt_frontmatter(ir, target, policy)
@@ -69,7 +80,7 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
         conditional_references,
     )
     _enforce_budgets(metrics, options)
-    manifest = _build_manifest(ir, target, files, transformations, metrics)
+    manifest = _build_manifest(ir, target, files, transformations, metrics, options)
     files[".harnessmith.json"] = json.dumps(
         manifest, indent=2, sort_keys=True, ensure_ascii=False
     ) + "\n"
@@ -325,13 +336,15 @@ def _metrics(
     script_chars = sum(len(value) for value in scripts.values())
     return {
         "source_skill_chars": len(source),
-        "source_skill_token_estimate": _token_estimate(source),
+        "source_skill_token_estimate": estimate_tokens(source),
         "compiled_root_chars": len(root),
-        "compiled_root_token_estimate": _token_estimate(root),
+        "compiled_root_token_estimate": estimate_tokens(root),
         "reference_chars": reference_chars,
-        "reference_token_estimate": sum(_token_estimate(value) for value in references.values()),
+        "reference_token_estimate": sum(
+            estimate_tokens(value) for value in references.values()
+        ),
         "mandatory_reference_chars": mandatory_chars,
-        "mandatory_reference_token_estimate": _token_estimate(
+        "mandatory_reference_token_estimate": estimate_tokens(
             "".join(
                 value
                 for path, value in references.items()
@@ -339,7 +352,7 @@ def _metrics(
             )
         ),
         "conditional_reference_chars": conditional_chars,
-        "conditional_reference_token_estimate": _token_estimate(
+        "conditional_reference_token_estimate": estimate_tokens(
             "".join(
                 value
                 for path, value in references.items()
@@ -347,9 +360,9 @@ def _metrics(
             )
         ),
         "script_chars": script_chars,
-        "script_token_estimate": _token_estimate("".join(scripts.values())),
+        "script_token_estimate": estimate_tokens("".join(scripts.values())),
         "normal_path_instruction_chars": normal_path_chars,
-        "normal_path_instruction_token_estimate": _token_estimate(
+        "normal_path_instruction_token_estimate": estimate_tokens(
             root
             + "".join(
                 value
@@ -363,18 +376,12 @@ def _metrics(
         if source
         else 0,
         "packaged_instruction_chars": packaged_instruction_chars,
-        "packaged_instruction_token_estimate": _token_estimate(
+        "packaged_instruction_token_estimate": estimate_tokens(
             root + "".join(references.values())
         ),
         "root_char_reduction": len(source) - len(root),
         "root_reduction_percent": round((1 - len(root) / len(source)) * 100) if source else 0,
     }
-
-
-def _token_estimate(text: str) -> int:
-    """Use a deterministic, explicitly approximate four-characters/token metric."""
-
-    return int(math.ceil(len(text) / 4.0))
 
 
 def _enforce_budgets(metrics: Dict[str, int], options: CompileOptions) -> None:
@@ -404,8 +411,9 @@ def _build_manifest(
     files: Dict[str, str],
     transformations: List[Dict[str, object]],
     metrics: Dict[str, int],
+    options: CompileOptions,
 ) -> Dict[str, object]:
-    return {
+    manifest: Dict[str, object] = {
         "schema_version": 1,
         "compiler": {"name": "harnessmith", "version": __version__},
         "target": target,
@@ -420,6 +428,12 @@ def _build_manifest(
             for path, content in sorted(files.items())
         },
     }
+    if options.recipe_id is not None:
+        manifest["recipe"] = {
+            "path": options.recipe_id,
+            "sha256": options.recipe_sha256,
+        }
+    return manifest
 
 
 def _normative_lines(text: str) -> List[str]:

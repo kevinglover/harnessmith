@@ -78,21 +78,23 @@ def split_frontmatter(text: str) -> Tuple[Tuple[FrontmatterField, ...], str, int
 
 
 def scalar_value(field: Optional[FrontmatterField], default: object = None) -> object:
-    """Parse a single-line YAML scalar used by compiler decisions.
+    """Parse a conservative YAML scalar subset used by compiler decisions.
 
     Complex values remain preserved in ``raw`` but are rejected if a compiler
-    decision would require interpreting them.
+    decision would require interpreting them. Literal and folded block strings
+    are supported without reserializing their source representation.
     """
 
     if field is None:
         return default
     first_line = field.raw.splitlines()[0]
     value = first_line.split(":", 1)[1].strip()
-    if not value or value in ("|", ">", "|-", ">-", "|+", ">+"):
+    if not value:
         raise SkillCompilerError(
-            "frontmatter field '%s' must be a single-line scalar for compilation"
-            % field.key
+            "frontmatter field '%s' must be a scalar for compilation" % field.key
         )
+    if value.startswith(("|", ">")):
+        return _block_scalar_value(field, value)
     if value.startswith('"'):
         try:
             return json.loads(value)
@@ -112,6 +114,70 @@ def scalar_value(field: Optional[FrontmatterField], default: object = None) -> o
     if lowered in ("null", "~"):
         return None
     return value
+
+
+def _block_scalar_value(field: FrontmatterField, header: str) -> str:
+    token = header.split(" #", 1)[0].strip()
+    marker = token[0]
+    modifiers = token[1:]
+    digits = [item for item in modifiers if item.isdigit()]
+    chomps = [item for item in modifiers if item in "+-"]
+    if (
+        any(item not in "123456789+-" for item in modifiers)
+        or len(digits) > 1
+        or len(chomps) > 1
+    ):
+        raise SkillCompilerError(
+            "unsupported YAML block scalar header for '%s': %s"
+            % (field.key, header)
+        )
+
+    content = field.raw.splitlines()[1:]
+    nonempty = [line for line in content if line.strip()]
+    if digits:
+        indentation = int(digits[0])
+    elif nonempty:
+        indentation = min(len(line) - len(line.lstrip(" ")) for line in nonempty)
+    else:
+        indentation = 0
+
+    lines: List[str] = []
+    for line in content:
+        if not line.strip():
+            lines.append("")
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading < indentation:
+            raise SkillCompilerError(
+                "invalid indentation in YAML block scalar '%s'" % field.key
+            )
+        lines.append(line[indentation:])
+
+    if marker == "|":
+        result = "\n".join(lines)
+    else:
+        parts: List[str] = []
+        for index, line in enumerate(lines):
+            parts.append(line)
+            if index == len(lines) - 1:
+                continue
+            following = lines[index + 1]
+            if (
+                not line
+                or not following
+                or line.startswith(" ")
+                or following.startswith(" ")
+            ):
+                parts.append("\n")
+            else:
+                parts.append(" ")
+        result = "".join(parts)
+
+    if "-" in chomps:
+        return result.rstrip("\n")
+    if "+" in chomps:
+        return result + "\n"
+    return result.rstrip("\n") + "\n"
 
 
 def render_frontmatter(fields: Sequence[FrontmatterField]) -> str:
