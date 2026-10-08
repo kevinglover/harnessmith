@@ -8,10 +8,13 @@ import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
+from . import __version__
 from .audit import audit_skill
 from .compiler import CompileOptions, compile_skill, write_package
 from .errors import SkillCompilerError
 from .recipe import load_recipe
+from .targets import TARGET_NAMES
+from .verification import compare_package, verify_compiled_package
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -19,12 +22,13 @@ def build_parser() -> argparse.ArgumentParser:
         prog="harnessmith",
         description="Audit or compile an Agent Skill for a target harness.",
     )
+    parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
     parser.add_argument(
         "source", type=Path, help="Path to a SKILL.md or its containing directory"
     )
     parser.add_argument(
         "--target",
-        choices=("generic", "cursor", "claude", "codex"),
+        choices=TARGET_NAMES,
         help="Target harness; may instead be supplied by --recipe",
     )
     parser.add_argument(
@@ -79,10 +83,34 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--json", action="store_true", help="Print the compile report as JSON"
     )
+    preview = parser.add_mutually_exclusive_group()
+    preview.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compile and validate without writing the output directory",
+    )
+    preview.add_argument(
+        "--diff",
+        action="store_true",
+        help="Report output changes without writing the output directory",
+    )
+    return parser
+
+
+def build_verify_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="harnessmith verify",
+        description="Independently verify a compiled Harnessmith package.",
+    )
+    parser.add_argument("package", type=Path, help="Compiled skill package directory")
+    parser.add_argument("--json", action="store_true", help="Print the report as JSON")
     return parser
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
+    argv = list(argv) if argv is not None else sys.argv[1:]
+    if argv and argv[0] == "verify":
+        return _verify_main(argv[1:])
     args = build_parser().parse_args(argv)
     try:
         recipe = load_recipe(args.recipe) if args.recipe else None
@@ -144,7 +172,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 recipe_sha256=recipe.sha256 if recipe else None,
             ),
         )
-        write_package(package, args.output)
+        diff = compare_package(package.files, args.output)
+        if not args.dry_run and not args.diff:
+            write_package(package, args.output)
     except (OSError, SkillCompilerError) as exc:
         print("harnessmith: error: %s" % exc, file=sys.stderr)
         return 2
@@ -156,6 +186,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "metrics": package.metrics,
         "files": sorted(package.files),
     }
+    if args.dry_run or args.diff:
+        report["written"] = False
+        report["diff"] = diff.as_dict()
     if args.json:
         print(json.dumps(report, indent=2, sort_keys=True))
     else:
@@ -165,10 +198,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             if normal_reduction >= 0
             else "%d%% larger" % abs(normal_reduction)
         )
+        verb = "Previewed" if args.dry_run or args.diff else "Compiled"
         print(
-            "Compiled %s for %s: %d%% smaller root; normal static path %s "
+            "%s %s for %s: %d%% smaller root; normal static path %s "
             "(%d -> %d estimated tokens)"
             % (
+                verb,
                 package.skill_name,
                 package.target,
                 package.metrics["root_reduction_percent"],
@@ -177,8 +212,29 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 package.metrics["normal_path_instruction_token_estimate"],
             )
         )
-        print("Output: %s" % args.output)
+        if args.diff:
+            print("Added: %s" % (", ".join(diff.added) or "none"))
+            print("Modified: %s" % (", ".join(diff.modified) or "none"))
+            print("Removed: %s" % (", ".join(diff.removed) or "none"))
+        print("Output: %s%s" % (args.output, " (not written)" if args.dry_run or args.diff else ""))
     return 0
+
+
+def _verify_main(argv: Sequence[str]) -> int:
+    args = build_verify_parser().parse_args(argv)
+    report = verify_compiled_package(args.package)
+    if args.json:
+        print(json.dumps(report.as_dict(), indent=2, sort_keys=True))
+    else:
+        if report.valid:
+            print("Verified %s: package is valid" % report.package)
+        else:
+            print("Verification failed for %s" % report.package)
+            for issue in report.issues:
+                print("- %s: %s" % (issue.code, issue.message))
+        for name, status in sorted(report.checks.items()):
+            print("%s: %s" % (name.replace("_", " ").title(), status))
+    return 0 if report.valid else 1
 
 
 def _print_audit(report: object, as_json: bool) -> None:

@@ -12,6 +12,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CliTests(unittest.TestCase):
+    def test_cli_version(self) -> None:
+        result = subprocess.run(
+            [sys.executable, "-m", "harnessmith", "--version"],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertRegex(result.stdout, r"harnessmith \d+\.\d+\.\d+")
+
     def test_cli_emits_machine_readable_report(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "speckit-analyze"
@@ -90,6 +101,71 @@ class CliTests(unittest.TestCase):
                 "recipes/speckit-analyze.cursor.json",
                 manifest["recipe"]["path"],
             )
+
+    def test_cli_dry_run_and_diff_do_not_write(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "preview"
+            for flag in ("--dry-run", "--diff"):
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "harnessmith",
+                        "skills/speckit-analyze",
+                        "--target",
+                        "cursor",
+                        "--output",
+                        str(output),
+                        flag,
+                        "--json",
+                    ],
+                    cwd=ROOT,
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(0, result.returncode, result.stderr)
+                self.assertFalse(output.exists())
+                self.assertFalse(json.loads(result.stdout)["written"])
+
+    def test_cli_verify_uses_distinct_invalid_exit_code(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "compiled"
+            compile_result = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "harnessmith",
+                    "skills/speckit-analyze",
+                    "--recipe",
+                    "recipes/speckit-analyze.cursor.json",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+            valid = subprocess.run(
+                [sys.executable, "-m", "harnessmith", "verify", str(output), "--json"],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, valid.returncode, valid.stderr)
+            (output / "SKILL.md").write_text("changed\n", encoding="utf-8")
+            invalid = subprocess.run(
+                [sys.executable, "-m", "harnessmith", "verify", str(output), "--json"],
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, invalid.returncode, invalid.stderr)
+            self.assertFalse(json.loads(invalid.stdout)["valid"])
 
 
 if __name__ == "__main__":

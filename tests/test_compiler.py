@@ -144,6 +144,17 @@ class CompilerTests(unittest.TestCase):
                 write_package(package, output)
             self.assertEqual("user data\n", (output / "KEEP.txt").read_text())
 
+    def test_symlinked_output_directory_is_rejected(self) -> None:
+        package = compile_skill(ANALYZE, CompileOptions(target="cursor"))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            external = root / "external"
+            external.mkdir()
+            output = root / "skill"
+            output.symlink_to(external, target_is_directory=True)
+            with self.assertRaisesRegex(SkillCompilerError, "symlinked output"):
+                write_package(package, output)
+
     def test_source_hash_pin_fails_closed(self) -> None:
         with self.assertRaisesRegex(SkillCompilerError, "source hash changed"):
             compile_skill(

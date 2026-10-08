@@ -108,6 +108,8 @@ def write_package(package: CompiledPackage, output: Path) -> None:
     """Write a package, replacing only files from an earlier compiler run."""
 
     output = Path(output)
+    if output.is_symlink():
+        raise SkillCompilerError("refusing to write through symlinked output: %s" % output)
     if output.exists():
         manifest_path = output / ".harnessmith.json"
         existing_entries = list(output.iterdir())
@@ -376,7 +378,15 @@ def _safe_output_path(root: Path, relative: str) -> Path:
     path = Path(relative)
     if path.is_absolute() or ".." in path.parts:
         raise SkillCompilerError("unsafe generated output path: %s" % relative)
-    return root / path
+    destination = root / path
+    cursor = destination.parent
+    while cursor != root.parent:
+        if cursor.is_symlink():
+            raise SkillCompilerError("unsafe symlink in generated output path: %s" % relative)
+        if cursor == root:
+            break
+        cursor = cursor.parent
+    return destination
 
 
 def _remove_empty_directories(root: Path) -> None:
