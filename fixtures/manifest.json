@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "fixtures": [
+    {
+      "fixture_id": "anthropic-small",
+      "repository": "https://github.com/anthropics/skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/anthropic-small/SKILL.md",
+      "source_sha256": "5097d9dd1defd924401a65dc3cff1c3768426956041bae784258cb75886694bb",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "anthropic-explicit-only",
+      "repository": "https://github.com/anthropics/skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/anthropic-explicit-only/SKILL.md",
+      "source_sha256": "7265e6bfca383eb3145ebb1cc31557b566b5f196477f426d18ef3c9ebb0e06c4",
+      "expected_targets": ["cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "github-copilot-frontmatter",
+      "repository": "https://github.com/github/awesome-copilot",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/github-copilot-frontmatter/SKILL.md",
+      "source_sha256": "b48261c6d406a857c93c2e551844b8bc45ca885265d0e88e0acf2b5da6b8e506",
+      "expected_targets": [],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "github-copilot-duplicate-headings",
+      "repository": "https://github.com/github/awesome-copilot",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/github-copilot-duplicate-headings/SKILL.md",
+      "source_sha256": "feb623c575289e454a6873a6a435b756086cd6e101870c7650785b6fd60244b1",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "huggingface-heavy-examples",
+      "repository": "https://github.com/huggingface/skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/huggingface-heavy-examples/SKILL.md",
+      "source_sha256": "3db427630fa928388b407157ea0323049277d37d2e7c943a6590ae7d9b6ca3e5",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "microsoft-fenced-headings",
+      "repository": "https://github.com/microsoft/skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/microsoft-fenced-headings/SKILL.md",
+      "source_sha256": "c82f1b84c18b2edb95e4ac5cb978ffc07ec73e73881dd75ae9b4afe438bd90ac",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "microsoft-setext",
+      "repository": "https://github.com/microsoft/skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/microsoft-setext/SKILL.md",
+      "source_sha256": "0c79925905a3dafff8f8317403e17c04be91196d889f62d857d10761d8f027a5",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "vercel-cross-links",
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/vercel-cross-links/SKILL.md",
+      "source_sha256": "d2e921f0ba409d084065ec43baa855bf8d6f28d01f2b5b445205a4414d790ed4",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "vercel-html-block",
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/vercel-html-block/SKILL.md",
+      "source_sha256": "36653a6a52ebfbcd6a66b7bf8749ebe9077b4623e3a54df43408e0ca7c6b92bf",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "speckit-over-budget",
+      "repository": "https://github.com/github/spec-kit",
+      "revision": "synthetic-equivalent-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/speckit-over-budget/SKILL.md",
+      "source_sha256": "ccc39602d60782ca448d5cb301b5193e2b385f09960b07803cfc2ee178db22af",
+      "expected_targets": ["generic", "cursor", "claude", "codex"],
+      "expected_diagnostics": []
+    }
+  ]
+}
