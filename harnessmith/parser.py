@@ -5,14 +5,22 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from .errors import SkillCompilerError
 from .frontmatter import scalar_value, split_frontmatter
 from .model import Section, SkillIR
 
 
-_HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*#*[ \t]*(?:\r?\n)?$")
+_ATX_HEADING = re.compile(
+    r"^ {0,3}(#{1,6})(?:[ \t]+(.*?))?[ \t]*(?:\r?\n)?$"
+)
+_SETEXT = re.compile(r"^ {0,3}(=+|-+)[ \t]*(?:\r?\n)?$")
+_FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})([^\r\n]*)(?:\r?\n)?$")
+_HTML_START = re.compile(
+    r"^ {0,3}(?:<!--|<(script|pre|style)(?:\s|>|$)|<(address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?:\s|/?>|$))",
+    re.IGNORECASE,
+)
 
 
 def parse_skill(path: Path, source_id: Optional[str] = None) -> SkillIR:
@@ -46,46 +54,94 @@ def parse_skill(path: Path, source_id: Optional[str] = None) -> SkillIR:
 
 def _parse_sections(body: str, body_start_line: int) -> Tuple[Section, ...]:
     lines = body.splitlines(keepends=True)
-    headings: List[Tuple[int, int, int, str]] = []
-    offset = 0
-    in_fence = False
-    fence_marker = ""
+    offsets: List[int] = []
+    cursor = 0
+    for line in lines:
+        offsets.append(cursor)
+        cursor += len(line)
+    headings: List[Tuple[int, int, int, str, str]] = []
+    fence_char: Optional[str] = None
+    fence_length = 0
+    html_end: Optional[re.Pattern[str]] = None
 
     for index, line in enumerate(lines):
-        stripped = line.lstrip()
-        fence = re.match(r"^(`{3,}|~{3,})", stripped)
-        if fence:
-            marker = fence.group(1)
-            if not in_fence:
-                in_fence = True
-                fence_marker = marker[0]
-            elif marker[0] == fence_marker:
-                in_fence = False
-                fence_marker = ""
-            offset += len(line)
+        if fence_char is not None:
+            close = re.match(
+                r"^ {0,3}(%s{%d,})[ \t]*(?:\r?\n)?$"
+                % (re.escape(fence_char), fence_length),
+                line,
+            )
+            if close:
+                fence_char = None
+                fence_length = 0
             continue
-        if not in_fence:
-            match = _HEADING.match(line)
-            if match:
-                headings.append(
-                    (index, offset, len(match.group(1)), match.group(2).strip())
-                )
-        offset += len(line)
+        fence = _FENCE.match(line)
+        if fence and not (fence.group(1).startswith("`") and "`" in fence.group(2)):
+            fence_char = fence.group(1)[0]
+            fence_length = len(fence.group(1))
+            continue
+        if html_end is not None:
+            if html_end.search(line):
+                html_end = None
+            continue
+        html = _HTML_START.match(line)
+        if html:
+            lowered = line.lower()
+            if "<!--" in lowered and "-->" not in lowered:
+                html_end = re.compile(r"-->")
+            elif html.group(1) and "</%s>" % html.group(1).lower() not in lowered:
+                html_end = re.compile(r"</%s\s*>" % html.group(1), re.IGNORECASE)
+            elif html.group(2):
+                html_end = re.compile(r"^\s*$")
+            # Block tags end at a blank line. Ignoring their opening line prevents
+            # HTML headings from becoming compiler section boundaries.
+            continue
+        match = _ATX_HEADING.match(line)
+        if match:
+            heading = (match.group(2) or "").strip()
+            heading = re.sub(r"[ \t]+#+[ \t]*$", "", heading)
+            headings.append(
+                (index, offsets[index], len(match.group(1)), heading, line)
+            )
+            continue
+        if index > 0 and _SETEXT.match(line):
+            previous = lines[index - 1]
+            title = previous.rstrip("\r\n")
+            if title.strip() and not title.startswith((" ", "\t")):
+                # The preceding line is the start of a Setext heading. It cannot
+                # already be consumed by another heading construct.
+                if not headings or headings[-1][0] != index - 1:
+                    level = 1 if line.lstrip().startswith("=") else 2
+                    headings.append(
+                        (
+                            index - 1,
+                            offsets[index - 1],
+                            level,
+                            title.strip(),
+                            previous + line,
+                        )
+                    )
 
     sections: List[Section] = []
     total_length = len(body)
-    for index, (line_index, start, level, heading) in enumerate(headings):
+    occurrences: Dict[str, int] = {}
+    for index, (line_index, start, level, heading, heading_text) in enumerate(headings):
         end = total_length
         end_line_index = len(lines)
-        for next_line, next_offset, next_level, _ in headings[index + 1 :]:
+        for next_line, next_offset, next_level, _, _ in headings[index + 1 :]:
             if next_level <= level:
                 end = next_offset
                 end_line_index = next_line
                 break
+        occurrences[heading] = occurrences.get(heading, 0) + 1
+        occurrence = occurrences[heading]
         sections.append(
             Section(
                 heading=heading,
                 level=level,
+                identity="%s[%d]" % (heading, occurrence),
+                occurrence=occurrence,
+                heading_text=heading_text,
                 start_line=body_start_line + line_index,
                 end_line=body_start_line + end_line_index - 1,
                 start_offset=start,

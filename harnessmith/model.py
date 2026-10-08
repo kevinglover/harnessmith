@@ -19,10 +19,13 @@ class FrontmatterField:
 
 @dataclass(frozen=True)
 class Section:
-    """An ATX-heading section with source provenance."""
+    """A Markdown heading section with stable identity and source provenance."""
 
     heading: str
     level: int
+    identity: str
+    occurrence: int
+    heading_text: str
     start_line: int
     end_line: int
     start_offset: int
