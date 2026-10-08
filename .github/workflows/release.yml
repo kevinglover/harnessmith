@@ -1,0 +1,53 @@
+---
+name: Release validation
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact package version to validate (without a v prefix)
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install build tools
+        run: python -m pip install build twine
+      - name: Confirm requested version
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          PACKAGE_VERSION="$(python -c 'import harnessmith; print(harnessmith.__version__)')"
+          test "${PACKAGE_VERSION}" = "${REQUESTED_VERSION}"
+          case "${REQUESTED_VERSION}" in
+            *[!0-9.]*|.*|*..*|*.) exit 1 ;;
+          esac
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Build and inspect distributions
+        run: |
+          python -m build
+          python -m twine check dist/*
+      - name: Smoke-test installed wheel
+        run: |
+          python -m venv "${RUNNER_TEMP}/wheel-test"
+          "${RUNNER_TEMP}/wheel-test/bin/python" -m pip install dist/*.whl
+          "${RUNNER_TEMP}/wheel-test/bin/harnessmith" --help
+      - name: Upload validated distributions
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: harnessmith-${{ inputs.version }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

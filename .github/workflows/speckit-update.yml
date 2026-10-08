@@ -1,0 +1,17 @@
+---
+name: Update Spec Kit integrations
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  update:
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: ./.github/workflows/speckit-init.yml
+    with:
+      ai-assistants: codex,agy,cursor-agent,copilot,opencode,claude
+      version-md-file-to-write: VERSION.md
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
