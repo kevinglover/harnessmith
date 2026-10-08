@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/v1/fixture-manifest.schema.json",
+  "title": "Harnessmith fixture manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "fixtures"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fixture_id", "repository", "revision", "license", "source_path", "source_sha256", "expected_targets", "expected_diagnostics"],
+        "properties": {
+          "fixture_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+          "repository": {"type": "string", "minLength": 1},
+          "revision": {"type": "string", "minLength": 1},
+          "license": {"type": "string", "minLength": 1},
+          "source_path": {"type": "string", "minLength": 1},
+          "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "expected_targets": {"type": "array", "items": {"enum": ["generic", "cursor", "claude", "codex"]}, "uniqueItems": true},
+          "expected_diagnostics": {"type": "array", "items": {"type": "string", "pattern": "^HS[0-9]+$"}, "uniqueItems": true}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/v1/adapter-capabilities.schema.json",
+  "title": "Harnessmith adapter capabilities",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "target", "capabilities"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "target": {"type": "string", "minLength": 1},
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status", "explanation"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "status": {"enum": ["supported", "unsupported", "lossy"]},
+          "explanation": {"type": "string", "minLength": 1},
+          "native_representation": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

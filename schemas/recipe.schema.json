@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/v1/recipe.schema.json",
+  "title": "Harnessmith recipe",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "target": {"enum": ["generic", "cursor", "claude", "codex"]},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "invocation": {"enum": ["source", "explicit", "automatic"]},
+    "extract_sections": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "optimizations": {"type": "array", "items": {"enum": ["spec-kit-extension-hooks"]}, "uniqueItems": true},
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "root_tokens": {"type": "integer", "minimum": 1},
+        "normal_path_tokens": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

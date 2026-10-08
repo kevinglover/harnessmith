@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/v1/diagnostic.schema.json",
+  "title": "Harnessmith diagnostic",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "rule_id", "severity", "message", "rationale"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "rule_id": {"type": "string", "pattern": "^HS[0-9]+$"},
+    "severity": {"enum": ["error", "warning", "note"]},
+    "message": {"type": "string", "minLength": 1},
+    "rationale": {"type": "string", "minLength": 1},
+    "estimated_savings_tokens": {"type": ["integer", "null"], "minimum": 0},
+    "source_span": {"$ref": "#/$defs/source_span"},
+    "remediation": {"$ref": "#/$defs/remediation"}
+  },
+  "$defs": {
+    "source_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "start_line", "end_line"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1},
+        "start_column": {"type": ["integer", "null"], "minimum": 1},
+        "end_column": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "remediation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "requires_review"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "requires_review": {"type": "boolean"},
+        "recipe_fragment": {"type": ["object", "null"]}
+      }
+    }
+  }
+}
