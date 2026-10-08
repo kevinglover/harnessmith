@@ -25,6 +25,7 @@ class PackagingTests(unittest.TestCase):
         )
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("usage: harnessmith", result.stdout)
+        self.assertIn("harnessmith verify PACKAGE", result.stdout)
 
     def test_packaging_uses_module_version_as_single_source(self) -> None:
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")

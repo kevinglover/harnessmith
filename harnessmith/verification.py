@@ -115,6 +115,18 @@ def verify_compiled_package(package_dir: Path) -> VerificationReport:
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 if actual != expected_hash:
                     issues.append(VerificationIssue("HS506", "owned file hash differs: %s" % relative))
+
+        expected_paths = set(safe_files) | {".harnessmith.json"}
+        for path in sorted(package_dir.rglob("*")):
+            if path.is_dir() and not path.is_symlink():
+                continue
+            relative = path.relative_to(package_dir).as_posix()
+            if relative not in expected_paths:
+                issues.append(
+                    VerificationIssue(
+                        "HS505", "unexpected package path: %s" % relative
+                    )
+                )
     checks["file_hashes"] = "failed" if any(i.code in {"HS504", "HS505", "HS506"} for i in issues) else "passed"
 
     source = _resolve_recorded_path(manifest.get("source"), package_dir)

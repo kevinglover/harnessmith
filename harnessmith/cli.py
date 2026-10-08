@@ -28,6 +28,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="harnessmith",
         description="Audit or compile an Agent Skill for a target harness.",
+        epilog=(
+            "To verify an existing compiled package, run: "
+            "harnessmith verify PACKAGE [--json]"
+        ),
     )
     parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
     parser.add_argument(

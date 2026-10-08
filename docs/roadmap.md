@@ -14,8 +14,9 @@ All branches start from the Phase 0 contracts and keep the safety invariants in
 - [x] Preserve existing target behavior and establish a green baseline.
 
 Baseline recorded on 2026-10-08: `python3 -m unittest discover -s tests -v`
-passes all 31 tests on Python 3.9-compatible source. The foundation phase adds
-contract tests only; it does not alter compilation or adapter behavior.
+passes all 31 foundation tests on Python 3.9-compatible source. The foundation
+phase added contract tests only; it did not alter compilation or adapter
+behavior.
 
 ## Parallel workstreams
 
@@ -42,10 +43,31 @@ the adapter-contract workstream deliberately migrates it.
 
 ## Acceptance gate
 
-- Existing compilation behavior remains compatible.
-- All durable JSON formats have explicit schemas and versions.
-- Corpus and behavioral tests run offline by default.
-- Unsupported semantics fail closed.
-- Static estimates and live runtime measurements are reported separately.
-- Built artifacts install and run in a clean environment.
-- Publishing remains a separate, explicitly authorized action.
+- [x] Existing compilation behavior remains compatible.
+- [x] All durable JSON formats have explicit schemas and versions.
+- [x] Corpus and behavioral tests run offline by default.
+- [x] Unsupported semantics fail closed.
+- [x] Static estimates and live runtime measurements are reported separately.
+- [x] CI builds and smoke-tests artifacts in a clean environment.
+- [x] Publishing remains a separate, explicitly authorized action.
+
+## Integration review
+
+Completed on 2026-10-08 against the merged roadmap branch:
+
+- [x] Adapter declarations and fail-closed contract tests cover every target.
+- [x] The pinned fixture corpus and offline behavioral scenarios validate.
+- [x] Audit output supports deterministic text, JSON, and SARIF formats.
+- [x] `verify`, `--dry-run`, and `--diff` preserve no-write behavior where promised.
+- [x] Verification detects missing, unexpected, modified, and unsafe package paths.
+- [x] Parser and transform regressions cover fences, Setext headings, duplicate
+  selectors, HTML blocks, links, and byte-preserving extraction.
+- [x] The checked-in compiled example matches deterministic regeneration.
+- [x] The full dependency-free suite passes 75 tests and byte-compilation.
+- [x] Repository CI defines schema, documentation, lint, type, coverage, package,
+  wheel-install, and generated-artifact gates.
+
+The local integration environment did not have the optional development tools
+installed, so schema validation via `jsonschema`, Ruff, mypy, coverage, package
+build, Twine, and clean-wheel installation remain CI-executed gates rather than
+locally reproduced results. No package was published.

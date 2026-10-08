@@ -7,7 +7,7 @@ communicates the affected area:
 - `HS2xx` — context efficiency
 - `HS3xx` — target compatibility
 - `HS4xx` — provenance and recipes (reserved)
-- `HS5xx` — generated-package verification (reserved)
+- `HS5xx` — generated-package verification
 
 Diagnostics have `error`, `warning`, or `note` severity. An error means the
 requested target cannot preserve the source behavior. A warning identifies a

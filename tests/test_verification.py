@@ -51,6 +51,18 @@ class VerificationTests(unittest.TestCase):
             self.assertIn("HS505", {issue.code for issue in report.issues})
             self.assertIn("HS506", {issue.code for issue in report.issues})
 
+    def test_unexpected_files_are_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._compiled(Path(directory))
+            (output / "unexpected.txt").write_text("not compiler-owned\n", encoding="utf-8")
+            report = verify_compiled_package(output)
+            self.assertFalse(report.valid)
+            self.assertIn(
+                "unexpected package path: unexpected.txt",
+                {issue.message for issue in report.issues},
+            )
+            self.assertEqual("failed", report.checks["file_hashes"])
+
     def test_manifest_traversal_and_owned_symlink_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = self._compiled(Path(directory))
