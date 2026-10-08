@@ -11,6 +11,13 @@ from typing import Optional, Sequence
 from . import __version__
 from .audit import audit_skill
 from .compiler import CompileOptions, compile_skill, write_package
+from .contracts import Diagnostic, Remediation, Severity, SourceSpan
+from .diagnostics import (
+    diagnostics_fail_threshold,
+    render_diagnostics_json,
+    render_diagnostics_sarif,
+    render_diagnostics_text,
+)
 from .errors import SkillCompilerError
 from .recipe import load_recipe
 from .targets import TARGET_NAMES
@@ -83,6 +90,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--json", action="store_true", help="Print the compile report as JSON"
     )
+    parser.add_argument(
+        "--format",
+        choices=("text", "json", "sarif"),
+        dest="audit_format",
+        help="Diagnostic output format (audit mode only)",
+    )
+    parser.add_argument(
+        "--fail-on",
+        choices=("note", "warning", "error"),
+        help=(
+            "Return exit code 1 when an audit diagnostic meets or exceeds this "
+            "severity"
+        ),
+    )
     preview = parser.add_mutually_exclusive_group()
     preview.add_argument(
         "--dry-run",
@@ -124,6 +145,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
 
         if args.audit:
+            if args.json and args.audit_format not in (None, "json"):
+                raise SkillCompilerError(
+                    "--json conflicts with --format %s" % args.audit_format
+                )
             report = audit_skill(args.source, target, source_id=args.source_id)
             if (
                 recipe
@@ -134,8 +159,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     "source hash differs from the selected recipe; "
                     "re-audit before compiling"
                 )
-            _print_audit(report, args.json)
+            diagnostics = _diagnostics_from_report(report)
+            # --json predates structured diagnostics and intentionally retains
+            # the complete audit report for backwards compatibility.
+            if args.json:
+                _print_audit(report, True)
+            else:
+                _print_audit(report, False, args.audit_format or "text", diagnostics)
+            if args.fail_on and diagnostics_fail_threshold(diagnostics, args.fail_on):
+                return 1
             return 0
+
+        if args.audit_format is not None or args.fail_on is not None:
+            raise SkillCompilerError("--format and --fail-on require --audit")
 
         if args.output is None:
             raise SkillCompilerError("--output is required when compiling")
@@ -237,9 +273,20 @@ def _verify_main(argv: Sequence[str]) -> int:
     return 0 if report.valid else 1
 
 
-def _print_audit(report: object, as_json: bool) -> None:
+def _print_audit(
+    report: object,
+    as_json: bool,
+    output_format: str = "text",
+    diagnostics: Sequence[Diagnostic] = (),
+) -> None:
     if as_json:
         print(json.dumps(report, indent=2, sort_keys=True))
+        return
+    if output_format == "json":
+        print(render_diagnostics_json(diagnostics))
+        return
+    if output_format == "sarif":
+        print(render_diagnostics_sarif(diagnostics, __version__))
         return
     assert isinstance(report, dict)
     metrics = report["metrics"]
@@ -272,7 +319,65 @@ def _print_audit(report: object, as_json: bool) -> None:
         )
     for warning in report["warnings"]:
         print("Warning: %s" % warning)
+    rendered = render_diagnostics_text(diagnostics)
+    if rendered:
+        print("Diagnostics:")
+        print(rendered)
     print("No files written.")
+
+
+def _diagnostics_from_report(report: object) -> list[Diagnostic]:
+    """Restore public diagnostic values serialized by ``audit_skill``."""
+
+    assert isinstance(report, dict)
+    diagnostics: list[Diagnostic] = []
+    for value in report.get("diagnostics", []):
+        assert isinstance(value, dict)
+        source_value = value.get("source_span")
+        source_span = None
+        if isinstance(source_value, dict):
+            source_span = SourceSpan(
+                path=str(source_value["path"]),
+                start_line=int(source_value["start_line"]),
+                end_line=int(source_value["end_line"]),
+                start_column=(
+                    int(source_value["start_column"])
+                    if "start_column" in source_value
+                    else None
+                ),
+                end_column=(
+                    int(source_value["end_column"])
+                    if "end_column" in source_value
+                    else None
+                ),
+            )
+        remediation_value = value.get("remediation")
+        remediation = None
+        if isinstance(remediation_value, dict):
+            recipe_fragment = remediation_value.get("recipe_fragment")
+            remediation = Remediation(
+                summary=str(remediation_value["summary"]),
+                recipe_fragment=(
+                    recipe_fragment if isinstance(recipe_fragment, dict) else None
+                ),
+                requires_review=bool(remediation_value["requires_review"]),
+            )
+        estimated_savings = value.get("estimated_savings_tokens")
+        diagnostics.append(
+            Diagnostic(
+                rule_id=str(value["rule_id"]),
+                severity=Severity(str(value["severity"])),
+                message=str(value["message"]),
+                rationale=str(value["rationale"]),
+                source_span=source_span,
+                estimated_savings_tokens=(
+                    int(estimated_savings) if estimated_savings is not None else None
+                ),
+                remediation=remediation,
+                schema_version=int(value.get("schema_version", 1)),
+            )
+        )
+    return diagnostics
 
 
 if __name__ == "__main__":
