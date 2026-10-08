@@ -3,47 +3,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Sequence, Set, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 from .errors import SkillCompilerError
 from .frontmatter import filter_fields, replace_scalar, scalar_value
 from .model import FrontmatterField, InvocationPolicy, SkillIR
-
-
-STANDARD_FIELDS: Set[str] = {
-    "name",
-    "description",
-    "license",
-    "compatibility",
-    "metadata",
-    "allowed-tools",
-}
-
-CLAUDE_FIELDS: Set[str] = STANDARD_FIELDS | {
-    "when_to_use",
-    "argument-hint",
-    "arguments",
-    "disable-model-invocation",
-    "user-invocable",
-    "disallowed-tools",
-    "model",
-    "effort",
-    "context",
-    "agent",
-    "background",
-    "hooks",
-    "paths",
-    "shell",
-}
-
-CURSOR_FIELDS: Set[str] = STANDARD_FIELDS | {
-    "paths",
-    "disable-model-invocation",
-    "icon",
-    "color",
-}
-
-CODEX_FIELDS: Set[str] = STANDARD_FIELDS
+from .targets import get_target
 
 
 @dataclass(frozen=True)
@@ -66,16 +31,9 @@ def source_invocation_policy(ir: SkillIR) -> InvocationPolicy:
 def adapt_frontmatter(
     ir: SkillIR, target: str, invocation: InvocationPolicy
 ) -> AdaptedFrontmatter:
-    target = target.lower()
-    if target not in ("generic", "cursor", "claude", "codex"):
-        raise SkillCompilerError("unknown target: %s" % target)
-
-    if target == "claude":
-        allowed = CLAUDE_FIELDS
-    elif target == "cursor":
-        allowed = CURSOR_FIELDS
-    else:
-        allowed = CODEX_FIELDS
+    definition = get_target(target)
+    target = definition.name
+    allowed = definition.frontmatter_fields
 
     _validate_unsupported_fields(ir, target, allowed)
     fields, dropped = filter_fields(ir.frontmatter, allowed)
