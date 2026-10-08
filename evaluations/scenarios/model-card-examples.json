@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "scenario_id": "model-card-load-examples",
+  "fixture_id": "huggingface-heavy-examples",
+  "target": "claude",
+  "prompt": "Draft the evaluation section for a classification model card.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Examples"
+    ]
+  },
+  "required_constraints": [
+    "State limitations and evaluation conditions explicitly."
+  ],
+  "forbidden_actions": [
+    "invent-metrics"
+  ],
+  "expected_reference_loads": [
+    "references/examples.md"
+  ],
+  "semantic_assertions": [
+    {
+      "kind": "output_contains",
+      "value": "label space"
+    },
+    {
+      "kind": "output_contains",
+      "value": "evaluation conditions"
+    }
+  ],
+  "mock_transcript": {
+    "invoked": true,
+    "output": "Document the label space and evaluation conditions; report only supplied metrics.",
+    "actions": [
+      "read-supplied-evidence"
+    ],
+    "reference_loads": [
+      "references/examples.md"
+    ]
+  }
+}

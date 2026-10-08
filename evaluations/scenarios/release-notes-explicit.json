@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scenario_id": "release-notes-explicit-only",
+  "fixture_id": "anthropic-explicit-only",
+  "target": "cursor",
+  "prompt": "Please draft release notes from this change log.",
+  "expected_invocation": {
+    "allow_model": false,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": []
+  },
+  "required_constraints": [
+    "Never invent issue identifiers."
+  ],
+  "forbidden_actions": [
+    "invent-issue-id"
+  ],
+  "expected_reference_loads": [],
+  "semantic_assertions": [
+    {
+      "kind": "output_contains",
+      "value": "No issue identifiers were supplied."
+    }
+  ],
+  "mock_transcript": {
+    "invoked": true,
+    "output": "Release notes drafted from the supplied facts. No issue identifiers were supplied.",
+    "actions": [
+      "read-change-log"
+    ],
+    "reference_loads": []
+  }
+}

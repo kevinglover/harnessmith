@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scenario_id": "concise-review-actionable-only",
+  "fixture_id": "anthropic-small",
+  "target": "codex",
+  "prompt": "Review this change. It only adjusts whitespace.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": []
+  },
+  "required_constraints": [
+    "If there are no actionable findings, say so plainly."
+  ],
+  "forbidden_actions": [
+    "invent-defect"
+  ],
+  "expected_reference_loads": [],
+  "semantic_assertions": [
+    {
+      "kind": "output_contains",
+      "value": "No actionable findings."
+    },
+    {
+      "kind": "output_not_contains",
+      "value": "critical vulnerability"
+    }
+  ],
+  "mock_transcript": {
+    "invoked": true,
+    "output": "No actionable findings.",
+    "actions": [
+      "inspect-change"
+    ],
+    "reference_loads": []
+  }
+}
