@@ -1,5 +1,11 @@
 # Harness-aware Agent Skill compilation
 
+> Historical research and design record. For the current implementation, start
+> with the [README](../README.md), [architecture](architecture.md),
+> [optimization model](optimization-model.md), and [target matrix](targets.md).
+> Where this report and those guides differ, the task-focused guides describe
+> current behavior.
+
 ## Conclusion
 
 One canonical behavioral definition can produce harness-aware packages without

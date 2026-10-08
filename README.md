@@ -1,266 +1,106 @@
 # Harnessmith
 
-Audit and compile Agent Skills into packages optimized for a target harness.
+Harnessmith audits and compiles canonical Agent Skills into deterministic,
+target-aware packages for `generic`, `cursor`, `claude`, and `codex` harnesses.
 
-**Status:** Harnessmith is an experimental compiler prototype. Its command-line
-interface, package format, and optimization passes may change before a stable
-release.
+> **Alpha:** the CLI, package manifest, and optimization passes may change before
+> a stable release.
 
-## Overview
+Harnessmith keeps optimization reviewable. It moves exact source sections only
+when you select them, records every transform in `.harnessmith.json`, and fails
+when a target cannot preserve behavior-bearing semantics. It does not silently
+rewrite instructions to make a skill fit.
 
-Harnessmith treats `SKILL.md` as the source format and keeps harness
-compatibility, context budgets, and reviewed optimizations in one compiler. A
-source can be a local skill, an upstream checkout, or a generated skill such as
-Spec Kit output.
+## Install
 
-The current workflow has three layers:
-
-- **Audit** measures any skill without changing it and identifies sections that
-  deserve human review.
-- **Recipe** records exact extraction choices, target policy, budgets, and the
-  reviewed source hash.
-- **Compile** applies only deterministic, selected transforms and emits a
-  provenance manifest.
-
-This repository began as an extension of
-[dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills), so
-its existing Spec Kit integrations remain useful fixtures. They are no longer
-the compiler's product boundary.
-
-## Audit any Agent Skill
-
-Pass either a skill directory or its `SKILL.md`:
+From a checkout, use Python 3.9 or newer:
 
 ```bash
-python3 -m harnessmith /path/to/example-skill \
+python3 -m pip install -e .
+harnessmith --version
+```
+
+You can also run every example below as `python3 -m harnessmith ...` without
+installing the console script.
+
+## Five-minute workflow
+
+Audit a skill without writing files:
+
+```bash
+harnessmith skills/speckit-analyze \
   --target cursor \
   --audit \
   --json
 ```
 
-Audit mode is read-only. Its suggestions are review candidates, not automatic
-rewrites: heading names and size can reveal context pressure, but only a human
-or reviewed recipe can decide whether prose is safe to load conditionally.
-
-## Compile with a pinned recipe
-
-Recipes make optimization decisions reproducible and keep them separate from
-upstream skills:
+Preview the checked-in, source-pinned recipe:
 
 ```bash
-python3 -m harnessmith skills/speckit-analyze \
+harnessmith skills/speckit-analyze \
   --recipe recipes/speckit-analyze.cursor.json \
-  --output examples/compiled/cursor/speckit-analyze
+  --output /tmp/harnessmith-preview \
+  --diff
 ```
 
-A recipe pins the source SHA-256. If the upstream skill changes, compilation
-fails until the skill is audited and the recipe is reviewed again. Command-line
-options can still drive one-off compilation, but checked-in recipes are the
-preferred path for maintained outputs.
+Compile and independently verify the package:
 
-The compiler supports `generic`, `cursor`, `claude`, and `codex` frontmatter
-adapters. Exact-heading extraction is explicit and lossless. Specialized
-optimizations are named and opt-in; the current Spec Kit extension-hook pass is
-one such transform, not a general assumption. A deterministic manifest records
-source, recipe, and output hashes, path-loaded context, packaged size, and every
-transformation.
+```bash
+harnessmith skills/speckit-analyze \
+  --recipe recipes/speckit-analyze.cursor.json \
+  --output /tmp/harnessmith-preview
 
-Run the test suite with:
+harnessmith verify /tmp/harnessmith-preview
+```
+
+The recipe pins the source SHA-256. If the source changes, compilation stops
+until the recipe is reviewed. `--dry-run` and `--diff` compile and validate in
+memory without writing the output directory.
+
+## What compilation changes
+
+An exact section extraction replaces the selected root section with a mandatory
+read instruction and moves its original bytes into `references/`:
+
+```text
+SKILL.md                         compiled package/
+├─ Workflow                     ├─ SKILL.md (workflow + required read gate)
+└─ Detailed examples     ->     ├─ references/detailed-examples.md
+                                └─ .harnessmith.json
+```
+
+The generated manifest records source and recipe hashes, output hashes,
+transform provenance, and static size estimates. See the
+[optimization walkthrough](docs/optimization-model.md#walkthrough-large-skill-to-progressive-disclosure)
+for an exact example.
+
+## Documentation
+
+- [CLI reference](docs/cli.md)
+- [Architecture](docs/architecture.md)
+- [Optimization model](docs/optimization-model.md)
+- [Target capability matrix](docs/targets.md)
+- [Recipes](docs/recipes.md)
+- [Diagnostics](docs/diagnostics.md)
+- [Verification and evaluation](docs/evaluation.md)
+- [Safety model](docs/safety-model.md)
+- [Adding an adapter](docs/adding-an-adapter.md)
+- [Roadmap](docs/roadmap.md)
+
+The earlier [investigation and design report](docs/harness-aware-skill-compilation.md)
+is retained as historical research. The task-focused guides above describe the
+current implementation.
+
+## Development
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 scripts/check_repository.py docs
 ```
 
-See [the investigation and design report](docs/harness-aware-skill-compilation.md)
-for the repository analysis, capability matrix, architecture, evaluation plan,
-measured example, and upstream boundaries. See the
-[cross-repository evaluation corpus](docs/evaluation-corpus.md) for pinned
-skills from other ecosystems that exercise the generic path.
+The repository also contains Spec Kit-derived skills used as real compiler
+inputs. Their maintenance and integration layout are documented in the
+[legacy research report](docs/harness-aware-skill-compilation.md) and are not
+the product boundary.
 
-## Current integration model
-
-The manual Spec Kit update workflow runs `specify init --integration` for:
-
-- `codex`
-- `agy`
-- `cursor-agent`
-- `copilot`
-- `opencode`
-- `claude`
-
-The generated files are therefore not all stored in the same layout:
-
-| Runtime / integration | Repository path                       | Role                                                                 |
-| --------------------- | ------------------------------------- | -------------------------------------------------------------------- |
-| Agent Skills (`agy`)  | `skills/`                             | Shared Spec Kit skills                                               |
-| Claude Code           | `.claude/skills -> ../skills`         | Shared skills exposed to Claude Code                                 |
-| Codex CLI             | `.agents/skills -> ../skills`         | Shared skills exposed to Codex                                       |
-| Cursor Agent          | `.cursor/skills/`                     | Cursor-specific generated skill copies                               |
-| GitHub Copilot CLI    | `.github/agents/`, `.github/prompts/` | Generated agents and prompt wrappers                                 |
-| OpenCode              | `.opencode/commands/`                 | Generated commands                                                   |
-| Gemini CLI            | `.gemini/commands/`                   | Checked-in commands; not regenerated by the current CI configuration |
-
-Legacy layouts such as `.claude/commands/`, `.codex/prompts/`, and `.opencode/command/` are intentionally not maintained.
-
-## Spec Kit fixture quickstart
-
-1. Clone this repository.
-
-   ```bash
-   git clone https://github.com/kevinglover/harnessmith.git
-   cd harnessmith
-   ```
-
-2. Install [Spec Kit](https://github.com/github/spec-kit).
-
-3. Initialize a target project with the Spec Kit integration appropriate for your agent.
-
-   ```bash
-   specify init --here --integration <integration>
-   ```
-
-4. If the target runtime consumes Agent Skills directly, copy the required skills from `skills/` into that project's skills directory when needed.
-
-   ```bash
-   cp -a skills/* /path/to/project/skills/
-   ```
-
-5. Invoke the relevant `speckit-*` skill or runtime command from your agent.
-
-## Spec Kit workflow
-
-The main Spec-Driven Development flow in this repository is:
-
-1. **Constitution** - Define project principles.
-2. **Specify** - Capture requirements for new work.
-   - Or **Baseline** - Derive a specification from an existing codebase.
-3. **Clarify** _(optional)_ - Resolve material ambiguities.
-4. **Plan** - Produce the implementation strategy.
-5. **Tasks** - Generate ordered work items.
-6. **Analyze** _(optional)_ - Check consistency across the specification, plan, and tasks.
-7. **Converge** _(optional)_ - Compare an existing implementation with the spec/plan/tasks and append remaining work to `tasks.md`.
-8. **Implement** - Execute the tasks.
-
-Additional utilities include **Checklist** for requirements-quality checks and **Tasks to Issues** for converting generated tasks into GitHub issues.
-
-### Visual workflow
-
-```mermaid
-flowchart TD
-  C0["speckit-constitution"] --> C1["speckit-specify"]
-  C0 --> B["speckit-baseline"]
-  C1 --> C2["speckit-plan"]
-  B --> C2
-  C2 --> C3["speckit-tasks"]
-  C3 --> C4["speckit-implement"]
-
-  C1 -.-> O1["speckit-clarify"]
-  B -.-> O1
-  O1 -.-> C2
-
-  C3 -.-> O2["speckit-analyze"]
-  O2 -.-> C4
-
-  C3 -.-> O3["speckit-converge"]
-  O3 -.-> C4
-
-  C3 -.-> O4["speckit-taskstoissues"]
-
-  C1 -.-> O5["speckit-checklist"]
-  C2 -.-> O5
-  C3 -.-> O5
-```
-
-## Skills
-
-### Spec Kit skills
-
-The current shared `speckit-*` set includes:
-
-- `speckit-analyze`
-- `speckit-baseline`
-- `speckit-checklist`
-- `speckit-clarify`
-- `speckit-constitution`
-- `speckit-converge`
-- `speckit-implement`
-- `speckit-plan`
-- `speckit-specify`
-- `speckit-tasks`
-- `speckit-taskstoissues`
-
-Most Spec Kit-managed skills are tracked by the manifests in `.specify/integrations/`. `speckit-baseline` is a repository-specific skill for deriving specifications from existing code.
-
-### Utility skills
-
-- `claude-command-converter` - Repository-specific utility for converting Claude command content into Agent Skill format.
-
-## Structure
-
-```text
-.
-├── benchmarks/                  # Pinned third-party evaluation inputs
-├── harnessmith/                 # Audit and compiler implementation
-├── recipes/                     # Reviewed, source-pinned optimizations
-├── examples/compiled/           # Deterministic generated packages
-├── skills/                      # Shared and repository-specific Agent Skills
-├── .agents/
-│   └── skills -> ../skills      # Codex CLI access to shared skills
-├── .claude/
-│   └── skills -> ../skills      # Claude Code access to shared skills
-├── .cursor/
-│   └── skills/                  # Cursor Agent generated skills
-├── .gemini/
-│   └── commands/                # Checked-in Gemini commands
-├── .github/
-│   ├── agents/                  # GitHub Copilot generated agents
-│   ├── prompts/                 # GitHub Copilot prompt wrappers
-│   └── workflows/               # CI and Spec Kit regeneration workflows
-├── .opencode/
-│   └── commands/                # OpenCode generated commands
-├── .specify/
-│   ├── integrations/            # Integration manifests
-│   ├── scripts/bash/            # Spec Kit helper scripts
-│   ├── templates/               # Spec Kit templates
-│   ├── init-options.json        # Last initialization options
-│   └── integration.json         # Current integration state
-├── .vscode/
-│   └── settings.json            # Workspace settings
-└── VERSION.md                   # Tracked Spec Kit version
-```
-
-## Regeneration
-
-`.github/workflows/ci.yml` calls `.github/workflows/speckit-init.yml`. The workflow:
-
-1. resolves the latest Spec Kit release,
-2. records `specify --version` in `VERSION.md`,
-3. skips regeneration when `VERSION.md` is unchanged,
-4. runs `specify init --force --here --ignore-agent-tools --script sh --integration` for the configured integrations,
-5. formats generated Markdown and JSON, and
-6. commits updated Spec Kit outputs when the tracked version changes.
-
-Treat manifest-managed runtime files as generated output. Prefer changing the integration configuration or repository-specific skills instead of manually maintaining generated copies.
-
-## Prerequisites
-
-Install and authenticate only the runtime tools you intend to use, plus Spec Kit itself.
-
-- **Claude Code** - Uses `.claude/skills`.
-- **OpenAI Codex CLI** - Uses `.agents/skills`.
-- **Cursor Agent** - Uses `.cursor/skills/`.
-- **GitHub Copilot CLI** - Uses `.github/agents/` and `.github/prompts/`.
-- **OpenCode** - Uses `.opencode/commands/`.
-- **Gemini CLI** - Can use the checked-in `.gemini/commands/`, but those files are outside the current regeneration set.
-- **Spec Kit** - Install from [github.com/github/spec-kit](https://github.com/github/spec-kit).
-
-## Usage notes
-
-- Skills do not always auto-run; use the runtime's skill invocation flow or request the skill explicitly.
-- If a skill fails, inspect its `SKILL.md` and verify the required Spec Kit project structure and prerequisites.
-- Run Spec Kit helper scripts from the repository root and prefer their structured output modes such as `--json` when available.
-- Do not restore legacy runtime layouts unless a currently supported Spec Kit integration starts generating them again.
-
-## License
-
-See [LICENSE](./LICENSE) for details.
+Harnessmith is licensed under the [GNU Affero General Public License v3.0](LICENSE).
