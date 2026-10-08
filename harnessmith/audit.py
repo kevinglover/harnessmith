@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 
 from .adapters import adapt_frontmatter, source_invocation_policy
+from .diagnostics import analyze_audit_diagnostics, diagnostic_to_dict
 from .errors import SkillCompilerError
 from .frontmatter import scalar_value
 from .metrics import estimate_tokens
@@ -43,6 +44,7 @@ def audit_skill(
     ir = parse_skill(Path(source), source_id=source_id)
     target = target.lower()
     warnings: List[str] = []
+    compatibility_error: Optional[str] = None
     target_transformations: List[Dict[str, object]] = []
     target_compatible = True
     try:
@@ -51,7 +53,8 @@ def audit_skill(
         target_transformations = adapted.transformations
     except SkillCompilerError as exc:
         target_compatible = False
-        warnings.append(str(exc))
+        compatibility_error = str(exc)
+        warnings.append(compatibility_error)
 
     duplicate_headings = {
         section.heading
@@ -76,6 +79,13 @@ def audit_skill(
     name = scalar_value(ir.field("name"))
     assert isinstance(name, str)
     root_tokens = estimate_tokens(ir.source_text)
+    diagnostics = analyze_audit_diagnostics(
+        ir,
+        target,
+        root_tokens,
+        sections,
+        compatibility_error=compatibility_error,
+    )
     return {
         "schema_version": 1,
         "skill": name,
@@ -86,6 +96,7 @@ def audit_skill(
         },
         "target_compatible": target_compatible,
         "warnings": warnings,
+        "diagnostics": [diagnostic_to_dict(item) for item in diagnostics],
         "metrics": {
             "source_chars": len(ir.source_text),
             "source_lines": len(ir.source_text.splitlines()),
