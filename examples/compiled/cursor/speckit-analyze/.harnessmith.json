@@ -53,6 +53,7 @@
     {
       "heading": "4. Detection Passes (Token-Efficient Analysis)",
       "output": "references/4-detection-passes-token-efficient-analysis.md",
+      "section_id": "4. Detection Passes (Token-Efficient Analysis)[1]",
       "source_lines": [
         125,
         162
@@ -63,6 +64,7 @@
     {
       "heading": "Specification Analysis Report",
       "output": "references/specification-analysis-report.md",
+      "section_id": "Specification Analysis Report[1]",
       "source_lines": [
         176,
         251
