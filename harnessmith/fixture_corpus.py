@@ -14,9 +14,10 @@ from pathlib import Path
 from typing import Mapping, Tuple
 
 from .contracts import CONTRACT_SCHEMA_VERSION, FixtureRecord
+from .targets import TARGET_NAMES
 
 
-TARGETS = frozenset(("generic", "cursor", "claude", "codex"))
+TARGETS = frozenset(TARGET_NAMES)
 _FIXTURE_ID = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 _DIAGNOSTIC_ID = re.compile(r"^HS[0-9]+$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")

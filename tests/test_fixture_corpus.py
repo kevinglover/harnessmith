@@ -9,6 +9,8 @@ from harnessmith.fixture_corpus import (
     FixtureValidationError,
     load_and_validate_manifest,
 )
+from harnessmith.compiler import CompileOptions, compile_skill
+from harnessmith.errors import SkillCompilerError
 from harnessmith.metrics import estimate_tokens
 
 
@@ -43,6 +45,25 @@ class FixtureCorpusTests(unittest.TestCase):
         )
         oversized = ROOT / "fixtures/sources/speckit-over-budget/SKILL.md"
         self.assertGreater(estimate_tokens(oversized.read_text(encoding="utf-8")), 5000)
+
+    def test_expected_target_matrix_matches_compiler_behavior(self) -> None:
+        records = load_and_validate_manifest(MANIFEST, ROOT)
+        for record in records:
+            actual = []
+            for target in ("generic", "cursor", "claude", "codex"):
+                try:
+                    compile_skill(
+                        ROOT / record.source_path,
+                        CompileOptions(
+                            target=target,
+                            source_id=record.source_path,
+                            expected_source_sha256=record.source_sha256,
+                        ),
+                    )
+                except SkillCompilerError:
+                    continue
+                actual.append(target)
+            self.assertEqual(record.expected_targets, tuple(actual), record.fixture_id)
 
     def test_hash_drift_is_rejected(self) -> None:
         document = json.loads(MANIFEST.read_text(encoding="utf-8"))

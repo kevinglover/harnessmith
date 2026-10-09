@@ -23,12 +23,41 @@
       "required": ["path", "sha256"],
       "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
     },
-    "transformations": {"type": "array", "items": {"type": "object"}},
-    "metrics": {"type": "object", "additionalProperties": {"type": "integer"}},
+    "transformations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "enum": ["extract-section", "frontmatter-filter", "invocation-adapter", "invocation-policy-override", "preserve-resource", "resolve-extension-hooks"]
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_skill_chars", "source_skill_token_estimate", "compiled_root_chars", "compiled_root_token_estimate", "reference_chars", "reference_token_estimate", "mandatory_reference_chars", "mandatory_reference_token_estimate", "conditional_reference_chars", "conditional_reference_token_estimate", "script_chars", "script_token_estimate", "normal_path_instruction_chars", "normal_path_instruction_token_estimate", "normal_path_reduction_percent", "packaged_instruction_chars", "packaged_instruction_token_estimate", "root_char_reduction", "root_reduction_percent"],
+      "patternProperties": {".*": {"type": "integer"}}
+    },
     "files": {
       "type": "object",
-      "propertyNames": {"not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}},
+      "minProperties": 1,
+      "propertyNames": {
+        "minLength": 1,
+        "not": {"pattern": "(^/|(^|/)\\.\\.(/|$)|\\\\|^\\.$)"}
+      },
       "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "executables": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {"pattern": "(^/|(^|/)\\.\\.(/|$)|\\\\|^\\.$)"}
+      }
     }
   }
 }

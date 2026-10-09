@@ -81,6 +81,36 @@ class VerificationTests(unittest.TestCase):
             report = verify_compiled_package(output)
             self.assertIn("HS504", {issue.code for issue in report.issues})
 
+    def test_malformed_transformation_is_reported_without_a_traceback(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._compiled(Path(directory))
+            manifest_path = output / ".harnessmith.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            invalid_values = (
+                [1],
+                [
+                    {
+                        "type": "preserve-resource",
+                        "path": "assets/x",
+                        "content": [],
+                        "source_sha256": "0" * 64,
+                        "executable": False,
+                    }
+                ],
+            )
+            for value in invalid_values:
+                with self.subTest(value=value):
+                    manifest["transformations"] = value
+                    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+                    report = verify_compiled_package(output)
+
+                    self.assertFalse(report.valid)
+                    self.assertEqual("failed", report.checks["manifest"])
+                    self.assertEqual(
+                        {"HS502"}, {issue.code for issue in report.issues}
+                    )
+
     def test_symlinked_owned_parent_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

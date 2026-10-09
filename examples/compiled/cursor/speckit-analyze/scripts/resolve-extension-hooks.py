@@ -166,29 +166,12 @@ def _manual_event(text: str, event: str):
 
 
 def _load_event(text: str, event: str):
-    try:
-        import yaml  # type: ignore
-    except ImportError:
-        return _manual_event(text, event)
-    try:
-        data = yaml.safe_load(text)
-    except Exception as exc:
-        raise InvalidConfig(str(exc)) from exc
-    if data is None:
-        return []
-    if not isinstance(data, dict):
-        raise InvalidConfig("configuration root must be a mapping")
-    hooks = data.get("hooks", {})
-    if hooks is None:
-        return []
-    if not isinstance(hooks, dict):
-        raise InvalidConfig("hooks must be a mapping")
-    entries = hooks.get(event, [])
-    if entries is None:
-        return []
-    if not isinstance(entries, list) or not all(isinstance(item, dict) for item in entries):
-        raise InvalidConfig("hooks.%s must be a list of mappings" % event)
-    return entries
+    # Always use the same strict subset parser. Environment-dependent optional
+    # YAML libraries can disagree about duplicate keys and accepted syntax,
+    # which would make hook behavior vary across otherwise identical packages.
+    # Unsupported syntax returns ``unavailable`` and activates the byte-exact
+    # fallback contract preserved by the compiler.
+    return _manual_event(text, event)
 
 
 def _text_field(hook, key: str, required: bool = False) -> str:

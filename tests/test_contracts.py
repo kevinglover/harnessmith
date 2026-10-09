@@ -13,6 +13,7 @@ from harnessmith.contracts import (
     Severity,
     SourceSpan,
 )
+from harnessmith.targets import TARGET_NAMES
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +28,23 @@ class ContractTests(unittest.TestCase):
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", document["$schema"])
             self.assertIn("schema_version", document["properties"])
             self.assertEqual(1, document["properties"]["schema_version"]["const"])
+
+    def test_published_target_enums_match_the_runtime_registry(self) -> None:
+        expected = list(TARGET_NAMES)
+        recipe = json.loads((ROOT / "schemas/recipe.schema.json").read_text())
+        fixture = json.loads(
+            (ROOT / "schemas/fixture-manifest.schema.json").read_text()
+        )
+        package = json.loads(
+            (ROOT / "schemas/package-manifest.schema.json").read_text()
+        )
+        self.assertEqual(expected, recipe["properties"]["target"]["enum"])
+        self.assertEqual(
+            expected,
+            fixture["properties"]["fixtures"]["items"]["properties"]
+            ["expected_targets"]["items"]["enum"],
+        )
+        self.assertEqual(expected, package["properties"]["target"]["enum"])
 
     def test_diagnostic_requires_stable_id_and_ordered_span(self) -> None:
         diagnostic = Diagnostic(

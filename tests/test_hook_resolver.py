@@ -119,6 +119,34 @@ class HookResolverTests(unittest.TestCase):
 
             self.assertEqual("missing", payload["status"])
 
+    def test_duplicate_yaml_keys_fail_closed_deterministically(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            output = temp / "compiled"
+            project = temp / "project"
+            config = project / ".specify" / "extensions.yml"
+            config.parent.mkdir(parents=True)
+            config.write_text(
+                "hooks:\n"
+                "  before_analyze: []\n"
+                "hooks:\n"
+                "  before_analyze:\n"
+                "    - extension: hidden\n"
+                "      command: speckit.hidden.run\n"
+                "      optional: false\n",
+                encoding="utf-8",
+            )
+            write_package(self._package(), output)
+
+            payload = self._run(
+                output / "scripts" / "resolve-extension-hooks.py",
+                "before_analyze",
+                project,
+            )
+
+            self.assertEqual("invalid", payload["status"])
+            self.assertIn("duplicate top-level hooks", payload["error"])
+
 
 if __name__ == "__main__":
     unittest.main()

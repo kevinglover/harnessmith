@@ -4,16 +4,20 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import shutil
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Set, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from . import __version__
 from .adapters import adapt_frontmatter, source_invocation_policy
 from .errors import SkillCompilerError
 from .frontmatter import render_frontmatter, scalar_value
 from .hook_optimizer import expected_extracted_section, optimize_extension_hooks
+from .manifest import is_safe_relative_path, require_valid_manifest
 from .metrics import estimate_tokens
 from .model import CompiledPackage, InvocationPolicy, SkillIR
 from .parser import parse_skill
@@ -49,6 +53,12 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
     target = options.target.lower()
     policy = _resolve_invocation(ir, options.invocation)
     adapted = adapt_frontmatter(ir, target, policy)
+    (
+        bundled_text,
+        bundled_binary,
+        executable_files,
+        resource_transforms,
+    ) = _load_bundled_resources(ir.source_path.parent)
     extraction = ExtractSectionsTransform(options.extract_sections)
     extraction_analysis = extraction.analyze(ir)
     extraction_result = extraction.apply(ir, extraction_analysis)
@@ -72,20 +82,56 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
     root_text = render_frontmatter(adapted.fields) + "\n" + generated_note + body.lstrip("\n")
 
     files: Dict[str, str] = {"SKILL.md": _ensure_final_newline(root_text)}
-    files.update(adapted.extra_files)
-    files.update(references)
-    files.update(scripts)
+    _merge_text_files(files, bundled_text)
+    _merge_text_files(files, adapted.extra_files)
+    _merge_text_files(files, references)
+    _merge_text_files(files, scripts)
+    binary_files = dict(bundled_binary)
+    collisions = set(files).intersection(binary_files)
+    if collisions:
+        raise SkillCompilerError(
+            "generated output collides with bundled resource: %s"
+            % ", ".join(sorted(collisions))
+        )
 
-    transformations = adapted.transformations + extraction_transforms + hook_transforms
+    transformations = (
+        adapted.transformations
+        + resource_transforms
+        + extraction_transforms
+        + hook_transforms
+    )
+    all_references = {
+        path: content
+        for path, content in files.items()
+        if path.startswith("references/")
+    }
+    all_scripts = {
+        path: content for path, content in files.items() if path.startswith("scripts/")
+    }
+    mandatory_references = {
+        str(item["output"])
+        for item in extraction_transforms
+        if isinstance(item.get("output"), str)
+    } - conditional_references
     metrics = _metrics(
         ir.source_text,
         files["SKILL.md"],
-        references,
-        scripts,
+        all_references,
+        all_scripts,
+        mandatory_references,
         conditional_references,
     )
     _enforce_budgets(metrics, options)
-    manifest = _build_manifest(ir, target, files, transformations, metrics, options)
+    manifest = _build_manifest(
+        ir,
+        target,
+        files,
+        binary_files,
+        transformations,
+        metrics,
+        executable_files,
+        options,
+    )
     files[".harnessmith.json"] = json.dumps(
         manifest, indent=2, sort_keys=True, ensure_ascii=False
     ) + "\n"
@@ -99,17 +145,25 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
         manifest=manifest,
         metrics=metrics,
         transformations=transformations,
+        binary_files=binary_files,
+        executable_files=executable_files,
     )
     verify_package(ir, package, options.extract_sections)
     return package
 
 
 def write_package(package: CompiledPackage, output: Path) -> None:
-    """Write a package, replacing only files from an earlier compiler run."""
+    """Transactionally replace compiler-owned files in an output directory."""
 
     output = Path(output)
     if output.is_symlink():
         raise SkillCompilerError("refusing to write through symlinked output: %s" % output)
+    if output.exists() and not output.is_dir():
+        raise SkillCompilerError("output exists and is not a directory: %s" % output)
+
+    package_bytes = dict(package.file_bytes())
+    _validate_compiled_package_bytes(package, package_bytes)
+    old_files: List[str] = []
     if output.exists():
         manifest_path = output / ".harnessmith.json"
         existing_entries = list(output.iterdir())
@@ -120,30 +174,77 @@ def write_package(package: CompiledPackage, output: Path) -> None:
         if manifest_path.is_file():
             try:
                 old_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-                if old_manifest.get("compiler", {}).get("name") != "harnessmith":
-                    raise SkillCompilerError("existing manifest has a different owner")
-                file_hashes = old_manifest.get("files")
-                if not isinstance(file_hashes, dict) or not all(
-                    isinstance(path, str) for path in file_hashes
-                ):
-                    raise SkillCompilerError("existing manifest has an invalid files map")
-                old_files = list(file_hashes.keys())
+                owned = require_valid_manifest(old_manifest)
+                file_hashes = owned["files"]
+                assert isinstance(file_hashes, dict)
+                old_files = list(file_hashes)
+                _verify_owned_output_hashes(output, file_hashes)
             except (OSError, ValueError, TypeError, AttributeError) as exc:
                 raise SkillCompilerError(
                     "cannot safely read existing compiler manifest: %s" % exc
                 ) from exc
             old_files.append(".harnessmith.json")
-            candidates = [_safe_output_path(output, relative) for relative in old_files]
-            for candidate in candidates:
-                if candidate.is_file() or candidate.is_symlink():
-                    candidate.unlink()
-            _remove_empty_directories(output)
 
-    output.mkdir(parents=True, exist_ok=True)
-    for relative, content in sorted(package.files.items()):
-        destination = _safe_output_path(output, relative)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(content, encoding="utf-8")
+        old_owned = set(old_files)
+        for relative in package_bytes:
+            destination = _safe_output_path(output, relative)
+            if (
+                relative not in old_owned
+                and (destination.exists() or destination.is_symlink())
+            ):
+                raise SkillCompilerError(
+                    "generated output path collides with an unowned file: %s"
+                    % relative
+                )
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    workspace = Path(
+        tempfile.mkdtemp(prefix=".%s.harnessmith-" % output.name, dir=output.parent)
+    )
+    staged = workspace / "package"
+    backup = workspace / "previous"
+    replaced = False
+    cleanup_workspace = True
+    try:
+        if output.exists():
+            shutil.copytree(output, staged, symlinks=True)
+        else:
+            staged.mkdir()
+        for relative in old_files:
+            candidate = _safe_output_path(staged, relative)
+            if candidate.is_file() or candidate.is_symlink():
+                candidate.unlink()
+        _remove_empty_directories(staged)
+
+        ordered = sorted(path for path in package_bytes if path != ".harnessmith.json")
+        ordered.append(".harnessmith.json")
+        for relative in ordered:
+            destination = _safe_output_path(staged, relative)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(package_bytes[relative])
+            destination.chmod(
+                0o755 if relative in package.executable_files else 0o644
+            )
+
+        try:
+            if output.exists():
+                replaced = True
+                os.replace(output, backup)
+            os.replace(staged, output)
+        except BaseException:
+            if replaced and backup.exists() and not output.exists():
+                try:
+                    os.replace(backup, output)
+                except OSError as rollback_error:
+                    cleanup_workspace = False
+                    raise SkillCompilerError(
+                        "package publish and rollback failed; previous output remains at %s"
+                        % backup
+                    ) from rollback_error
+            raise
+    finally:
+        if cleanup_workspace:
+            shutil.rmtree(workspace, ignore_errors=True)
 
 
 def verify_package(
@@ -249,6 +350,7 @@ def _metrics(
     root: str,
     references: Dict[str, str],
     scripts: Dict[str, str],
+    mandatory_references: Set[str],
     conditional_references: Set[str],
 ) -> Dict[str, int]:
     reference_chars = sum(len(value) for value in references.values())
@@ -257,7 +359,11 @@ def _metrics(
         for path, value in references.items()
         if path in conditional_references
     )
-    mandatory_chars = reference_chars - conditional_chars
+    mandatory_chars = sum(
+        len(value)
+        for path, value in references.items()
+        if path in mandatory_references
+    )
     normal_path_chars = len(root) + mandatory_chars
     packaged_instruction_chars = len(root) + reference_chars
     script_chars = sum(len(value) for value in scripts.values())
@@ -275,7 +381,7 @@ def _metrics(
             "".join(
                 value
                 for path, value in references.items()
-                if path not in conditional_references
+                if path in mandatory_references
             )
         ),
         "conditional_reference_chars": conditional_chars,
@@ -294,7 +400,7 @@ def _metrics(
             + "".join(
                 value
                 for path, value in references.items()
-                if path not in conditional_references
+                if path in mandatory_references
             )
         ),
         "normal_path_reduction_percent": round(
@@ -336,10 +442,14 @@ def _build_manifest(
     ir: SkillIR,
     target: str,
     files: Dict[str, str],
+    binary_files: Dict[str, bytes],
     transformations: List[Dict[str, object]],
     metrics: Dict[str, int],
+    executable_files: Tuple[str, ...],
     options: CompileOptions,
 ) -> Dict[str, object]:
+    file_bytes = {path: content.encode("utf-8") for path, content in files.items()}
+    file_bytes.update(binary_files)
     manifest: Dict[str, object] = {
         "schema_version": 1,
         "compiler": {"name": "harnessmith", "version": __version__},
@@ -351,10 +461,12 @@ def _build_manifest(
         "transformations": transformations,
         "metrics": metrics,
         "files": {
-            path: hashlib.sha256(content.encode("utf-8")).hexdigest()
-            for path, content in sorted(files.items())
+            path: hashlib.sha256(content).hexdigest()
+            for path, content in sorted(file_bytes.items())
         },
     }
+    if executable_files:
+        manifest["executables"] = list(executable_files)
     if options.recipe_id is not None:
         manifest["recipe"] = {
             "path": options.recipe_id,
@@ -375,10 +487,12 @@ def _normative_lines(text: str) -> List[str]:
 
 
 def _safe_output_path(root: Path, relative: str) -> Path:
-    path = Path(relative)
-    if path.is_absolute() or ".." in path.parts:
+    if not is_safe_relative_path(relative):
         raise SkillCompilerError("unsafe generated output path: %s" % relative)
+    path = Path(relative)
     destination = root / path
+    if destination.is_symlink():
+        raise SkillCompilerError("unsafe symlink in generated output path: %s" % relative)
     cursor = destination.parent
     while cursor != root.parent:
         if cursor.is_symlink():
@@ -404,3 +518,109 @@ def _remove_empty_directories(root: Path) -> None:
 
 def _ensure_final_newline(text: str) -> str:
     return text.rstrip("\n") + "\n"
+
+
+def _load_bundled_resources(
+    skill_root: Path,
+) -> Tuple[Dict[str, str], Dict[str, bytes], Tuple[str, ...], List[Dict[str, object]]]:
+    text_files: Dict[str, str] = {}
+    binary_files: Dict[str, bytes] = {}
+    executables: List[str] = []
+    transformations: List[Dict[str, object]] = []
+    for directory_name in ("references", "scripts", "assets"):
+        directory = skill_root / directory_name
+        if not directory.exists():
+            continue
+        if directory.is_symlink() or not directory.is_dir():
+            raise SkillCompilerError(
+                "bundled resource directory is not a safe directory: %s" % directory
+            )
+        for path in sorted(directory.rglob("*")):
+            relative = path.relative_to(skill_root).as_posix()
+            if path.is_symlink():
+                raise SkillCompilerError("bundled resource must not be a symlink: %s" % relative)
+            if path.is_dir():
+                continue
+            if not path.is_file():
+                raise SkillCompilerError("bundled resource is not a regular file: %s" % relative)
+            content = path.read_bytes()
+            try:
+                text_files[relative] = content.decode("utf-8")
+                kind = "text"
+            except UnicodeDecodeError:
+                binary_files[relative] = content
+                kind = "binary"
+            executable = bool(path.stat().st_mode & 0o111)
+            if executable:
+                executables.append(relative)
+            transformations.append(
+                {
+                    "type": "preserve-resource",
+                    "path": relative,
+                    "content": kind,
+                    "source_sha256": hashlib.sha256(content).hexdigest(),
+                    "executable": executable,
+                }
+            )
+    return (
+        text_files,
+        binary_files,
+        tuple(sorted(executables)),
+        transformations,
+    )
+
+
+def _merge_text_files(destination: Dict[str, str], additions: Mapping[str, str]) -> None:
+    collisions = set(destination).intersection(additions)
+    if collisions:
+        raise SkillCompilerError(
+            "generated output path collides with existing package file: %s"
+            % ", ".join(sorted(collisions))
+        )
+    destination.update(additions)
+
+
+def _validate_compiled_package_bytes(
+    package: CompiledPackage, package_bytes: Mapping[str, bytes]
+) -> None:
+    manifest = require_valid_manifest(package.manifest)
+    manifest_content = package_bytes.get(".harnessmith.json")
+    if manifest_content is None:
+        raise SkillCompilerError("compiled package is missing .harnessmith.json")
+    try:
+        serialized = json.loads(manifest_content.decode("utf-8"))
+    except (UnicodeError, ValueError) as exc:
+        raise SkillCompilerError("compiled package manifest is unreadable: %s" % exc) from exc
+    if serialized != manifest:
+        raise SkillCompilerError("compiled package manifest content does not match metadata")
+    file_hashes = manifest["files"]
+    assert isinstance(file_hashes, dict)
+    actual_paths = set(package_bytes) - {".harnessmith.json"}
+    if actual_paths != set(file_hashes):
+        raise SkillCompilerError("compiled package files do not match its manifest")
+    for relative, expected in file_hashes.items():
+        if not is_safe_relative_path(relative):
+            raise SkillCompilerError("unsafe generated output path: %s" % relative)
+        actual = hashlib.sha256(package_bytes[relative]).hexdigest()
+        if actual != expected:
+            raise SkillCompilerError("compiled package hash differs: %s" % relative)
+    if tuple(sorted(package.executable_files)) != tuple(manifest.get("executables", [])):
+        raise SkillCompilerError("compiled package executable metadata differs")
+
+
+def _verify_owned_output_hashes(
+    output: Path, file_hashes: Mapping[str, object]
+) -> None:
+    for relative, expected in file_hashes.items():
+        if not isinstance(relative, str) or not is_safe_relative_path(relative):
+            raise SkillCompilerError("unsafe generated output path: %r" % relative)
+        path = _safe_output_path(output, relative)
+        if path.is_symlink() or not path.is_file():
+            raise SkillCompilerError(
+                "existing compiler-owned file is missing or unsafe: %s" % relative
+            )
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise SkillCompilerError(
+                "existing compiler-owned file was modified: %s; verify or use a new output directory"
+                % relative
+            )

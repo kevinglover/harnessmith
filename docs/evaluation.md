@@ -12,6 +12,7 @@ independent verifier additionally checks:
 - manifest schema and Harnessmith ownership;
 - safe relative paths and absence of symlink traversal;
 - missing, unexpected, or hash-mismatched generated files;
+- executable-mode drift and preserved-resource provenance;
 - source and recipe drift when recorded paths are available;
 - recomputed metrics and compiler invariants; and
 - deterministic regeneration when source and recipe are resolvable.

@@ -10,9 +10,10 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 from .errors import SkillCompilerError
+from .targets import TARGET_NAMES
 
 
-TARGETS = ("generic", "cursor", "claude", "codex")
+TARGETS = TARGET_NAMES
 INVOCATION_POLICIES = ("source", "explicit", "automatic")
 OPTIMIZATIONS = ("spec-kit-extension-hooks",)
 _TOP_LEVEL_KEYS = {

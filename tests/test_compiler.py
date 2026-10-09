@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from harnessmith import CompileOptions, SkillCompilerError, compile_skill, write_package
+from harnessmith.verification import verify_compiled_package
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +16,81 @@ ANALYZE = ROOT / "skills" / "speckit-analyze" / "SKILL.md"
 
 
 class CompilerTests(unittest.TestCase):
+    def test_bundled_text_binary_and_executable_resources_are_preserved(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill = root / "source"
+            (skill / "references").mkdir(parents=True)
+            (skill / "scripts").mkdir()
+            (skill / "assets").mkdir()
+            (skill / "SKILL.md").write_text(
+                "---\nname: bundled\ndescription: Bundled resources.\n---\n\n"
+                "## Guide\n\nRead [the guide](references/guide.md).\n",
+                encoding="utf-8",
+            )
+            (skill / "references" / "guide.md").write_text(
+                "# Existing guide\n", encoding="utf-8"
+            )
+            script = skill / "scripts" / "run.sh"
+            script.write_text("#!/bin/sh\necho ok\n", encoding="utf-8")
+            script.chmod(0o755)
+            binary = b"\x89PNG\r\n\x1a\n\xff"
+            (skill / "assets" / "logo.bin").write_bytes(binary)
+
+            package = compile_skill(skill, CompileOptions(target="generic"))
+
+            self.assertEqual(
+                "# Existing guide\n", package.files["references/guide.md"]
+            )
+            self.assertEqual(binary, package.binary_files["assets/logo.bin"])
+            self.assertIn("scripts/run.sh", package.executable_files)
+            self.assertEqual(
+                3,
+                sum(
+                    item.get("type") == "preserve-resource"
+                    for item in package.transformations
+                ),
+            )
+
+            output = root / "compiled"
+            write_package(package, output)
+            self.assertEqual(binary, (output / "assets" / "logo.bin").read_bytes())
+            self.assertTrue((output / "scripts" / "run.sh").stat().st_mode & 0o111)
+            self.assertTrue(verify_compiled_package(output).valid)
+
+    def test_generated_resource_collision_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            skill = Path(directory) / "source"
+            (skill / "references").mkdir(parents=True)
+            (skill / "SKILL.md").write_text(
+                "---\nname: collision\ndescription: Collision.\n---\n\n"
+                "## Guide\n\nCanonical guide.\n",
+                encoding="utf-8",
+            )
+            (skill / "references" / "guide.md").write_text(
+                "Existing guide.\n", encoding="utf-8"
+            )
+            with self.assertRaisesRegex(SkillCompilerError, "collides"):
+                compile_skill(
+                    skill,
+                    CompileOptions(target="generic", extract_sections=("Guide",)),
+                )
+
+    def test_bundled_resource_symlink_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill = root / "source"
+            (skill / "references").mkdir(parents=True)
+            (skill / "SKILL.md").write_text(
+                "---\nname: symlink\ndescription: Symlink.\n---\n\nBody.\n",
+                encoding="utf-8",
+            )
+            external = root / "external.md"
+            external.write_text("External.\n", encoding="utf-8")
+            (skill / "references" / "external.md").symlink_to(external)
+            with self.assertRaisesRegex(SkillCompilerError, "must not be a symlink"):
+                compile_skill(skill, CompileOptions(target="generic"))
+
     def test_cursor_vertical_slice_is_lossless_and_smaller(self) -> None:
         package = compile_skill(
             ANALYZE,
@@ -143,6 +221,67 @@ class CompilerTests(unittest.TestCase):
             with self.assertRaisesRegex(SkillCompilerError, "refusing"):
                 write_package(package, output)
             self.assertEqual("user data\n", (output / "KEEP.txt").read_text())
+
+    def test_modified_owned_file_is_not_overwritten(self) -> None:
+        package = compile_skill(ANALYZE, CompileOptions(target="cursor"))
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "skill"
+            write_package(package, output)
+            (output / "SKILL.md").write_text("user modification\n", encoding="utf-8")
+            with self.assertRaisesRegex(SkillCompilerError, "was modified"):
+                write_package(package, output)
+            self.assertEqual(
+                "user modification\n",
+                (output / "SKILL.md").read_text(encoding="utf-8"),
+            )
+
+    def test_new_generated_path_does_not_overwrite_unowned_file(self) -> None:
+        cursor_package = compile_skill(ANALYZE, CompileOptions(target="cursor"))
+        codex_package = compile_skill(
+            ANALYZE, CompileOptions(target="codex", invocation="explicit")
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "skill"
+            write_package(cursor_package, output)
+            policy = output / "agents" / "openai.yaml"
+            policy.parent.mkdir()
+            policy.write_text("user data\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(SkillCompilerError, "unowned file"):
+                write_package(codex_package, output)
+
+            self.assertEqual("user data\n", policy.read_text(encoding="utf-8"))
+
+    def test_failed_atomic_publish_restores_previous_package(self) -> None:
+        package = compile_skill(ANALYZE, CompileOptions(target="cursor"))
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "skill"
+            write_package(package, output)
+            before = {
+                path.relative_to(output): path.read_bytes()
+                for path in output.rglob("*")
+                if path.is_file()
+            }
+            real_replace = os.replace
+            calls = 0
+
+            def fail_publish(source, destination):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    raise OSError("simulated publish failure")
+                return real_replace(source, destination)
+
+            with mock.patch("harnessmith.compiler.os.replace", side_effect=fail_publish):
+                with self.assertRaisesRegex(OSError, "simulated publish failure"):
+                    write_package(package, output)
+
+            after = {
+                path.relative_to(output): path.read_bytes()
+                for path in output.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(before, after)
 
     def test_symlinked_output_directory_is_rejected(self) -> None:
         package = compile_skill(ANALYZE, CompileOptions(target="cursor"))

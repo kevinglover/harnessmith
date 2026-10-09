@@ -36,12 +36,39 @@ def check_schemas() -> List[str]:
         return ["jsonschema is required for the schema check; install .[dev]"]
 
     errors: List[str] = []
+    validators = {}
     for path in sorted((ROOT / "schemas").glob("*.schema.json")):
         try:
             document = json.loads(path.read_text(encoding="utf-8"))
-            validator_for(document).check_schema(document)
+            validator_class = validator_for(document)
+            validator_class.check_schema(document)
+            validators[path.name] = validator_class(document)
         except Exception as exc:  # jsonschema exposes several validation errors
             errors.append(f"{path.relative_to(ROOT)}: {exc}")
+    instances = {
+        "fixture-manifest.schema.json": [ROOT / "fixtures" / "manifest.json"],
+        "package-manifest.schema.json": sorted(
+            (ROOT / "examples" / "compiled").rglob(".harnessmith.json")
+        ),
+        "recipe.schema.json": sorted((ROOT / "recipes").glob("*.json")),
+    }
+    for schema_name, paths in instances.items():
+        validator = validators.get(schema_name)
+        if validator is None:
+            continue
+        for path in paths:
+            try:
+                instance = json.loads(path.read_text(encoding="utf-8"))
+                for error in sorted(
+                    validator.iter_errors(instance),
+                    key=lambda item: tuple(str(part) for part in item.absolute_path),
+                ):
+                    location = ".".join(str(item) for item in error.path) or "$"
+                    errors.append(
+                        f"{path.relative_to(ROOT)}:{location}: {error.message}"
+                    )
+            except (OSError, ValueError) as exc:
+                errors.append(f"{path.relative_to(ROOT)}: {exc}")
     return errors
 
 

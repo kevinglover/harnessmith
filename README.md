@@ -74,6 +74,11 @@ transform provenance, and static size estimates. See the
 [optimization walkthrough](docs/optimization-model.md#walkthrough-large-skill-to-progressive-disclosure)
 for an exact example.
 
+Existing files under `references/`, `scripts/`, and `assets/` are preserved
+byte-for-byte. Binary assets and executable script metadata are included in the
+manifest, and compilation fails if a generated path would collide with an
+existing resource.
+
 ## Documentation
 
 - [CLI reference](docs/cli.md)

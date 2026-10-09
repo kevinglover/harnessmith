@@ -212,7 +212,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 recipe_sha256=recipe.sha256 if recipe else None,
             ),
         )
-        diff = compare_package(package.files, args.output)
+        diff = compare_package(package.file_bytes(), args.output)
         if not args.dry_run and not args.diff:
             write_package(package, args.output)
     except (OSError, SkillCompilerError) as exc:
@@ -224,7 +224,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "target": package.target,
         "output": args.output.as_posix(),
         "metrics": package.metrics,
-        "files": sorted(package.files),
+        "files": sorted(package.file_bytes()),
     }
     if args.dry_run or args.diff:
         report["written"] = False

@@ -8,7 +8,7 @@
     "references/4-detection-passes-token-efficient-analysis.md": "f500bf5c8cbde99fdd694c5d87eb3eef8c27c3cd1ef87ab748bbb99eeb1a54d9",
     "references/extension-hooks-fallback.md": "3f2723c83844ea159bd1c70f4765960d6c2c91038eaf97ec2ac8e33c48f906ae",
     "references/specification-analysis-report.md": "6bbba1c15259547b2c99c47af86b409c0118af92969567a1aa60ce792465f3b7",
-    "scripts/resolve-extension-hooks.py": "f8773781b615e98935184bdc6c87dac3a8d9c9bad59ce0e57d5bd53f985631be"
+    "scripts/resolve-extension-hooks.py": "f89dcc4211f43cfb0ff47bc8388c32d8a2ab946454397420f743d9410e91238c"
   },
   "metrics": {
     "compiled_root_chars": 6416,
@@ -26,8 +26,8 @@
     "reference_token_estimate": 2009,
     "root_char_reduction": 5847,
     "root_reduction_percent": 48,
-    "script_chars": 10541,
-    "script_token_estimate": 2636,
+    "script_chars": 10139,
+    "script_token_estimate": 2535,
     "source_skill_chars": 12263,
     "source_skill_token_estimate": 3066
   },

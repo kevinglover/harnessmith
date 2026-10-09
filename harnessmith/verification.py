@@ -4,20 +4,21 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from .compiler import CompileOptions, compile_skill, verify_package
 from .errors import SkillCompilerError
+from .manifest import (
+    is_safe_relative_path,
+    manifest_validation_errors,
+    require_valid_manifest,
+)
 from .metrics import estimate_tokens
 from .parser import parse_skill
 from .recipe import load_recipe
 from .targets import get_target
-
-
-_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 @dataclass(frozen=True)
@@ -91,6 +92,8 @@ def verify_compiled_package(package_dir: Path) -> VerificationReport:
     target = manifest.get("target") if isinstance(manifest.get("target"), str) else None
     _validate_manifest(manifest, issues)
     checks["manifest"] = "passed" if not issues else "failed"
+    if issues:
+        return VerificationReport(package_dir, target, tuple(issues), checks)
     if target is not None:
         try:
             get_target(target)
@@ -115,6 +118,14 @@ def verify_compiled_package(package_dir: Path) -> VerificationReport:
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 if actual != expected_hash:
                     issues.append(VerificationIssue("HS506", "owned file hash differs: %s" % relative))
+                expected_executable = relative in manifest.get("executables", [])
+                actual_executable = bool(path.stat().st_mode & 0o111)
+                if expected_executable != actual_executable:
+                    issues.append(
+                        VerificationIssue(
+                            "HS506", "owned file executable mode differs: %s" % relative
+                        )
+                    )
 
         expected_paths = set(safe_files) | {".harnessmith.json"}
         for path in sorted(package_dir.rglob("*")):
@@ -173,9 +184,13 @@ def verify_compiled_package(package_dir: Path) -> VerificationReport:
     if source is not None and recipe is not None and checks.get("source") == "passed" and checks.get("recipe") == "passed":
         try:
             expected = _regenerate(source, recipe, manifest)
-            disk = {name: path.read_text(encoding="utf-8") for name, path in safe_files.items() if path.is_file() and not path.is_symlink()}
-            disk[".harnessmith.json"] = manifest_path.read_text(encoding="utf-8")
-            if expected.files != disk:
+            disk = {
+                name: path.read_bytes()
+                for name, path in safe_files.items()
+                if path.is_file() and not path.is_symlink()
+            }
+            disk[".harnessmith.json"] = manifest_path.read_bytes()
+            if expected.file_bytes() != disk:
                 raise SkillCompilerError("deterministic regeneration differs from package contents")
             checks["regeneration"] = "passed"
         except (OSError, UnicodeError, SkillCompilerError) as exc:
@@ -187,7 +202,9 @@ def verify_compiled_package(package_dir: Path) -> VerificationReport:
     return VerificationReport(package_dir, target, tuple(issues), checks)
 
 
-def compare_package(files: Mapping[str, str], output: Path) -> PackageDiff:
+def compare_package(
+    files: Mapping[str, Union[str, bytes]], output: Path
+) -> PackageDiff:
     """Compare desired package contents with compiler-owned output, without writes."""
 
     output = Path(output)
@@ -216,8 +233,12 @@ def compare_package(files: Mapping[str, str], output: Path) -> PackageDiff:
             raise SkillCompilerError("unsafe symlink in generated output path: %s" % relative)
         else:
             try:
-                differs = not path.is_file() or path.read_text(encoding="utf-8") != files[relative]
-            except (OSError, UnicodeError) as exc:
+                expected = files[relative]
+                expected_bytes = (
+                    expected.encode("utf-8") if isinstance(expected, str) else expected
+                )
+                differs = not path.is_file() or path.read_bytes() != expected_bytes
+            except OSError as exc:
                 raise SkillCompilerError("cannot compare output file %s: %s" % (relative, exc)) from exc
             if differs:
                 modified.append(relative)
@@ -226,32 +247,16 @@ def compare_package(files: Mapping[str, str], output: Path) -> PackageDiff:
 
 
 def _validate_manifest(manifest: Mapping[str, object], issues: List[VerificationIssue]) -> None:
-    required = {"schema_version", "compiler", "target", "source", "transformations", "metrics", "files"}
-    allowed = required | {"recipe"}
-    if manifest.get("schema_version") != 1:
-        issues.append(VerificationIssue("HS502", "manifest schema_version must be 1"))
-    if set(manifest) - allowed or not required.issubset(manifest):
-        issues.append(VerificationIssue("HS502", "manifest has missing or unknown top-level fields"))
-    compiler = manifest.get("compiler")
-    if not isinstance(compiler, dict) or compiler.get("name") != "harnessmith" or not isinstance(compiler.get("version"), str):
-        issues.append(VerificationIssue("HS502", "manifest compiler ownership is invalid"))
-    if not isinstance(manifest.get("transformations"), list) or not isinstance(manifest.get("metrics"), dict):
-        issues.append(VerificationIssue("HS502", "manifest transformations or metrics are invalid"))
-    files = manifest.get("files")
-    if not isinstance(files, dict) or not all(isinstance(k, str) and isinstance(v, str) and _SHA256.fullmatch(v) for k, v in files.items()):
-        issues.append(VerificationIssue("HS502", "manifest files map is invalid"))
-    for key in ("source", "recipe"):
-        record = manifest.get(key)
-        if key == "recipe" and record is None:
-            continue
-        if not isinstance(record, dict) or set(record) != {"path", "sha256"} or not isinstance(record.get("path"), str) or not _SHA256.fullmatch(str(record.get("sha256", ""))):
-            issues.append(VerificationIssue("HS502", "manifest %s record is invalid" % key))
+    issues.extend(
+        VerificationIssue("HS502", message)
+        for message in manifest_validation_errors(manifest)
+    )
 
 
 def _verify_metrics(manifest: Mapping[str, object], source: Path, files: Mapping[str, Path]) -> None:
     metrics = manifest.get("metrics")
     assert isinstance(metrics, dict)
-    texts = {name: path.read_text(encoding="utf-8") for name, path in files.items()}
+    texts = _read_utf8_files(files)
     source_text = source.read_text(encoding="utf-8")
     references = {k: v for k, v in texts.items() if k.startswith("references/")}
     scripts = {k: v for k, v in texts.items() if k.startswith("scripts/")}
@@ -260,6 +265,13 @@ def _verify_metrics(manifest: Mapping[str, object], source: Path, files: Mapping
         for item in manifest.get("transformations", [])
         if isinstance(item, dict) and item.get("type") == "resolve-extension-hooks"
     }
+    mandatory_paths = {
+        str(item.get("output"))
+        for item in manifest.get("transformations", [])
+        if isinstance(item, dict)
+        and item.get("type") == "extract-section"
+        and isinstance(item.get("output"), str)
+    } - conditional
     root = texts.get("SKILL.md", "")
     values = {
         "source_skill_chars": len(source_text),
@@ -271,7 +283,7 @@ def _verify_metrics(manifest: Mapping[str, object], source: Path, files: Mapping
         "script_chars": sum(map(len, scripts.values())),
         "script_token_estimate": estimate_tokens("".join(scripts.values())),
     }
-    mandatory = "".join(v for k, v in references.items() if k not in conditional)
+    mandatory = "".join(v for k, v in references.items() if k in mandatory_paths)
     conditional_text = "".join(v for k, v in references.items() if k in conditional)
     values.update({
         "mandatory_reference_chars": len(mandatory),
@@ -292,6 +304,7 @@ def _verify_metrics(manifest: Mapping[str, object], source: Path, files: Mapping
 
 
 def _verify_invariants(manifest: Mapping[str, object], source: Path, files: Mapping[str, Path]) -> None:
+    _verify_preserved_resources(manifest, source, files)
     ir = parse_skill(source)
     transformations = list(manifest.get("transformations", []))
     extracted = tuple(str(item["heading"]) for item in transformations if isinstance(item, dict) and item.get("type") == "extract-section" and isinstance(item.get("heading"), str))
@@ -305,9 +318,23 @@ def _verify_invariants(manifest: Mapping[str, object], source: Path, files: Mapp
             item = dict(item)
             item["section_id"] = resolve_section(ir, item["heading"]).identity
         normalized.append(item)
-    texts = {name: path.read_text(encoding="utf-8") for name, path in files.items()}
+    texts = _read_utf8_files(files)
+    binary = {
+        name: path.read_bytes()
+        for name, path in files.items()
+        if name not in texts
+    }
     from .model import CompiledPackage
-    package = CompiledPackage("verified", str(manifest.get("target")), texts, dict(manifest), dict(manifest.get("metrics", {})), normalized)
+    package = CompiledPackage(
+        skill_name="verified",
+        target=str(manifest.get("target")),
+        files=texts,
+        manifest=dict(manifest),
+        metrics=dict(manifest.get("metrics", {})),
+        transformations=normalized,
+        binary_files=binary,
+        executable_files=tuple(manifest.get("executables", [])),
+    )
     verify_package(ir, package, extracted)
 
 
@@ -343,10 +370,7 @@ def _record_hash(record: object) -> Optional[str]:
 
 
 def _is_safe_relative(relative: str) -> bool:
-    if not relative or "\x00" in relative or "\\" in relative:
-        return False
-    path = Path(relative)
-    return not path.is_absolute() and ".." not in path.parts
+    return is_safe_relative_path(relative)
 
 
 def _has_symlink_component(root: Path, path: Path) -> bool:
@@ -366,12 +390,76 @@ def _read_owned_manifest(path: Path) -> Mapping[str, object]:
         manifest = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise SkillCompilerError("cannot safely read existing compiler manifest: %s" % exc) from exc
-    if not isinstance(manifest, dict) or not isinstance(manifest.get("compiler"), dict) or manifest["compiler"].get("name") != "harnessmith" or not isinstance(manifest.get("files"), dict):
-        raise SkillCompilerError("existing manifest has invalid ownership or files map")
-    for relative in manifest["files"]:
+    manifest = require_valid_manifest(manifest)
+    files = manifest["files"]
+    assert isinstance(files, dict)
+    for relative in files:
         if not isinstance(relative, str) or not _is_safe_relative(relative):
             raise SkillCompilerError("unsafe generated output path: %r" % relative)
     return manifest
+
+
+def _read_utf8_files(files: Mapping[str, Path]) -> Dict[str, str]:
+    texts: Dict[str, str] = {}
+    for name, path in files.items():
+        try:
+            texts[name] = path.read_bytes().decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+    return texts
+
+
+def _verify_preserved_resources(
+    manifest: Mapping[str, object], source: Path, files: Mapping[str, Path]
+) -> None:
+    records = [
+        item
+        for item in manifest.get("transformations", [])
+        if isinstance(item, dict) and item.get("type") == "preserve-resource"
+    ]
+    recorded_paths = [item.get("path") for item in records]
+    if any(not isinstance(path, str) or not _is_safe_relative(path) for path in recorded_paths):
+        raise SkillCompilerError("preserved resource has an unsafe path")
+    if len(recorded_paths) != len(set(recorded_paths)):
+        raise SkillCompilerError("preserved resource paths are duplicated")
+
+    source_paths = set()
+    for directory_name in ("references", "scripts", "assets"):
+        directory = source.parent / directory_name
+        if not directory.exists():
+            continue
+        if directory.is_symlink() or not directory.is_dir():
+            raise SkillCompilerError("preserved resource directory is unsafe: %s" % directory)
+        for path in directory.rglob("*"):
+            relative = path.relative_to(source.parent).as_posix()
+            if path.is_symlink():
+                raise SkillCompilerError("preserved resource is a symlink: %s" % relative)
+            if path.is_dir():
+                continue
+            if not path.is_file():
+                raise SkillCompilerError("preserved resource is not a regular file: %s" % relative)
+            source_paths.add(relative)
+    if source_paths != set(recorded_paths):
+        raise SkillCompilerError("preserved resource inventory differs from the source package")
+
+    executables = set(manifest.get("executables", []))
+    for item in records:
+        relative = str(item["path"])
+        source_path = source.parent / relative
+        output_path = files.get(relative)
+        expected_hash = item.get("source_sha256")
+        if not isinstance(expected_hash, str):
+            raise SkillCompilerError("preserved resource hash is invalid: %s" % relative)
+        source_bytes = source_path.read_bytes()
+        if hashlib.sha256(source_bytes).hexdigest() != expected_hash:
+            raise SkillCompilerError("preserved resource hash differs: %s" % relative)
+        if output_path is None or output_path.read_bytes() != source_bytes:
+            raise SkillCompilerError("preserved resource output differs: %s" % relative)
+        expected_executable = item.get("executable")
+        if not isinstance(expected_executable, bool):
+            raise SkillCompilerError("preserved resource mode is invalid: %s" % relative)
+        if expected_executable != (relative in executables):
+            raise SkillCompilerError("preserved resource mode differs: %s" % relative)
 
 
 def _report(package: Path, target: Optional[str], raw: Sequence[Tuple[str, str]], checks: Mapping[str, str]) -> VerificationReport:

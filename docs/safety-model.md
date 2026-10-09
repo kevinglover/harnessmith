@@ -41,6 +41,16 @@ context.
 
 Harnessmith writes to an empty directory or one containing a valid
 Harnessmith-owned `.harnessmith.json`. On regeneration it removes only paths
-listed in the earlier manifest, then writes the new package. Use `--dry-run` or
-`--diff` when the destination is uncertain, and run the independent verifier
-before distributing generated output.
+listed in the earlier manifest. It refuses regeneration when an owned file no
+longer matches its recorded hash, which prevents silently replacing manual
+edits or trusting a stale ownership record.
+
+Writes are staged beside the destination and published with a directory swap.
+If publication fails, Harnessmith restores the previous directory. Use
+`--dry-run` or `--diff` when the destination is uncertain, and run the
+independent verifier before distributing generated output.
+
+Bundled `references/`, `scripts/`, and `assets/` must contain regular files and
+directories only. Symlinks and collisions with compiler-generated paths are
+rejected. File contents are preserved byte-for-byte, including binary assets;
+executable script metadata is recorded and verified separately.

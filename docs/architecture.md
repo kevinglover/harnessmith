@@ -54,6 +54,17 @@ contents and hashes. Generated packages include `.harnessmith.json`; its
 overwrite a populated directory without a valid owned manifest and rejects
 unsafe relative paths and symlink traversal.
 
+Compilation preserves regular files under the canonical package's
+`references/`, `scripts/`, and `assets/` directories. Text resources remain
+available to instruction metrics, binary resources are hashed as exact bytes,
+and executable script paths are recorded explicitly. Resource symlinks and
+generated-path collisions fail closed.
+
+The writer validates the previous manifest and owned hashes, builds the full
+replacement in a sibling staging directory, and swaps it into place only after
+every file is ready. The previous package is restored if publication fails;
+the manifest is written last within the staged package.
+
 `harnessmith verify` independently checks the on-disk manifest, output hashes,
 source and recipe drift when those paths are available, invariant retention,
 budgets, and deterministic regeneration. Verification never repairs a package.

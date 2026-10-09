@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Mapping, Optional, Tuple
 
 
 @dataclass(frozen=True)
@@ -71,3 +71,20 @@ class CompiledPackage:
     manifest: Dict[str, object]
     metrics: Dict[str, int]
     transformations: List[Dict[str, object]] = field(default_factory=list)
+    binary_files: Dict[str, bytes] = field(default_factory=dict)
+    executable_files: Tuple[str, ...] = ()
+
+    def file_bytes(self) -> Mapping[str, bytes]:
+        """Return every package file in its exact on-disk representation."""
+
+        values = {
+            path: content.encode("utf-8") for path, content in self.files.items()
+        }
+        overlap = set(values).intersection(self.binary_files)
+        if overlap:
+            raise ValueError(
+                "package paths cannot be both text and binary: %s"
+                % ", ".join(sorted(overlap))
+            )
+        values.update(self.binary_files)
+        return values

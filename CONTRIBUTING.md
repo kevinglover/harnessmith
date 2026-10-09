@@ -28,6 +28,10 @@ python -m build
 python -m twine check dist/*
 ```
 
+The repository check validates both the published JSON Schemas and the
+checked-in recipes, fixture manifest, and compiled package manifests against
+those schemas.
+
 The fixture corpus is offline and pinned. Validate it with the fixture tests;
 do not silently replace fixture sources or their provenance hashes.
 

@@ -71,7 +71,10 @@ root and normal-path metrics before calling the change an optimization.
 
 `spec-kit-extension-hooks` is currently the only named optimization. It moves
 exact extension-hook fallback contracts into references and generates a
-resolver script. The fallback remains available and its provenance is verified.
+resolver script. The resolver uses one dependency-free, strict YAML subset on
+every host; unsupported syntax activates the exact fallback rather than changing
+behavior according to installed Python packages. The fallback remains available
+and its provenance is verified.
 This pass is opt-in through a recipe or `--optimize-extension-hooks`.
 
 ## Budgets
