@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Set
 from .adapters import adapt_frontmatter, source_invocation_policy
 from .diagnostics import analyze_audit_diagnostics, diagnostic_to_dict
 from .errors import SkillCompilerError
-from .frontmatter import scalar_value
+from .metadata import string_value
 from .metrics import estimate_tokens
 from .model import Section, SkillIR
 from .parser import parse_skill
@@ -37,11 +37,12 @@ _NORMATIVE = re.compile(
 
 
 def audit_skill(
-    source: Path, target: str, source_id: Optional[str] = None
+    source: Path, target: str, source_id: Optional[str] = None, *,
+    check_directory: bool = True,
 ) -> Dict[str, object]:
     """Describe context pressure and review candidates without changing files."""
 
-    ir = parse_skill(Path(source), source_id=source_id)
+    ir = parse_skill(Path(source), source_id=source_id, validate_required=False)
     target = target.lower()
     warnings: List[str] = []
     compatibility_error: Optional[str] = None
@@ -76,8 +77,13 @@ def audit_skill(
         if section["classification"] == "review-for-reference"
     ]
 
-    name = scalar_value(ir.field("name"))
-    assert isinstance(name, str)
+    try:
+        name_field = ir.field("name")
+        name = string_value(name_field) if name_field else None
+    except SkillCompilerError:
+        name = None
+    if not isinstance(name, str):
+        name = ir.source_path.parent.name
     root_tokens = estimate_tokens(ir.source_text)
     diagnostics = analyze_audit_diagnostics(
         ir,
@@ -85,6 +91,11 @@ def audit_skill(
         root_tokens,
         sections,
         compatibility_error=compatibility_error,
+        check_directory=check_directory,
+    )
+    warnings.extend(
+        item.message for item in diagnostics
+        if item.severity.value == "warning" and item.message not in warnings
     )
     return {
         "schema_version": 1,

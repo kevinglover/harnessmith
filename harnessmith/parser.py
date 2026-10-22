@@ -8,7 +8,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from .errors import SkillCompilerError
-from .frontmatter import scalar_value, split_frontmatter
+from .frontmatter import split_frontmatter
+from .metadata import string_value
 from .model import Section, SkillIR
 
 
@@ -23,22 +24,25 @@ _HTML_START = re.compile(
 )
 
 
-def parse_skill(path: Path, source_id: Optional[str] = None) -> SkillIR:
+def parse_skill(
+    path: Path, source_id: Optional[str] = None, *, validate_required: bool = True
+) -> SkillIR:
     path = Path(path)
     if path.is_dir():
         path = path / "SKILL.md"
-    text = path.read_text(encoding="utf-8")
+    text = path.read_bytes().decode("utf-8")
     fields, body, body_start_line = split_frontmatter(text)
-    name_field = next((item for item in fields if item.key == "name"), None)
-    description_field = next(
-        (item for item in fields if item.key == "description"), None
-    )
-    name = scalar_value(name_field)
-    description = scalar_value(description_field)
-    if not isinstance(name, str) or not name:
-        raise SkillCompilerError("frontmatter requires a non-empty scalar 'name'")
-    if not isinstance(description, str) or not description:
-        raise SkillCompilerError("frontmatter requires a non-empty scalar 'description'")
+    if validate_required:
+        name_field = next((item for item in fields if item.key == "name"), None)
+        description_field = next(
+            (item for item in fields if item.key == "description"), None
+        )
+        name = string_value(name_field) if name_field else None
+        description = string_value(description_field) if description_field else None
+        if not isinstance(name, str) or not name:
+            raise SkillCompilerError("frontmatter requires a non-empty scalar 'name'")
+        if not isinstance(description, str) or not description:
+            raise SkillCompilerError("frontmatter requires a non-empty scalar 'description'")
 
     return SkillIR(
         source_path=path,

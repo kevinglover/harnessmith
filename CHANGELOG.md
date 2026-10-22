@@ -9,6 +9,13 @@ published.
 
 ### Added
 
+- Target-aware metadata diagnostics and compile validation, with advisory
+  installation-directory checks and preserved frontmatter text.
+- Advisory host-specific body syntax and tool-permission diagnostics in audit
+  and compilation output; embedded commands are never evaluated.
+- Capability schema version 2 separating tool metadata preservation from
+  unverified runtime grants and restrictions; version 1 schema retained.
+
 - Versioned contracts, adapter capability declarations, and an offline fixture
   corpus.
 - Explicit transform pipeline and Markdown parsing regression coverage.

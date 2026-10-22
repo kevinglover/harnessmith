@@ -8,6 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from dataclasses import asdict
 from typing import Iterable, List
 from urllib.parse import unquote, urlsplit
 
@@ -69,6 +70,19 @@ def check_schemas() -> List[str]:
                     )
             except (OSError, ValueError) as exc:
                 errors.append(f"{path.relative_to(ROOT)}: {exc}")
+    # Check emitted capabilities as well as schemas; v2 must not masquerade as v1.
+    sys.path.insert(0, str(ROOT))
+    from harnessmith.targets import capability_documents
+
+    capability_validator = validators.get("adapter-capabilities-v2.schema.json")
+    if capability_validator is not None:
+        for target, contract in capability_documents().items():
+            document = json.loads(json.dumps(asdict(contract)))
+            legacy_validator = validators.get("adapter-capabilities.schema.json")
+            if legacy_validator is not None and legacy_validator.is_valid(document):
+                errors.append(f"capabilities/{target}: v1 accepted a v2 document")
+            for error in capability_validator.iter_errors(document):
+                errors.append(f"capabilities/{target}: {error.message}")
     return errors
 
 

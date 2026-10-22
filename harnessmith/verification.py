@@ -257,7 +257,7 @@ def _verify_metrics(manifest: Mapping[str, object], source: Path, files: Mapping
     metrics = manifest.get("metrics")
     assert isinstance(metrics, dict)
     texts = _read_utf8_files(files)
-    source_text = source.read_text(encoding="utf-8")
+    source_text = source.read_bytes().decode("utf-8")
     references = {k: v for k, v in texts.items() if k.startswith("references/")}
     scripts = {k: v for k, v in texts.items() if k.startswith("scripts/")}
     conditional = {

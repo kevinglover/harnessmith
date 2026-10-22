@@ -9,7 +9,8 @@ target representation, and generated output.
    representation with source spans and stable section identities.
 2. `harnessmith.recipe` optionally validates a versioned recipe and its pinned
    source hash.
-3. `harnessmith.adapters` maps frontmatter and invocation policy through the
+3. Target metadata validation checks interpreted fields without normalizing their
+   source text. `harnessmith.adapters` maps frontmatter and invocation policy through the
    machine-readable declarations in `harnessmith.targets`.
 4. Ordered transforms analyze, apply, and verify their own invariants.
 5. `harnessmith.compiler.verify_package` checks normative-statement retention,
@@ -41,7 +42,8 @@ not a general Markdown heuristic.
 - `harnessmith.transforms` defines the pass protocol and lossless extraction.
 - `harnessmith.compiler` builds packages and performs in-process invariants.
 - `harnessmith.verification` verifies packages from disk and compares previews.
-- `schemas/` defines version 1 JSON contracts for durable artifacts.
+- `schemas/` defines versioned JSON contracts: adapter capabilities use version 2;
+  other durable formats remain at version 1.
 
 Recipes record reviewed intent. Manifests record what happened. Audit reports
 are advisory observations and never mutate the source.

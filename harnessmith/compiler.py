@@ -13,9 +13,11 @@ from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 from . import __version__
+from .body_syntax import body_syntax_diagnostics, tool_semantics_diagnostics
+from .metadata import string_value
 from .adapters import adapt_frontmatter, source_invocation_policy
 from .errors import SkillCompilerError
-from .frontmatter import render_frontmatter, scalar_value
+from .frontmatter import render_frontmatter
 from .hook_optimizer import expected_extracted_section, optimize_extension_hooks
 from .manifest import is_safe_relative_path, require_valid_manifest
 from .metrics import estimate_tokens
@@ -41,7 +43,7 @@ class CompileOptions:
 def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
     """Compile one canonical skill into a harness-specific package."""
 
-    ir = parse_skill(Path(source), source_id=options.source_id)
+    ir = parse_skill(Path(source), source_id=options.source_id, validate_required=False)
     if (
         options.expected_source_sha256 is not None
         and ir.source_sha256 != options.expected_source_sha256
@@ -136,8 +138,9 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
         manifest, indent=2, sort_keys=True, ensure_ascii=False
     ) + "\n"
 
-    name = scalar_value(ir.field("name"))
-    assert isinstance(name, str)
+    name_field = ir.field("name")
+    assert name_field is not None
+    name = string_value(name_field)
     package = CompiledPackage(
         skill_name=name,
         target=target,
@@ -147,6 +150,8 @@ def compile_skill(source: Path, options: CompileOptions) -> CompiledPackage:
         transformations=transformations,
         binary_files=binary_files,
         executable_files=executable_files,
+        diagnostics=(body_syntax_diagnostics(ir, target)
+                     + tool_semantics_diagnostics(ir, target)),
     )
     verify_package(ir, package, options.extract_sections)
     return package

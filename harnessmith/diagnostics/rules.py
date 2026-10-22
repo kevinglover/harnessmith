@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Iterable, List, Mapping, Optional
 
+from ..body_syntax import body_syntax_diagnostics, tool_semantics_diagnostics
+from ..metadata import metadata_diagnostics
 from ..contracts import Diagnostic, Remediation, Severity, SourceSpan
 from ..model import Section, SkillIR
 
@@ -17,6 +19,7 @@ def analyze_audit_diagnostics(
     root_tokens: int,
     sections: Iterable[Mapping[str, object]],
     compatibility_error: Optional[str] = None,
+    check_directory: bool = True,
 ) -> List[Diagnostic]:
     """Return findings in stable source/rule order.
 
@@ -24,7 +27,9 @@ def analyze_audit_diagnostics(
     validity, HS2xx context efficiency, and HS3xx target compatibility.
     """
 
-    findings: List[Diagnostic] = []
+    findings = metadata_diagnostics(ir, target, directory=check_directory)
+    findings.extend(body_syntax_diagnostics(ir, target))
+    findings.extend(tool_semantics_diagnostics(ir, target))
     section_reports = list(sections)
     section_by_identity = {
         (section.heading, section.start_line, section.end_line): section
@@ -116,7 +121,7 @@ def analyze_audit_diagnostics(
             )
         )
 
-    if compatibility_error:
+    if compatibility_error and not compatibility_error.startswith("HS102:"):
         findings.append(
             Diagnostic(
                 rule_id="HS305",

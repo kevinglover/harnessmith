@@ -22,12 +22,13 @@ ROOT = Path(__file__).resolve().parents[1]
 class ContractTests(unittest.TestCase):
     def test_all_published_schemas_are_versioned_json(self) -> None:
         schemas = sorted((ROOT / "schemas").glob("*.schema.json"))
-        self.assertEqual(5, len(schemas))
+        self.assertEqual(6, len(schemas))
         for path in schemas:
             document = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", document["$schema"])
             self.assertIn("schema_version", document["properties"])
-            self.assertEqual(1, document["properties"]["schema_version"]["const"])
+            version = 2 if path.name == "adapter-capabilities-v2.schema.json" else 1
+            self.assertEqual(version, document["properties"]["schema_version"]["const"])
 
     def test_published_target_enums_match_the_runtime_registry(self) -> None:
         expected = list(TARGET_NAMES)
