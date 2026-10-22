@@ -1,0 +1,1338 @@
+{
+  "review_date": "2026-10-22",
+  "timezone": "America/New_York",
+  "revision": "c5fa9d4c3c8c9c0429147f7105f6bb92111de72c",
+  "python": "3.9.6",
+  "harnessmith": "0.1.0",
+  "token_method": "ceil(characters / 4); static estimate, not runtime usage",
+  "initial_worktree": "?? docs/weekly-reviews/",
+  "hashes": {
+    "evaluations/scenarios/concise-review.json": "a3a23c0f469332418e66d941b566d20bb59fb026b4b40d62bf2b45599f117d7a",
+    "evaluations/scenarios/model-card-examples.json": "4dce2a2924faad63e9b96f53b8c16ca47211978d5f0fa9317c007430bac7c8b3",
+    "evaluations/scenarios/release-notes-explicit.json": "1fcb15598804b77f84164697c6153d3ce83fad865b7d125601ec1ebb95f3385a",
+    "recipes/speckit-analyze.cursor.json": "31a6f5e15e81590fb26c0c59c5bb46b43e48ba71318b4b5c4211b07e638f7af7",
+    "skills/claude-command-converter/SKILL.md": "3c046185123925e44147a3808f54b28e46dabd0fea794cce863a62381483a26e",
+    "skills/speckit-analyze/SKILL.md": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533",
+    "skills/speckit-baseline/SKILL.md": "4ff3daf1828a4f3425a0a3cbb84b385bf8be2faabcc7086ccd413cb793155313",
+    "skills/speckit-checklist/SKILL.md": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+    "skills/speckit-clarify/SKILL.md": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a",
+    "skills/speckit-constitution/SKILL.md": "ed6afb41c5e6bdc458a7493e78370fed64fa8fb5f4254a87734f7af5e3a0ae81",
+    "skills/speckit-converge/SKILL.md": "315095144896fd0a26256994df831a50d66a01631b4e7b8e15b6e9ec2e122058",
+    "skills/speckit-implement/SKILL.md": "8932afc951b85f42486bfb5ea1e4369eeb58aae0e3c969301d3daf7a1065bf2f",
+    "skills/speckit-plan/SKILL.md": "0ffc26d8fadf6f529ecb5ffc0cf176916ad83703f38dd23434e79f82e05da61d",
+    "skills/speckit-specify/SKILL.md": "5c84d5e5b114d6640277fb24a1773f488d644e56c6b5b844a3324351200d572a",
+    "skills/speckit-tasks/SKILL.md": "4ba8fb6ce1d278d540606c76346607e432c6788181d3010a5c97ff58c7b58594",
+    "skills/speckit-taskstoissues/SKILL.md": "52bfbcb714023d5ae457c1c38d6faee1609fb8df82a88d86d518b68dac91fd30"
+  },
+  "audits": [
+    {
+      "skill": "claude-command-converter",
+      "target": "generic",
+      "source": {
+        "path": "skills/claude-command-converter/SKILL.md",
+        "sha256": "3c046185123925e44147a3808f54b28e46dabd0fea794cce863a62381483a26e"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 5648,
+        "source_lines": 207,
+        "source_token_estimate": 1412,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 11,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "claude-command-converter",
+      "target": "cursor",
+      "source": {
+        "path": "skills/claude-command-converter/SKILL.md",
+        "sha256": "3c046185123925e44147a3808f54b28e46dabd0fea794cce863a62381483a26e"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 5648,
+        "source_lines": 207,
+        "source_token_estimate": 1412,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 11,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "claude-command-converter",
+      "target": "claude",
+      "source": {
+        "path": "skills/claude-command-converter/SKILL.md",
+        "sha256": "3c046185123925e44147a3808f54b28e46dabd0fea794cce863a62381483a26e"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 5648,
+        "source_lines": 207,
+        "source_token_estimate": 1412,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 11,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "claude-command-converter",
+      "target": "codex",
+      "source": {
+        "path": "skills/claude-command-converter/SKILL.md",
+        "sha256": "3c046185123925e44147a3808f54b28e46dabd0fea794cce863a62381483a26e"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 5648,
+        "source_lines": 207,
+        "source_token_estimate": 1412,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 11,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-analyze",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-analyze/SKILL.md",
+        "sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 12263,
+        "source_lines": 271,
+        "source_token_estimate": 3066,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 25,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-analyze",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-analyze/SKILL.md",
+        "sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 12263,
+        "source_lines": 271,
+        "source_token_estimate": 3066,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 25,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-analyze",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-analyze/SKILL.md",
+        "sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 12263,
+        "source_lines": 271,
+        "source_token_estimate": 3066,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 25,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-analyze",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-analyze/SKILL.md",
+        "sha256": "ca1df50efb37ef8364f717adc7da1723466d4286cce27e58e7fd5ed4c789d533"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 12263,
+        "source_lines": 271,
+        "source_token_estimate": 3066,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 25,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-baseline",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-baseline/SKILL.md",
+        "sha256": "4ff3daf1828a4f3425a0a3cbb84b385bf8be2faabcc7086ccd413cb793155313"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 4483,
+        "source_lines": 114,
+        "source_token_estimate": 1121,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 9,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-baseline",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-baseline/SKILL.md",
+        "sha256": "4ff3daf1828a4f3425a0a3cbb84b385bf8be2faabcc7086ccd413cb793155313"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 4483,
+        "source_lines": 114,
+        "source_token_estimate": 1121,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 9,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-baseline",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-baseline/SKILL.md",
+        "sha256": "4ff3daf1828a4f3425a0a3cbb84b385bf8be2faabcc7086ccd413cb793155313"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 4483,
+        "source_lines": 114,
+        "source_token_estimate": 1121,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 9,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-baseline",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-baseline/SKILL.md",
+        "sha256": "4ff3daf1828a4f3425a0a3cbb84b385bf8be2faabcc7086ccd413cb793155313"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 4483,
+        "source_lines": 114,
+        "source_token_estimate": 1121,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 9,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-checklist",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-checklist/SKILL.md",
+        "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 22694,
+        "source_lines": 395,
+        "source_token_estimate": 5674,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 7,
+        "review_candidate_count": 3
+      }
+    },
+    {
+      "skill": "speckit-checklist",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-checklist/SKILL.md",
+        "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 22694,
+        "source_lines": 395,
+        "source_token_estimate": 5674,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 7,
+        "review_candidate_count": 3
+      }
+    },
+    {
+      "skill": "speckit-checklist",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-checklist/SKILL.md",
+        "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 22694,
+        "source_lines": 395,
+        "source_token_estimate": 5674,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 7,
+        "review_candidate_count": 3
+      }
+    },
+    {
+      "skill": "speckit-checklist",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-checklist/SKILL.md",
+        "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 22694,
+        "source_lines": 395,
+        "source_token_estimate": 5674,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 7,
+        "review_candidate_count": 3
+      }
+    },
+    {
+      "skill": "speckit-clarify",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-clarify/SKILL.md",
+        "sha256": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 20158,
+        "source_lines": 308,
+        "source_token_estimate": 5040,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 6,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-clarify",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-clarify/SKILL.md",
+        "sha256": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 20158,
+        "source_lines": 308,
+        "source_token_estimate": 5040,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 6,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-clarify",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-clarify/SKILL.md",
+        "sha256": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 20158,
+        "source_lines": 308,
+        "source_token_estimate": 5040,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 6,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-clarify",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-clarify/SKILL.md",
+        "sha256": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 20158,
+        "source_lines": 308,
+        "source_token_estimate": 5040,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": true,
+        "section_count": 6,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-constitution",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-constitution/SKILL.md",
+        "sha256": "ed6afb41c5e6bdc458a7493e78370fed64fa8fb5f4254a87734f7af5e3a0ae81"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 10647,
+        "source_lines": 191,
+        "source_token_estimate": 2662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 5,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-constitution",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-constitution/SKILL.md",
+        "sha256": "ed6afb41c5e6bdc458a7493e78370fed64fa8fb5f4254a87734f7af5e3a0ae81"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 10647,
+        "source_lines": 191,
+        "source_token_estimate": 2662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 5,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-constitution",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-constitution/SKILL.md",
+        "sha256": "ed6afb41c5e6bdc458a7493e78370fed64fa8fb5f4254a87734f7af5e3a0ae81"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 10647,
+        "source_lines": 191,
+        "source_token_estimate": 2662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 5,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-constitution",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-constitution/SKILL.md",
+        "sha256": "ed6afb41c5e6bdc458a7493e78370fed64fa8fb5f4254a87734f7af5e3a0ae81"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 10647,
+        "source_lines": 191,
+        "source_token_estimate": 2662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 5,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-converge",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-converge/SKILL.md",
+        "sha256": "315095144896fd0a26256994df831a50d66a01631b4e7b8e15b6e9ec2e122058"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13244,
+        "source_lines": 281,
+        "source_token_estimate": 3311,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 15,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-converge",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-converge/SKILL.md",
+        "sha256": "315095144896fd0a26256994df831a50d66a01631b4e7b8e15b6e9ec2e122058"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13244,
+        "source_lines": 281,
+        "source_token_estimate": 3311,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 15,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-converge",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-converge/SKILL.md",
+        "sha256": "315095144896fd0a26256994df831a50d66a01631b4e7b8e15b6e9ec2e122058"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13244,
+        "source_lines": 281,
+        "source_token_estimate": 3311,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 15,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-converge",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-converge/SKILL.md",
+        "sha256": "315095144896fd0a26256994df831a50d66a01631b4e7b8e15b6e9ec2e122058"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13244,
+        "source_lines": 281,
+        "source_token_estimate": 3311,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 15,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-implement",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-implement/SKILL.md",
+        "sha256": "8932afc951b85f42486bfb5ea1e4369eeb58aae0e3c969301d3daf7a1065bf2f"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13198,
+        "source_lines": 238,
+        "source_token_estimate": 3300,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 6,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-implement",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-implement/SKILL.md",
+        "sha256": "8932afc951b85f42486bfb5ea1e4369eeb58aae0e3c969301d3daf7a1065bf2f"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13198,
+        "source_lines": 238,
+        "source_token_estimate": 3300,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 6,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-implement",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-implement/SKILL.md",
+        "sha256": "8932afc951b85f42486bfb5ea1e4369eeb58aae0e3c969301d3daf7a1065bf2f"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13198,
+        "source_lines": 238,
+        "source_token_estimate": 3300,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 6,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-implement",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-implement/SKILL.md",
+        "sha256": "8932afc951b85f42486bfb5ea1e4369eeb58aae0e3c969301d3daf7a1065bf2f"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 13198,
+        "source_lines": 238,
+        "source_token_estimate": 3300,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 6,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-plan",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-plan/SKILL.md",
+        "sha256": "0ffc26d8fadf6f529ecb5ffc0cf176916ad83703f38dd23434e79f82e05da61d"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8351,
+        "source_lines": 178,
+        "source_token_estimate": 2088,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-plan",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-plan/SKILL.md",
+        "sha256": "0ffc26d8fadf6f529ecb5ffc0cf176916ad83703f38dd23434e79f82e05da61d"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8351,
+        "source_lines": 178,
+        "source_token_estimate": 2088,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-plan",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-plan/SKILL.md",
+        "sha256": "0ffc26d8fadf6f529ecb5ffc0cf176916ad83703f38dd23434e79f82e05da61d"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8351,
+        "source_lines": 178,
+        "source_token_estimate": 2088,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-plan",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-plan/SKILL.md",
+        "sha256": "0ffc26d8fadf6f529ecb5ffc0cf176916ad83703f38dd23434e79f82e05da61d"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8351,
+        "source_lines": 178,
+        "source_token_estimate": 2088,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-specify",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-specify/SKILL.md",
+        "sha256": "5c84d5e5b114d6640277fb24a1773f488d644e56c6b5b844a3324351200d572a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 18646,
+        "source_lines": 360,
+        "source_token_estimate": 4662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-specify",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-specify/SKILL.md",
+        "sha256": "5c84d5e5b114d6640277fb24a1773f488d644e56c6b5b844a3324351200d572a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 18646,
+        "source_lines": 360,
+        "source_token_estimate": 4662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-specify",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-specify/SKILL.md",
+        "sha256": "5c84d5e5b114d6640277fb24a1773f488d644e56c6b5b844a3324351200d572a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 18646,
+        "source_lines": 360,
+        "source_token_estimate": 4662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-specify",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-specify/SKILL.md",
+        "sha256": "5c84d5e5b114d6640277fb24a1773f488d644e56c6b5b844a3324351200d572a"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 18646,
+        "source_lines": 360,
+        "source_token_estimate": 4662,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 2
+      }
+    },
+    {
+      "skill": "speckit-tasks",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-tasks/SKILL.md",
+        "sha256": "4ba8fb6ce1d278d540606c76346607e432c6788181d3010a5c97ff58c7b58594"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 11667,
+        "source_lines": 228,
+        "source_token_estimate": 2917,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-tasks",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-tasks/SKILL.md",
+        "sha256": "4ba8fb6ce1d278d540606c76346607e432c6788181d3010a5c97ff58c7b58594"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 11667,
+        "source_lines": 228,
+        "source_token_estimate": 2917,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-tasks",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-tasks/SKILL.md",
+        "sha256": "4ba8fb6ce1d278d540606c76346607e432c6788181d3010a5c97ff58c7b58594"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 11667,
+        "source_lines": 228,
+        "source_token_estimate": 2917,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-tasks",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-tasks/SKILL.md",
+        "sha256": "4ba8fb6ce1d278d540606c76346607e432c6788181d3010a5c97ff58c7b58594"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 11667,
+        "source_lines": 228,
+        "source_token_estimate": 2917,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 10,
+        "review_candidate_count": 1
+      }
+    },
+    {
+      "skill": "speckit-taskstoissues",
+      "target": "generic",
+      "source": {
+        "path": "skills/speckit-taskstoissues/SKILL.md",
+        "sha256": "52bfbcb714023d5ae457c1c38d6faee1609fb8df82a88d86d518b68dac91fd30"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8194,
+        "source_lines": 121,
+        "source_token_estimate": 2049,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 4,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-taskstoissues",
+      "target": "cursor",
+      "source": {
+        "path": "skills/speckit-taskstoissues/SKILL.md",
+        "sha256": "52bfbcb714023d5ae457c1c38d6faee1609fb8df82a88d86d518b68dac91fd30"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8194,
+        "source_lines": 121,
+        "source_token_estimate": 2049,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 4,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-taskstoissues",
+      "target": "claude",
+      "source": {
+        "path": "skills/speckit-taskstoissues/SKILL.md",
+        "sha256": "52bfbcb714023d5ae457c1c38d6faee1609fb8df82a88d86d518b68dac91fd30"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8194,
+        "source_lines": 121,
+        "source_token_estimate": 2049,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 4,
+        "review_candidate_count": 0
+      }
+    },
+    {
+      "skill": "speckit-taskstoissues",
+      "target": "codex",
+      "source": {
+        "path": "skills/speckit-taskstoissues/SKILL.md",
+        "sha256": "52bfbcb714023d5ae457c1c38d6faee1609fb8df82a88d86d518b68dac91fd30"
+      },
+      "target_compatible": true,
+      "warnings": [],
+      "metrics": {
+        "source_chars": 8194,
+        "source_lines": 121,
+        "source_token_estimate": 2049,
+        "recommended_root_token_budget": 5000,
+        "over_recommended_root_budget": false,
+        "section_count": 4,
+        "review_candidate_count": 0
+      }
+    }
+  ],
+  "evaluations": [
+    {
+      "checks": [
+        {
+          "check_id": "invocation-policy",
+          "message": "source invocation policy matches the scenario and is compiled fail-closed",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "expected-diagnostics",
+          "message": "audit diagnostics match the fixture's pinned expectations",
+          "passed": true,
+          "scope": "canonical"
+        },
+        {
+          "check_id": "mock-invocation",
+          "message": "mock user prompt invocation matches expected user policy",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "required-constraint-1",
+          "message": "required constraint is retained verbatim in both variants",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "forbidden-action-1",
+          "message": "mock transcript does not perform forbidden action 'invent-defect'",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "reference-loads",
+          "message": "mock reference loads exactly match expected compiled package references",
+          "passed": true,
+          "scope": "compiled-package-and-mock-transcript"
+        },
+        {
+          "check_id": "semantic-1",
+          "message": "output_contains assertion for 'No actionable findings.'",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "semantic-2",
+          "message": "output_not_contains assertion for 'critical vulnerability'",
+          "passed": true,
+          "scope": "mock-transcript"
+        }
+      ],
+      "fidelity": {
+        "passed_checks": 8,
+        "total_checks": 8
+      },
+      "fixture_id": "anthropic-small",
+      "passed": true,
+      "runtime_metrics": null,
+      "scenario_id": "concise-review-actionable-only",
+      "schema_version": 1,
+      "static_metrics": {
+        "canonical_token_estimate": 65,
+        "compiled_normal_path_token_estimate": 79,
+        "compiled_root_token_estimate": 79
+      },
+      "target": "codex"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "invocation-policy",
+          "message": "source invocation policy matches the scenario and is compiled fail-closed",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "expected-diagnostics",
+          "message": "audit diagnostics match the fixture's pinned expectations",
+          "passed": true,
+          "scope": "canonical"
+        },
+        {
+          "check_id": "mock-invocation",
+          "message": "mock user prompt invocation matches expected user policy",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "required-constraint-1",
+          "message": "required constraint is retained verbatim in both variants",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "forbidden-action-1",
+          "message": "mock transcript does not perform forbidden action 'invent-metrics'",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "reference-loads",
+          "message": "mock reference loads exactly match expected compiled package references",
+          "passed": true,
+          "scope": "compiled-package-and-mock-transcript"
+        },
+        {
+          "check_id": "semantic-1",
+          "message": "output_contains assertion for 'label space'",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "semantic-2",
+          "message": "output_contains assertion for 'evaluation conditions'",
+          "passed": true,
+          "scope": "mock-transcript"
+        }
+      ],
+      "fidelity": {
+        "passed_checks": 8,
+        "total_checks": 8
+      },
+      "fixture_id": "huggingface-heavy-examples",
+      "passed": true,
+      "runtime_metrics": null,
+      "scenario_id": "model-card-load-examples",
+      "schema_version": 1,
+      "static_metrics": {
+        "canonical_token_estimate": 140,
+        "compiled_normal_path_token_estimate": 225,
+        "compiled_root_token_estimate": 117
+      },
+      "target": "claude"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "invocation-policy",
+          "message": "source invocation policy matches the scenario and is compiled fail-closed",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "expected-diagnostics",
+          "message": "audit diagnostics match the fixture's pinned expectations",
+          "passed": true,
+          "scope": "canonical"
+        },
+        {
+          "check_id": "mock-invocation",
+          "message": "mock user prompt invocation matches expected user policy",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "required-constraint-1",
+          "message": "required constraint is retained verbatim in both variants",
+          "passed": true,
+          "scope": "canonical-and-compiled"
+        },
+        {
+          "check_id": "forbidden-action-1",
+          "message": "mock transcript does not perform forbidden action 'invent-issue-id'",
+          "passed": true,
+          "scope": "mock-transcript"
+        },
+        {
+          "check_id": "reference-loads",
+          "message": "mock reference loads exactly match expected compiled package references",
+          "passed": true,
+          "scope": "compiled-package-and-mock-transcript"
+        },
+        {
+          "check_id": "semantic-1",
+          "message": "output_contains assertion for 'No issue identifiers were supplied.'",
+          "passed": true,
+          "scope": "mock-transcript"
+        }
+      ],
+      "fidelity": {
+        "passed_checks": 7,
+        "total_checks": 7
+      },
+      "fixture_id": "anthropic-explicit-only",
+      "passed": true,
+      "runtime_metrics": null,
+      "scenario_id": "release-notes-explicit-only",
+      "schema_version": 1,
+      "static_metrics": {
+        "canonical_token_estimate": 65,
+        "compiled_normal_path_token_estimate": 75,
+        "compiled_root_token_estimate": 75
+      },
+      "target": "cursor"
+    }
+  ],
+  "compile": {
+    "files": [
+      ".harnessmith.json",
+      "SKILL.md",
+      "references/4-detection-passes-token-efficient-analysis.md",
+      "references/extension-hooks-fallback.md",
+      "references/specification-analysis-report.md",
+      "scripts/resolve-extension-hooks.py"
+    ],
+    "metrics": {
+      "compiled_root_chars": 6416,
+      "compiled_root_token_estimate": 1604,
+      "conditional_reference_chars": 4703,
+      "conditional_reference_token_estimate": 1176,
+      "mandatory_reference_chars": 3331,
+      "mandatory_reference_token_estimate": 833,
+      "normal_path_instruction_chars": 9747,
+      "normal_path_instruction_token_estimate": 2437,
+      "normal_path_reduction_percent": 21,
+      "packaged_instruction_chars": 14450,
+      "packaged_instruction_token_estimate": 3613,
+      "reference_chars": 8034,
+      "reference_token_estimate": 2009,
+      "root_char_reduction": 5847,
+      "root_reduction_percent": 48,
+      "script_chars": 10139,
+      "script_token_estimate": 2535,
+      "source_skill_chars": 12263,
+      "source_skill_token_estimate": 3066
+    },
+    "output": "/tmp/harnessmith-review-2026-10-22/compiled",
+    "skill": "speckit-analyze",
+    "target": "cursor"
+  },
+  "verification": {
+    "checks": {
+      "file_hashes": "passed",
+      "invariants": "passed",
+      "manifest": "passed",
+      "metrics": "passed",
+      "recipe": "passed",
+      "regeneration": "passed",
+      "source": "passed",
+      "target": "passed"
+    },
+    "issues": [],
+    "package": "/tmp/harnessmith-review-2026-10-22/compiled",
+    "target": "cursor",
+    "valid": true
+  },
+  "checked_in_example_verification": {
+    "checks": {
+      "file_hashes": "passed",
+      "invariants": "passed",
+      "manifest": "passed",
+      "metrics": "passed",
+      "recipe": "passed",
+      "regeneration": "passed",
+      "source": "passed",
+      "target": "passed"
+    },
+    "issues": [],
+    "package": "examples/compiled/cursor/speckit-analyze",
+    "target": "cursor",
+    "valid": true
+  },
+  "probes": {
+    "invalid-standard-metadata": {
+      "generic": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "cursor": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "claude": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "codex": {
+        "target_compatible": true,
+        "warnings": []
+      }
+    },
+    "claude-dynamic-body": {
+      "generic": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "cursor": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "claude": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "codex": {
+        "target_compatible": true,
+        "warnings": []
+      }
+    },
+    "tool-list": {
+      "generic": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "cursor": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "claude": {
+        "target_compatible": true,
+        "warnings": []
+      },
+      "codex": {
+        "target_compatible": true,
+        "warnings": []
+      }
+    }
+  },
+  "discovery": [
+    {
+      "skill": "claude-command-converter",
+      "description_chars": 255,
+      "path_chars": 92
+    },
+    {
+      "skill": "speckit-analyze",
+      "description_chars": 134,
+      "path_chars": 83
+    },
+    {
+      "skill": "speckit-baseline",
+      "description_chars": 66,
+      "path_chars": 84
+    },
+    {
+      "skill": "speckit-checklist",
+      "description_chars": 79,
+      "path_chars": 85
+    },
+    {
+      "skill": "speckit-clarify",
+      "description_chars": 156,
+      "path_chars": 83
+    },
+    {
+      "skill": "speckit-constitution",
+      "description_chars": 88,
+      "path_chars": 88
+    },
+    {
+      "skill": "speckit-converge",
+      "description_chars": 166,
+      "path_chars": 84
+    },
+    {
+      "skill": "speckit-implement",
+      "description_chars": 89,
+      "path_chars": 85
+    },
+    {
+      "skill": "speckit-plan",
+      "description_chars": 98,
+      "path_chars": 80
+    },
+    {
+      "skill": "speckit-specify",
+      "description_chars": 87,
+      "path_chars": 83
+    },
+    {
+      "skill": "speckit-tasks",
+      "description_chars": 104,
+      "path_chars": 81
+    },
+    {
+      "skill": "speckit-taskstoissues",
+      "description_chars": 125,
+      "path_chars": 89
+    }
+  ],
+  "checks": {
+    "unit_tests": {
+      "run": 85,
+      "passed": 85,
+      "log_tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 85 tests in 1.417s",
+        "",
+        "OK"
+      ]
+    },
+    "repository_docs": "passed",
+    "repository_all": "incomplete: jsonschema missing",
+    "live_evaluations": "not run"
+  }
+}
