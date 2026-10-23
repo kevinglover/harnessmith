@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "target": "cursor",
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "invocation": "source",
+  "extract_sections": [
+    "Example Checklist Types & Sample Items",
+    "Anti-Examples: What NOT To Do"
+  ],
+  "optimizations": [],
+  "budgets": {
+    "root_tokens": 5000,
+    "normal_path_tokens": 5900
+  }
+}

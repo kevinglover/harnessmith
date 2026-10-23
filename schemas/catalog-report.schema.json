@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "evidence_kind": {
+      "const": "static-catalog-estimate"
+    },
+    "target": {
+      "enum": [
+        "codex",
+        "claude"
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "profile_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "enum": [
+            "codex",
+            "claude"
+          ]
+        },
+        "host_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "listing_format": {
+          "const": "json-lines-name-description-path-v1"
+        },
+        "budget_characters": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "reserved_characters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "schema_version",
+        "profile_id",
+        "target",
+        "host_version",
+        "listing_format",
+        "budget_characters",
+        "reserved_characters",
+        "evidence"
+      ]
+    },
+    "profile_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "listing_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "skill_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "components_characters": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "description": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "path": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "formatting": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "path",
+              "formatting"
+            ]
+          },
+          "listing_characters": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "path",
+          "source_sha256",
+          "components_characters",
+          "listing_characters"
+        ]
+      }
+    },
+    "components_characters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "path": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "formatting": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "path",
+        "formatting"
+      ]
+    },
+    "listing_characters": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "listing_token_estimate": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "assumed_total_characters": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "overflow_characters": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "diagnostic.schema.json"
+      }
+    },
+    "runtime_metrics": {
+      "type": "null"
+    }
+  },
+  "required": [
+    "schema_version",
+    "evidence_kind",
+    "target",
+    "profile",
+    "profile_sha256",
+    "listing_sha256",
+    "skill_count",
+    "entries",
+    "components_characters",
+    "listing_characters",
+    "listing_token_estimate",
+    "assumed_total_characters",
+    "overflow_characters",
+    "diagnostics",
+    "runtime_metrics"
+  ]
+}

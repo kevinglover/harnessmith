@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "target": "cursor",
+  "source_sha256": "1aa720fe3c91412a06b4bc8fff1399bdd4f289bfe4d2f112b1d472e0e1c3d85a",
+  "invocation": "source",
+  "extract_sections": [
+    "Completion Report"
+  ],
+  "optimizations": [],
+  "budgets": {
+    "root_tokens": 5000,
+    "normal_path_tokens": 5150
+  }
+}
