@@ -75,3 +75,13 @@ stable occurrence such as `Examples[2]`.
 ```bash
 harnessmith --version
 ```
+
+## Portability diagnostics during compilation
+
+Compilation includes a `diagnostics` array in its JSON report and displays the
+same findings on stderr in text mode. Metadata validation errors (`HS102`) stop
+compilation. Tool-runtime uncertainty (`HS306`) and body syntax findings
+(`HS307`, `HS308`) are advisory and do not alter generated files or manifests.
+For CI that requires review before packaging, run an audit with
+`--fail-on warning` (or `--fail-on note` to include possible literal examples).
+See [Diagnostic rules](diagnostics.md).

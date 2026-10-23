@@ -12,6 +12,7 @@ from typing import Dict, Optional, Tuple
 
 
 CONTRACT_SCHEMA_VERSION = 1
+CAPABILITY_SCHEMA_VERSION = 2
 
 
 class Severity(str, Enum):
@@ -24,6 +25,7 @@ class CapabilityStatus(str, Enum):
     SUPPORTED = "supported"
     UNSUPPORTED = "unsupported"
     LOSSY = "lossy"
+    UNKNOWN = "unknown"
 
 
 @dataclass(frozen=True)
@@ -89,7 +91,7 @@ class Capability:
 class AdapterCapabilities:
     target: str
     capabilities: Tuple[Capability, ...]
-    schema_version: int = CONTRACT_SCHEMA_VERSION
+    schema_version: int = CAPABILITY_SCHEMA_VERSION
 
     def __post_init__(self) -> None:
         names = [item.name for item in self.capabilities]

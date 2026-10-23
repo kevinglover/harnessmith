@@ -31,12 +31,26 @@ def _capability(
 
 
 @dataclass(frozen=True)
+class MetadataPolicy:
+    """Validation policy, independent of raw frontmatter preservation."""
+
+    portable_name: bool = True
+    name_limit: Optional[int] = 64
+    description_limit: Optional[int] = 1024
+    compatibility_limit: int = 500
+    tool_lists: bool = False
+    tool_commas: bool = False
+    directory_matches_name: bool = True
+
+
+@dataclass(frozen=True)
 class TargetDefinition:
     """Declarative contract consumed by an adapter and external tooling."""
 
     name: str
     frontmatter_fields: FrozenSet[str]
     capabilities: AdapterCapabilities
+    metadata_policy: MetadataPolicy = MetadataPolicy()
 
     def __post_init__(self) -> None:
         if self.capabilities.target != self.name:
@@ -62,13 +76,44 @@ _COMMON_PACKAGE_CAPABILITIES = (
         "Helper scripts can be included in the compiled skill package.",
         "scripts/",
     ),
-    _capability(
-        "tools.allowlist",
-        CapabilityStatus.SUPPORTED,
-        "Allowed tools are represented by standard skill frontmatter.",
-        "allowed-tools",
-    ),
 )
+
+
+def _tool_capabilities(target: str) -> Tuple[Capability, ...]:
+    runtime = (
+        CapabilityStatus.UNSUPPORTED if target == "generic"
+        else CapabilityStatus.UNKNOWN
+    )
+    return (
+        _capability(
+            "tools.allowed_metadata", CapabilityStatus.SUPPORTED,
+            "Preserves accepted allowed-tools syntax; makes no permission guarantee.",
+            "allowed-tools",
+        ),
+        _capability(
+            "tools.allowlist", CapabilityStatus.UNSUPPORTED,
+            "Legacy name now means exclusive restriction: allowed-tools does not "
+            "express an exclusive tool policy. No conversion is provided.",
+        ),
+        _capability(
+            "tools.preapproval", runtime,
+            ("Claude documents invocation-turn grants, subject to permission settings; "
+             "managed-only rules can ignore these grants in v2.1.282+. "
+             "No versioned runtime has been tested."
+             if target == "claude" else
+             "Portable metadata is experimental; no versioned runtime "
+             "preapproval guarantee is available."),
+            "allowed-tools",
+        ),
+        _capability(
+            "tools.restriction", runtime,
+            ("Claude documents turn-scoped disallowed-tools, with an "
+             "EndConversation exception. Runtime enforcement is unverified."
+             if target == "claude" else
+             "No verified runtime restriction policy or conversion is available."),
+            "disallowed-tools" if target == "claude" else None,
+        ),
+    )
 
 
 def _contract(target: str, *items: Capability) -> AdapterCapabilities:
@@ -103,6 +148,7 @@ GENERIC = TargetDefinition(
             "Only standard Agent Skills frontmatter is portable.",
         ),
         *_COMMON_PACKAGE_CAPABILITIES,
+        *_tool_capabilities("generic"),
     ),
 )
 
@@ -137,11 +183,16 @@ CURSOR = TargetDefinition(
             "paths, icon, color",
         ),
         *_COMMON_PACKAGE_CAPABILITIES,
+        *_tool_capabilities("cursor"),
     ),
 )
 
 CLAUDE = TargetDefinition(
     name="claude",
+    metadata_policy=MetadataPolicy(
+        portable_name=False, name_limit=None, description_limit=None,
+        tool_lists=True, tool_commas=True, directory_matches_name=False,
+    ),
     frontmatter_fields=frozenset(
         set(STANDARD_FRONTMATTER_FIELDS)
         | {
@@ -188,10 +239,16 @@ CLAUDE = TargetDefinition(
             "Claude Code skill frontmatter",
         ),
         *_COMMON_PACKAGE_CAPABILITIES,
+        *_tool_capabilities("claude"),
         _capability(
             "tools.denylist",
-            CapabilityStatus.SUPPORTED,
-            "Disallowed tools are represented natively.",
+            CapabilityStatus.UNKNOWN,
+            "Legacy runtime claim is unverified; see tools.restriction.",
+            "disallowed-tools",
+        ),
+        _capability(
+            "tools.disallowed_metadata", CapabilityStatus.SUPPORTED,
+            "Preserves accepted disallowed-tools syntax without converting it.",
             "disallowed-tools",
         ),
     ),
@@ -224,6 +281,7 @@ CODEX = TargetDefinition(
             "Only standard skill frontmatter is emitted in SKILL.md.",
         ),
         *_COMMON_PACKAGE_CAPABILITIES,
+        *_tool_capabilities("codex"),
         _capability(
             "metadata.extra_files",
             CapabilityStatus.SUPPORTED,

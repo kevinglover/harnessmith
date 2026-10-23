@@ -11,8 +11,7 @@ communicates the affected area:
 
 Diagnostics have `error`, `warning`, or `note` severity. An error means the
 requested target cannot preserve the source behavior. A warning identifies a
-condition likely to require action. A note is an optimization opportunity and
-does not imply invalid input.
+condition likely to require action. A note supplies review context and does not imply invalid input.
 
 ## Rule reference
 
@@ -21,6 +20,19 @@ does not imply invalid input.
 Two or more sections have the same heading. Heading-only recipes cannot select
 one occurrence unambiguously, so rename the sections before selecting either
 one for transformation.
+
+### HS102 — Invalid target metadata
+
+A required field, string type, length, name, map, or tool-list representation
+violates the selected target policy. Each field has its own source span. These
+errors block compilation without changing the source. Structurally unreadable
+frontmatter still raises a parser error before field-level diagnostics.
+
+### HS103 — Installation directory mismatch
+
+The source folder differs from the portable skill name. This is an advisory
+installation warning: compiler staging paths and corpus IDs may differ. Claude
+permits name overrides. See [Metadata validation](targets.md#metadata-validation).
 
 ### HS201 — Recommended root budget exceeded
 
@@ -41,6 +53,22 @@ instructions before extraction.
 The selected adapter cannot represent a behavior-bearing source capability.
 Compilation must remain fail-closed. Choose a compatible target or explicitly
 revise the source semantics; Harnessmith does not offer an automatic fix.
+
+### HS306 — Tool runtime semantics unverified
+
+The compiler preserves an accepted tool field, but has no versioned runtime
+evidence for grants or enforcement. Preservation is not an exclusive allowlist.
+
+### HS307 — Host-specific body syntax
+
+A known Claude dynamic command or substitution occurs in ordinary body text for
+a non-Claude target. Review portability; compilation preserves it with a warning.
+
+### HS308 — Possible literal host syntax
+
+Known syntax occurs in a code context, quote, comment, or escaped text. This note
+separates likely examples from ordinary prose without asserting that host
+preprocessing ignores them. Use a note threshold to require review of both.
 
 ## Library rendering and CI thresholds
 

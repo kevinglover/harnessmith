@@ -19,3 +19,6 @@ Compatibility is fail-closed: adapters classify behavior as `supported`,
 Additive schema changes that affect consumers require a deliberate schema
 decision. Downstream work should import the shared enums and records rather
 than inventing parallel severity or capability labels.
+
+The capability-specific version 2 extension is recorded in
+[ADR 0003](0003-tool-capability-evidence.md). Other contracts remain at version 1.

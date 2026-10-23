@@ -59,9 +59,7 @@ def split_frontmatter(text: str) -> Tuple[Tuple[FrontmatterField, ...], str, int
             raise SkillCompilerError("duplicate frontmatter field: %s" % key)
         seen.add(key)
         end = (
-            starts[item_index + 1][0]
-            if item_index + 1 < len(starts)
-            else len(fm_lines)
+            starts[item_index + 1][0] if item_index + 1 < len(starts) else len(fm_lines)
         )
         raw = "".join(fm_lines[start:end])
         fields.append(
@@ -128,8 +126,7 @@ def _block_scalar_value(field: FrontmatterField, header: str) -> str:
         or len(chomps) > 1
     ):
         raise SkillCompilerError(
-            "unsupported YAML block scalar header for '%s': %s"
-            % (field.key, header)
+            "unsupported YAML block scalar header for '%s': %s" % (field.key, header)
         )
 
     content = field.raw.splitlines()[1:]
@@ -157,20 +154,26 @@ def _block_scalar_value(field: FrontmatterField, header: str) -> str:
         result = "\n".join(lines)
     else:
         parts: List[str] = []
+        previous = None
         for index, line in enumerate(lines):
-            parts.append(line)
-            if index == len(lines) - 1:
+            if not line:
                 continue
-            following = lines[index + 1]
-            if (
-                not line
-                or not following
-                or line.startswith(" ")
-                or following.startswith(" ")
-            ):
-                parts.append("\n")
+            if previous is None:
+                parts.append("\n" * index)
             else:
-                parts.append(" ")
+                blanks = index - previous - 1
+                if lines[previous].startswith((" ", "\t")) or line.startswith(
+                    (" ", "\t")
+                ):
+                    parts.append("\n" * (blanks + 1))
+                else:
+                    parts.append("\n" * blanks if blanks else " ")
+            parts.append(line)
+            previous = index
+        if previous is not None:
+            parts.append("\n" * (len(lines) - previous - 1))
+        else:
+            parts.append("\n" * max(0, len(lines) - 1))
         result = "".join(parts)
 
     if "-" in chomps:

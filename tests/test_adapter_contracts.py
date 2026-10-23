@@ -94,5 +94,41 @@ class AdapterContractTests(unittest.TestCase):
                 adapt_frontmatter(ir, target, InvocationPolicy())
 
 
+class ToolCapabilityTests(unittest.TestCase):
+    def test_v2_distinguishes_representation_from_runtime_claims(self) -> None:
+        for definition in iter_targets():
+            self.assertEqual(2, definition.capabilities.schema_version)
+            self.assertIs(CapabilityStatus.SUPPORTED,
+                          definition.capability('tools.allowed_metadata').status)
+            self.assertIs(CapabilityStatus.UNSUPPORTED,
+                          definition.capability('tools.allowlist').status)
+            expected = (CapabilityStatus.UNSUPPORTED if definition.name == 'generic'
+                        else CapabilityStatus.UNKNOWN)
+            self.assertIs(expected, definition.capability('tools.preapproval').status)
+            self.assertIs(expected, definition.capability('tools.restriction').status)
+        self.assertIs(CapabilityStatus.UNKNOWN,
+                      get_target('claude').capability('tools.denylist').status)
+
+    def test_permission_fields_are_never_converted_to_restrictions(self) -> None:
+        ir = _ir('name: example\ndescription: Example\nallowed-tools: Read Grep\n')
+        for definition in iter_targets():
+            adapted = adapt_frontmatter(ir, definition.name, InvocationPolicy())
+            fields = {field.key: field.raw for field in adapted.fields}
+            self.assertEqual('allowed-tools: Read Grep\n', fields['allowed-tools'])
+            self.assertNotIn('disallowed-tools', fields)
+        restricted = _ir('name: example\ndescription: Example\ndisallowed-tools: Write\n')
+        for target in ('generic', 'cursor', 'codex'):
+            with self.assertRaisesRegex(SkillCompilerError, 'cannot preserve'):
+                adapt_frontmatter(restricted, target, InvocationPolicy())
+        adapted = adapt_frontmatter(restricted, 'claude', InvocationPolicy())
+        self.assertIn('disallowed-tools: Write\n', [f.raw for f in adapted.fields])
+
+    def test_unrecognized_restrictive_policy_fails_closed(self) -> None:
+        ir = _ir('name: example\ndescription: Example\ntools-policy: exclusive\n')
+        for target in TARGET_NAMES:
+            with self.assertRaisesRegex(SkillCompilerError, 'cannot preserve'):
+                adapt_frontmatter(ir, target, InvocationPolicy())
+
+
 if __name__ == "__main__":
     unittest.main()

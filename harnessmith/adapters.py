@@ -7,6 +7,7 @@ from typing import Dict, List, Sequence, Tuple
 
 from .errors import SkillCompilerError
 from .frontmatter import filter_fields, replace_scalar, scalar_value
+from .metadata import require_valid_metadata
 from .model import FrontmatterField, InvocationPolicy, SkillIR
 from .targets import get_target
 
@@ -34,6 +35,7 @@ def adapt_frontmatter(
     definition = get_target(target)
     target = definition.name
     allowed = definition.frontmatter_fields
+    require_valid_metadata(ir, target)
 
     _validate_unsupported_fields(ir, target, allowed)
     fields, dropped = filter_fields(ir.frontmatter, allowed)

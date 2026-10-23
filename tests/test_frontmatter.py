@@ -11,7 +11,7 @@ class FrontmatterTests(unittest.TestCase):
         source = (
             "---\n"
             "name: sample-skill\n"
-            "description: \"A sample.\"\n"
+            'description: "A sample."\n'
             "metadata:\n"
             "  author: example\n"
             "allowed-tools:\n"
@@ -27,7 +27,9 @@ class FrontmatterTests(unittest.TestCase):
         self.assertIn("  - Grep\n", fields[3].raw)
         self.assertEqual("\n# Sample\n", body)
         self.assertEqual(10, body_line)
-        self.assertTrue(render_frontmatter(fields).startswith("---\nname: sample-skill\n"))
+        self.assertTrue(
+            render_frontmatter(fields).startswith("---\nname: sample-skill\n")
+        )
 
     def test_folded_block_scalar_is_interpreted_and_preserved(self) -> None:
         source = (
@@ -51,14 +53,24 @@ class FrontmatterTests(unittest.TestCase):
             render_frontmatter(fields),
         )
 
+    def test_folded_paragraphs_and_more_indented_lines(self) -> None:
+        for content, expected in [
+            ("  a\n\n  b", "a\nb"),
+            ("  a\n\n\n  b", "a\n\nb"),
+            ("\n  a\n  b", "\na b"),
+            ("  a\n    code\n  b", "a\n  code\nb"),
+            ("  a\n\n    code\n\n  b", "a\n\n  code\n\nb"),
+        ]:
+            for chomp, suffix in [("-", ""), ("", "\n"), ("+", "\n")]:
+                with self.subTest(content=content, chomp=chomp):
+                    fields, _, _ = split_frontmatter(
+                        "---\ndescription: >" + chomp + "\n" + content + "\n---\n"
+                    )
+                    self.assertEqual(expected + suffix, scalar_value(fields[0]))
+
     def test_literal_block_scalar_preserves_line_breaks(self) -> None:
         fields, _, _ = split_frontmatter(
-            "---\n"
-            "name: sample\n"
-            "description: |\n"
-            "  First line.\n"
-            "  Second line.\n"
-            "---\n"
+            "---\nname: sample\ndescription: |\n  First line.\n  Second line.\n---\n"
         )
 
         self.assertEqual(

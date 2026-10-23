@@ -13,6 +13,7 @@ from .audit import audit_skill
 from .compiler import CompileOptions, compile_skill, write_package
 from .contracts import Diagnostic, Remediation, Severity, SourceSpan
 from .diagnostics import (
+    diagnostic_to_dict,
     diagnostics_fail_threshold,
     render_diagnostics_json,
     render_diagnostics_sarif,
@@ -225,7 +226,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "output": args.output.as_posix(),
         "metrics": package.metrics,
         "files": sorted(package.file_bytes()),
+        "diagnostics": [diagnostic_to_dict(item) for item in package.diagnostics],
     }
+    if package.diagnostics and not args.json:
+        print(render_diagnostics_text(package.diagnostics), file=sys.stderr)
     if args.dry_run or args.diff:
         report["written"] = False
         report["diff"] = diff.as_dict()

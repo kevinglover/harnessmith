@@ -240,7 +240,10 @@ def evaluate_scenario(
             "source invocation policy matches the scenario and is compiled fail-closed",
         )
     )
-    audit = audit_skill(source, scenario.target, source_id=record.source_path)
+    # Corpus directory names identify fixtures, not installation locations.
+    audit = audit_skill(
+        source, scenario.target, source_id=record.source_path, check_directory=False
+    )
     actual_diagnostics = tuple(
         diagnostic["rule_id"] for diagnostic in audit["diagnostics"]
     )

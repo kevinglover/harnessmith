@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Tuple
 
+from .contracts import Diagnostic
+
 
 @dataclass(frozen=True)
 class FrontmatterField:
@@ -73,6 +75,7 @@ class CompiledPackage:
     transformations: List[Dict[str, object]] = field(default_factory=list)
     binary_files: Dict[str, bytes] = field(default_factory=dict)
     executable_files: Tuple[str, ...] = ()
+    diagnostics: List[Diagnostic] = field(default_factory=list)
 
     def file_bytes(self) -> Mapping[str, bytes]:
         """Return every package file in its exact on-disk representation."""

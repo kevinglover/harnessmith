@@ -6,7 +6,7 @@ must fail closed for semantics it cannot preserve.
 ## Implementation checklist
 
 1. Add a `TargetDefinition` in `harnessmith.targets` with a unique lowercase
-   name, allowed frontmatter fields, and capability declarations.
+   name, allowed frontmatter fields, metadata policy, and capability declarations.
 2. Include the target in the registry and recipe/schema target enums.
 3. Implement frontmatter and extra-file rendering in
    `harnessmith.adapters.adapt_frontmatter`.
@@ -25,9 +25,13 @@ Every target declares at least:
 - `frontmatter.extensions`
 - `content.references`
 - `content.scripts`
-- `tools.allowlist`
+- `tools.allowed_metadata`
+- `tools.allowlist` (legacy exclusive-restriction key)
+- `tools.preapproval`
+- `tools.restriction`
 
-Capability status is `supported`, `unsupported`, or `lossy`. The current
+Capability schema version 2 supports `supported`, `unsupported`, `lossy`, and
+`unknown`. Use `unknown` for runtime behavior lacking versioned evidence. The current
 compiler does not silently opt into lossy behavior. `native_representation`
 should name the exact field or file used when support exists.
 
@@ -40,7 +44,7 @@ Before coding, answer:
 - Which standard and extension frontmatter fields affect behavior?
 - Are argument declarations semantic or presentation-only?
 - Can the package contain references, scripts, and metadata files?
-- How are tool allowlists and denylists represented?
+- Which tool fields are preserved, and which runtime permission claims have evidence?
 - What should compilation reject rather than approximate?
 
 Keep target knowledge in the declaration and adapter. General transforms should
