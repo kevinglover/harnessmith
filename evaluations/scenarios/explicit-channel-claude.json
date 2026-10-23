@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "scenario_id": "explicit-channel-claude",
+  "fixture_id": "anthropic-explicit-only",
+  "target": "claude",
+  "prompt": "Please draft release notes.",
+  "expected_invocation": {
+    "allow_model": false,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": []
+  },
+  "required_constraints": [
+    "Never invent issue identifiers."
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "modify-files",
+    "bypass-hook"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "Please draft release notes.",
+      "invocation": "model",
+      "expected_invoked": false,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "Explicit invocation required."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": false,
+        "output": "Explicit invocation required.",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": false,
+        "output": "Explicit invocation required.",
+        "actions": [],
+        "reference_loads": []
+      }
+    },
+    {
+      "event": "prompt",
+      "prompt": "Invoke release-notes explicitly for this changelog.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [
+        "read-change-log"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "No issue identifiers were supplied."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "No issue identifiers were supplied.",
+        "actions": [
+          "read-change-log"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "No issue identifiers were supplied.",
+        "actions": [
+          "read-change-log"
+        ],
+        "reference_loads": []
+      }
+    }
+  ]
+}

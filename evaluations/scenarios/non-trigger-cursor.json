@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "scenario_id": "non-trigger-cursor",
+  "fixture_id": "harnessmith-lifecycle",
+  "target": "cursor",
+  "prompt": "What is two plus two?",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Examples"
+    ]
+  },
+  "required_constraints": [
+    "Run checks only after approval. Never deploy or modify files.",
+    "On abort, stop immediately without performing further actions."
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "modify-files",
+    "bypass-hook"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "What is two plus two?",
+      "invocation": "model",
+      "expected_invoked": false,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "Four."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": false,
+        "output": "Four.",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": false,
+        "output": "Four.",
+        "actions": [],
+        "reference_loads": []
+      }
+    }
+  ]
+}

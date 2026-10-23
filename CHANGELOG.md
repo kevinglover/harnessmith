@@ -9,6 +9,13 @@ published.
 
 ### Added
 
+- Backward-compatible version-2 evaluation scenarios with independent canonical
+  and compiled turn contracts across all targets, including invocation channels,
+  approval, abort, hook failure, reference reloads, continuation, and compaction.
+- Opt-in repeated runtime evidence collection with package/source/configuration
+  hashes, environment versions, raw traces and usage, explicit mock labeling,
+  and published scenario/evidence schemas. No built-in live provider is enabled.
+
 - Target-aware metadata diagnostics and compile validation, with advisory
   installation-directory checks and preserved frontmatter text.
 - Advisory host-specific body syntax and tool-permission diagnostics in audit

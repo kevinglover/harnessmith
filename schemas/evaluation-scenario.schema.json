@@ -1,0 +1,168 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "target": {
+      "enum": [
+        "generic",
+        "cursor",
+        "claude",
+        "codex"
+      ]
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "expected_invocation": {
+      "type": "object",
+      "properties": {
+        "allow_model": {
+          "type": "boolean"
+        },
+        "allow_user": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allow_model",
+        "allow_user"
+      ],
+      "additionalProperties": false
+    },
+    "compilation": {
+      "type": "object",
+      "properties": {
+        "extract_sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "extract_sections"
+      ],
+      "additionalProperties": false
+    },
+    "required_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "expected_reference_loads": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "semantic_assertions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "output_contains",
+              "output_not_contains"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "mock_transcript": {
+      "type": "object",
+      "properties": {
+        "invoked": {
+          "type": "boolean"
+        },
+        "output": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "reference_loads": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "required": [
+        "invoked",
+        "output",
+        "actions",
+        "reference_loads"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "fixture_id",
+    "target",
+    "prompt",
+    "expected_invocation",
+    "compilation",
+    "required_constraints",
+    "forbidden_actions",
+    "expected_reference_loads",
+    "semantic_assertions",
+    "mock_transcript"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/evaluation-scenario.schema.json",
+  "title": "evaluation-scenario"
+}

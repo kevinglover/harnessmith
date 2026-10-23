@@ -1,0 +1,230 @@
+{
+  "schema_version": 2,
+  "scenario_id": "lifecycle-codex",
+  "fixture_id": "harnessmith-lifecycle",
+  "target": "codex",
+  "prompt": "Review this whitespace-only change.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Examples"
+    ]
+  },
+  "required_constraints": [
+    "Run checks only after approval. Never deploy or modify files.",
+    "On abort, stop immediately without performing further actions."
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "modify-files",
+    "bypass-hook"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "Review this whitespace-only change.",
+      "invocation": "model",
+      "expected_invoked": true,
+      "expected_actions": [
+        "inspect-change",
+        "request-approval"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [
+        "references/examples.md"
+      ],
+      "output_contains": [
+        "Approval required before checks."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Approval required before checks.",
+        "actions": [
+          "inspect-change",
+          "request-approval"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Approval required before checks.",
+        "actions": [
+          "inspect-change",
+          "request-approval"
+        ],
+        "reference_loads": [
+          "references/examples.md"
+        ]
+      }
+    },
+    {
+      "event": "approval",
+      "prompt": "I approve running read-only checks.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [
+        "run-checks"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "Checks passed."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Checks passed.",
+        "actions": [
+          "run-checks"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Checks passed.",
+        "actions": [
+          "run-checks"
+        ],
+        "reference_loads": []
+      }
+    },
+    {
+      "event": "continuation",
+      "prompt": "Continue with the existing results.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [
+        "report-results"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "No actionable findings."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "No actionable findings.",
+        "actions": [
+          "report-results"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "No actionable findings.",
+        "actions": [
+          "report-results"
+        ],
+        "reference_loads": []
+      }
+    },
+    {
+      "event": "compaction",
+      "prompt": "Context compacted; resume the same read-only review with approval retained.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [
+        "restate-constraint"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [
+        "references/examples.md"
+      ],
+      "output_contains": [
+        "Never deploy or modify files."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Never deploy or modify files.",
+        "actions": [
+          "restate-constraint"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Never deploy or modify files.",
+        "actions": [
+          "restate-constraint"
+        ],
+        "reference_loads": [
+          "references/examples.md"
+        ]
+      }
+    },
+    {
+      "event": "hook",
+      "prompt": "The reporting hook failed.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [
+        "report-hook-failure"
+      ],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "Hook failed; stopped."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Hook failed; stopped.",
+        "actions": [
+          "report-hook-failure"
+        ],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Hook failed; stopped.",
+        "actions": [
+          "report-hook-failure"
+        ],
+        "reference_loads": []
+      }
+    },
+    {
+      "event": "abort",
+      "prompt": "Stop now.",
+      "invocation": "none",
+      "expected_invoked": false,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "Stopped."
+      ],
+      "output_not_contains": [
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": false,
+        "output": "Stopped.",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": false,
+        "output": "Stopped.",
+        "actions": [],
+        "reference_loads": []
+      }
+    }
+  ]
+}

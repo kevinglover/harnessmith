@@ -17,6 +17,7 @@ from .adapters import source_invocation_policy
 from .audit import audit_skill
 from .compiler import CompileOptions, compile_skill
 from .contracts import CapabilityStatus
+from .evaluation_turns import EvaluationTurn, parse_turns, check_turns
 from .fixture_corpus import load_and_validate_manifest
 from .metrics import estimate_tokens
 from .parser import parse_skill
@@ -65,6 +66,7 @@ class EvaluationScenario:
     semantic_assertions: Tuple[SemanticAssertion, ...]
     mock_transcript: MockTranscript
     schema_version: int = EVALUATION_SCHEMA_VERSION
+    turns: Tuple[EvaluationTurn, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -86,6 +88,7 @@ class EvaluationResult:
     static_metrics: Mapping[str, int]
     runtime_metrics: Optional[Mapping[str, object]] = None
     schema_version: int = EVALUATION_SCHEMA_VERSION
+    evidence_kind: str = "mock-contract"
 
     def to_json(self, *, indent: int = 2) -> str:
         """Return a deterministic, machine-readable result document."""
@@ -138,11 +141,28 @@ def load_scenario(path: Path) -> EvaluationScenario:
         "semantic_assertions",
         "mock_transcript",
     }
+    version = value.get("schema_version")
+    if type(version) is not int or version not in (1, 2):
+        raise EvaluationScenarioError("unsupported evaluation scenario schema version")
+    if version == 2:
+        expected_keys.difference_update(
+            {"mock_transcript", "expected_reference_loads", "semantic_assertions"}
+        )
+        expected_keys.add("turns")
     if set(value) != expected_keys:
         raise EvaluationScenarioError("scenario has missing or unknown fields")
-    if value["schema_version"] != EVALUATION_SCHEMA_VERSION:
-        raise EvaluationScenarioError("unsupported evaluation scenario schema version")
 
+    if version == 2:
+        value.update(
+            mock_transcript={
+                "invoked": False,
+                "output": "",
+                "actions": [],
+                "reference_loads": [],
+            },
+            expected_reference_loads=[],
+            semantic_assertions=[],
+        )
     invocation = _object(value, "expected_invocation")
     if set(invocation) != {"allow_model", "allow_user"} or any(
         not isinstance(invocation[key], bool) for key in invocation
@@ -173,7 +193,16 @@ def load_scenario(path: Path) -> EvaluationScenario:
             raise EvaluationScenarioError("unknown semantic assertion: %s" % kind)
         assertions.append(SemanticAssertion(kind, _nonempty_string(assertion, "value")))
 
+    try:
+        turns = parse_turns(value["turns"]) if version == 2 else ()
+    except ValueError as exc:
+        raise EvaluationScenarioError(str(exc)) from exc
+    if version == 2 and turns[0].prompt != value["prompt"]:
+        raise EvaluationScenarioError("prompt must match the first turn prompt")
+
     return EvaluationScenario(
+        schema_version=version,
+        turns=turns,
         scenario_id=_nonempty_string(value, "scenario_id"),
         fixture_id=_nonempty_string(value, "fixture_id"),
         target=_nonempty_string(value, "target"),
@@ -312,12 +341,34 @@ def evaluate_scenario(
             )
         )
 
+    if scenario.turns:
+        # V1 transcript fields remain for migration, but V2 uses independent turns.
+        checks = [check for check in checks if "mock" not in check.scope]
+        for variant in ("canonical", "compiled"):
+            files = (
+                package.files
+                if variant == "compiled"
+                else {
+                    path.relative_to(source.parent).as_posix(): ""
+                    for path in source.parent.rglob("*")
+                    if path.is_file()
+                }
+            )
+            for check_id, passed, message in check_turns(
+                scenario.turns,
+                tuple(getattr(turn, "mock_" + variant) for turn in scenario.turns),
+                variant=variant,
+                allow_model=policy.allow_model,
+                allow_user=policy.allow_user,
+                forbidden_actions=scenario.forbidden_actions,
+                available_files=tuple(files),
+            ):
+                checks.append(_check(check_id, "mock-" + variant, passed, message))
+
     passed_count = sum(check.passed for check in checks)
     static_metrics = {
         "canonical_token_estimate": estimate_tokens(ir.source_text),
-        "compiled_root_token_estimate": package.metrics[
-            "compiled_root_token_estimate"
-        ],
+        "compiled_root_token_estimate": package.metrics["compiled_root_token_estimate"],
         "compiled_normal_path_token_estimate": package.metrics[
             "normal_path_instruction_token_estimate"
         ],

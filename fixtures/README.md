@@ -21,12 +21,17 @@ upstream commit SHA and retain the upstream license and attribution.
 
 ## Coverage
 
-The ten fixtures cover six named ecosystems: Anthropic Skills, GitHub Awesome
+The original ten fixtures cover six named ecosystems: Anthropic Skills, GitHub Awesome
 Copilot, Hugging Face Skills, Microsoft Skills, Vercel Agent Skills, and GitHub
 Spec Kit. Cases include a minimal skill, explicit-only invocation, unsupported
 behavior-bearing frontmatter, duplicate headings, example-heavy content,
 heading-like text inside a fence, Setext headings, cross-links, an HTML block,
 and a root above the recommended 5,000-token budget.
+
+An additional original Harnessmith lifecycle fixture covers read-only approval,
+abort, hook failure, continuation, and compaction contracts. It is pinned at
+`synthetic-lifecycle-v1` and dedicated under the same CC0-1.0 terms. Its events
+are synthetic evaluation inputs, not recorded behavior of those ecosystems.
 
 ## Validate offline
 
