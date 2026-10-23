@@ -22,12 +22,14 @@ ROOT = Path(__file__).resolve().parents[1]
 class ContractTests(unittest.TestCase):
     def test_all_published_schemas_are_versioned_json(self) -> None:
         schemas = sorted((ROOT / "schemas").glob("*.schema.json"))
-        self.assertEqual(6, len(schemas))
+        self.assertEqual(9, len(schemas))
         for path in schemas:
             document = json.loads(path.read_text(encoding="utf-8"))
-            self.assertEqual("https://json-schema.org/draft/2020-12/schema", document["$schema"])
+            self.assertEqual(
+                "https://json-schema.org/draft/2020-12/schema", document["$schema"]
+            )
             self.assertIn("schema_version", document["properties"])
-            version = 2 if path.name == "adapter-capabilities-v2.schema.json" else 1
+            version = 2 if "-v2.schema.json" in path.name else 1
             self.assertEqual(version, document["properties"]["schema_version"]["const"])
 
     def test_published_target_enums_match_the_runtime_registry(self) -> None:
@@ -42,8 +44,9 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(expected, recipe["properties"]["target"]["enum"])
         self.assertEqual(
             expected,
-            fixture["properties"]["fixtures"]["items"]["properties"]
-            ["expected_targets"]["items"]["enum"],
+            fixture["properties"]["fixtures"]["items"]["properties"][
+                "expected_targets"
+            ]["items"]["enum"],
         )
         self.assertEqual(expected, package["properties"]["target"]["enum"])
 

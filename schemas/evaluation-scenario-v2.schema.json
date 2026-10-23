@@ -1,0 +1,255 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "target": {
+      "enum": [
+        "generic",
+        "cursor",
+        "claude",
+        "codex"
+      ]
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "expected_invocation": {
+      "type": "object",
+      "properties": {
+        "allow_model": {
+          "type": "boolean"
+        },
+        "allow_user": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allow_model",
+        "allow_user"
+      ],
+      "additionalProperties": false
+    },
+    "compilation": {
+      "type": "object",
+      "properties": {
+        "extract_sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "extract_sections"
+      ],
+      "additionalProperties": false
+    },
+    "required_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "uniqueItems": true
+    },
+    "turns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "enum": [
+              "prompt",
+              "approval",
+              "abort",
+              "hook",
+              "continuation",
+              "compaction"
+            ]
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "invocation": {
+            "enum": [
+              "user",
+              "model",
+              "none"
+            ]
+          },
+          "expected_invoked": {
+            "type": "boolean"
+          },
+          "expected_actions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "canonical_reference_loads": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "compiled_reference_loads": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "output_contains": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "output_not_contains": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "mock_canonical": {
+            "type": "object",
+            "properties": {
+              "invoked": {
+                "type": "boolean"
+              },
+              "output": {
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "reference_loads": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "required": [
+              "invoked",
+              "output",
+              "actions",
+              "reference_loads"
+            ],
+            "additionalProperties": false
+          },
+          "mock_compiled": {
+            "type": "object",
+            "properties": {
+              "invoked": {
+                "type": "boolean"
+              },
+              "output": {
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              },
+              "reference_loads": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "required": [
+              "invoked",
+              "output",
+              "actions",
+              "reference_loads"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "event",
+          "prompt",
+          "invocation",
+          "expected_invoked",
+          "expected_actions",
+          "canonical_reference_loads",
+          "compiled_reference_loads",
+          "output_contains",
+          "output_not_contains",
+          "mock_canonical",
+          "mock_compiled"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "fixture_id",
+    "target",
+    "prompt",
+    "expected_invocation",
+    "compilation",
+    "required_constraints",
+    "forbidden_actions",
+    "turns"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/evaluation-scenario-v2.schema.json",
+  "title": "evaluation-scenario-v2"
+}

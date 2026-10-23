@@ -100,6 +100,21 @@
       "source_sha256": "ccc39602d60782ca448d5cb301b5193e2b385f09960b07803cfc2ee178db22af",
       "expected_targets": ["generic", "cursor", "claude", "codex"],
       "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "harnessmith-lifecycle",
+      "repository": "https://github.com/kevinglover/harnessmith",
+      "revision": "synthetic-lifecycle-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/harnessmith-lifecycle/SKILL.md",
+      "source_sha256": "239fa13360bf6defcecc44766b7d14ea05fb208bd7f74b7062ed8f5482e71faa",
+      "expected_targets": [
+        "generic",
+        "cursor",
+        "claude",
+        "codex"
+      ],
+      "expected_diagnostics": []
     }
   ]
 }

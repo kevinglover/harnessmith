@@ -70,6 +70,26 @@ def check_schemas() -> List[str]:
                     )
             except (OSError, ValueError) as exc:
                 errors.append(f"{path.relative_to(ROOT)}: {exc}")
+    # Scenarios have independently versioned contracts; reject unknown versions.
+    for path in sorted((ROOT / "evaluations/scenarios").glob("*.json")):
+        try:
+            instance = json.loads(path.read_text(encoding="utf-8"))
+            version = instance.get("schema_version")
+            name = {
+                1: "evaluation-scenario.schema.json",
+                2: "evaluation-scenario-v2.schema.json",
+            }.get(version)
+            if name is None or type(version) is not int:
+                errors.append(f"{path.relative_to(ROOT)}: unsupported scenario version")
+                continue
+            validator = validators.get(name)
+            if validator is None:
+                errors.append(f"{path.relative_to(ROOT)}: missing or invalid schema {name}")
+                continue
+            for error in validator.iter_errors(instance):
+                errors.append(f"{path.relative_to(ROOT)}: {error.message}")
+        except (OSError, ValueError, AttributeError, TypeError) as exc:
+            errors.append(f"{path.relative_to(ROOT)}: {exc}")
     # Check emitted capabilities as well as schemas; v2 must not masquerade as v1.
     sys.path.insert(0, str(ROOT))
     from harnessmith.targets import capability_documents
@@ -99,10 +119,14 @@ def check_docs() -> List[str]:
             try:
                 local.relative_to(ROOT.resolve())
             except ValueError:
-                errors.append(f"{path.relative_to(ROOT)}: link escapes repository: {target}")
+                errors.append(
+                    f"{path.relative_to(ROOT)}: link escapes repository: {target}"
+                )
                 continue
             if not local.exists():
-                errors.append(f"{path.relative_to(ROOT)}: missing link target: {target}")
+                errors.append(
+                    f"{path.relative_to(ROOT)}: missing link target: {target}"
+                )
     return errors
 
 
