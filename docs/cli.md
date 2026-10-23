@@ -85,3 +85,16 @@ compilation. Tool-runtime uncertainty (`HS306`) and body syntax findings
 For CI that requires review before packaging, run an audit with
 `--fail-on warning` (or `--fail-on note` to include possible literal examples).
 See [Diagnostic rules](diagnostics.md).
+
+## Catalog audit
+
+```bash
+harnessmith catalog DIRECTORY --target codex|claude [--profile PROFILE.json] [--json]
+harnessmith catalog DIRECTORY --target codex --format sarif --fail-on warning
+```
+
+Measures name, description, relative path, and listing-format costs across a
+catalog. Reports duplicate names and descriptions, plus overflow against an
+explicit versioned profile. No host budget is assumed by default. See
+[Catalog discovery audit](catalog-audit.md) for scope, schemas, and the
+separation between measured components and unverified runtime assumptions.

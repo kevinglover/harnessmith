@@ -9,6 +9,11 @@ published.
 
 ### Added
 
+- Read-only catalog auditing for Codex and Claude, with versioned listing
+  profiles/reports, component accounting, and advisory duplicate/overflow findings.
+- Source-pinned Cursor root-budget recipes for checklist and clarify, with
+  mandatory references and explicit normal-path cost increases.
+
 - Backward-compatible version-2 evaluation scenarios with independent canonical
   and compiled turn contracts across all targets, including invocation channels,
   approval, abort, hook failure, reference reloads, continuation, and compaction.

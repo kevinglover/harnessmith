@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "enum": [
+        "codex",
+        "claude"
+      ]
+    },
+    "host_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "listing_format": {
+      "const": "json-lines-name-description-path-v1"
+    },
+    "budget_characters": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "reserved_characters": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile_id",
+    "target",
+    "host_version",
+    "listing_format",
+    "budget_characters",
+    "reserved_characters",
+    "evidence"
+  ]
+}

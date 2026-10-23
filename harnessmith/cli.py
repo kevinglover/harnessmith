@@ -10,6 +10,7 @@ from typing import Optional, Sequence
 
 from . import __version__
 from .audit import audit_skill
+from .catalog import audit_catalog
 from .compiler import CompileOptions, compile_skill, write_package
 from .contracts import Diagnostic, Remediation, Severity, SourceSpan
 from .diagnostics import (
@@ -31,7 +32,8 @@ def build_parser() -> argparse.ArgumentParser:
         description="Audit or compile an Agent Skill for a target harness.",
         epilog=(
             "To verify an existing compiled package, run: "
-            "harnessmith verify PACKAGE [--json]"
+            "harnessmith verify PACKAGE [--json]. For catalog discovery cost, run: "
+            "harnessmith catalog DIRECTORY --target codex|claude [--json]"
         ),
     )
     parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
@@ -135,6 +137,8 @@ def build_verify_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(argv) if argv is not None else sys.argv[1:]
+    if argv and argv[0] == "catalog":
+        return _catalog_main(argv[1:])
     if argv and argv[0] == "verify":
         return _verify_main(argv[1:])
     args = build_parser().parse_args(argv)
@@ -262,6 +266,44 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print("Removed: %s" % (", ".join(diff.removed) or "none"))
         print("Output: %s%s" % (args.output, " (not written)" if args.dry_run or args.diff else ""))
     return 0
+
+
+def _catalog_main(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(
+        prog="harnessmith catalog", description="Audit a skill catalog without writing files."
+    )
+    parser.add_argument("root", type=Path)
+    parser.add_argument("--target", required=True, choices=("codex", "claude"))
+    parser.add_argument("--profile", type=Path, help="Versioned JSON listing assumptions")
+    parser.add_argument("--json", action="store_true", help="Print the complete report")
+    parser.add_argument("--format", choices=("text", "json", "sarif"))
+    parser.add_argument("--fail-on", choices=("note", "warning", "error"))
+    args = parser.parse_args(argv)
+    try:
+        if args.json and args.format not in (None, "json"):
+            raise SkillCompilerError("--json conflicts with --format")
+        report = audit_catalog(args.root, args.target, args.profile)
+        diagnostics = _diagnostics_from_report(report)
+    except (OSError, UnicodeError, SkillCompilerError) as exc:
+        print("harnessmith: error: %s" % exc, file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(report, indent=2, sort_keys=True))
+    elif args.format == "json":
+        print(render_diagnostics_json(diagnostics))
+    elif args.format == "sarif":
+        print(render_diagnostics_sarif(diagnostics, __version__))
+    else:
+        print("Audited %d skills for %s: %d listing characters (%d estimated tokens)"
+              % (int(report["skill_count"]), args.target, int(report["listing_characters"]),
+                 int(report["listing_token_estimate"])))
+        print("Measured components: %s" % report["components_characters"])
+        print("Assumptions: %s" % json.dumps(report["profile"], sort_keys=True))
+        print("Static synthetic listing only; runtime discovery remains unverified.")
+        if diagnostics:
+            print(render_diagnostics_text(diagnostics))
+        print("No files written.")
+    return 1 if args.fail_on and diagnostics_fail_threshold(diagnostics, args.fail_on) else 0
 
 
 def _verify_main(argv: Sequence[str]) -> int:

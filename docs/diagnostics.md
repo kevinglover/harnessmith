@@ -76,3 +76,12 @@ preprocessing ignores them. Use a note threshold to require review of both.
 `diagnostics_fail_threshold(findings, "warning")` returns true for warning and
 error findings; a threshold of `note` includes every diagnostic. CLI policy is
 kept separate from these library APIs.
+
+## Catalog findings
+
+The read-only `catalog` command emits advisory warnings in the HS4xx namespace:
+`HS401` for duplicate skill names, `HS402` for exceeding an operator-supplied
+listing budget, and `HS403` for identical descriptions after case/whitespace
+normalization. These findings do not establish host truncation or model trigger
+accuracy. See [Catalog discovery audit](catalog-audit.md) for measurements and
+versioned assumptions. Existing per-skill audit output is unchanged.
