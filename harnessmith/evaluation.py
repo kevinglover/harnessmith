@@ -349,7 +349,7 @@ def evaluate_scenario(
                 package.file_bytes()
                 if variant == "compiled"
                 else {
-                    path.relative_to(source.parent).as_posix(): ""
+                    path.relative_to(source.parent).as_posix(): b""
                     for path in source.parent.rglob("*")
                     if path.is_file()
                 }
