@@ -346,7 +346,7 @@ def evaluate_scenario(
         checks = [check for check in checks if "mock" not in check.scope]
         for variant in ("canonical", "compiled"):
             files = (
-                package.files
+                package.file_bytes()
                 if variant == "compiled"
                 else {
                     path.relative_to(source.parent).as_posix(): ""
