@@ -214,6 +214,44 @@ class MetadataValidationTests(unittest.TestCase):
                 compile_skill(self.source, CompileOptions("generic"))
                 self.check_invalid(base + key + ": " + value + "b\n", ("generic",))
 
+    def test_keep_chomping_preserves_trailing_blank_lines(self) -> None:
+        for marker in ["|+", ">+"]:
+            for newline in ["\n", "\r\n"]:
+                for trailing in [1, 2, 3]:
+                    for size in [1024 - trailing, 1025 - trailing]:
+                        fields = (
+                            "name: valid-name\ndescription: "
+                            + marker
+                            + "\n  "
+                            + "x" * size
+                            + "\n" * trailing
+                        )
+                        raw = ("---\n" + fields + "---\nBody.\n").replace("\n", newline)
+                        self.source.write_bytes(raw.encode())
+                        with self.subTest(
+                            marker=marker, newline=newline, trailing=trailing, size=size
+                        ):
+                            ir = parse_skill(self.source)
+                            self.assertEqual(
+                                "x" * size + "\n" * trailing,
+                                string_value(ir.field("description")),
+                            )
+                            if size + trailing > 1024:
+                                with self.assertRaisesRegex(
+                                    SkillCompilerError, "HS102"
+                                ):
+                                    compile_skill(
+                                        self.source, CompileOptions("generic")
+                                    )
+                            else:
+                                package = compile_skill(
+                                    self.source, CompileOptions("generic")
+                                )
+                                self.assertIn(
+                                    fields.replace("\n", newline),
+                                    package.files["SKILL.md"],
+                                )
+
     def test_length_boundaries_and_claude_extensions(self) -> None:
         for key, limit in [("description", 1024), ("compatibility", 500)]:
             fields = "name: valid-name\n" + (

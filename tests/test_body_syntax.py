@@ -171,6 +171,32 @@ class BodySyntaxTests(unittest.TestCase):
             expected = "HS307" if body.startswith("`<!--`") else "HS308"
             self.assertEqual([expected], [d.rule_id for d in self.findings()])
 
+    def test_indented_code_cannot_open_inline_spans(self) -> None:
+        for indentation in ["    ", "\t"]:
+            self.write(indentation + "`\nActive $ARGUMENTS\n`\n")
+            self.assertEqual(["HS307"], [d.rule_id for d in self.findings()])
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "harnessmith",
+                    str(self.source),
+                    "--target",
+                    "generic",
+                    "--audit",
+                    "--json",
+                    "--fail-on",
+                    "warning",
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, result.returncode, result.stderr)
+            self.write("`example\n" + indentation + "`\nActive $ARGUMENTS\n")
+            self.assertEqual(["HS307"], [d.rule_id for d in self.findings()])
+            self.write("`example\n" + indentation + "$ARGUMENTS`\n")
+            self.assertEqual(["HS308"], [d.rule_id for d in self.findings()])
+
     def test_long_plain_paragraph_skips_escape_checks(self) -> None:
         self.write("Ordinary prose with no host syntax. " * 3000)
         with patch("harnessmith.body_syntax._escaped", return_value=False) as escaped:

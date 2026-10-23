@@ -83,12 +83,15 @@ def string_value(field: FrontmatterField) -> str:
         raise SkillCompilerError("invalid single-quoted string")
     if value[0] in "|>":
         # Top-level comments belong to the raw field span, not its string value.
-        content = [lines[0]] + [line for line in lines[1:] if not line.startswith("#")]
+        block_lines = field.raw.splitlines(keepends=True)
+        content = [block_lines[0]] + [
+            line for line in block_lines[1:] if not line.startswith("#")
+        ]
         if any(line.strip() and not line.startswith(" ") for line in content[1:]):
             raise SkillCompilerError("block string content must be indented")
         parsed = scalar_value(
             FrontmatterField(
-                field.key, "\n".join(content), field.start_line, field.end_line
+                field.key, "".join(content), field.start_line, field.end_line
             )
         )
     else:

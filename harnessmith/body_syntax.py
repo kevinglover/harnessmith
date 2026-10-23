@@ -131,8 +131,10 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
                 elif not in_comment and line[index] == "`":
                     run = len(line[index:]) - len(line[index:].lstrip("`"))
                     if inline_ticks is None:
-                        if not _escaped(line, index) and _has_closing_ticks(
-                            lines, line_index, index + run, run
+                        if (
+                            not indented
+                            and not _escaped(line, index)
+                            and _has_closing_ticks(lines, line_index, index + run, run)
                         ):
                             inline_ticks = run
                     elif inline_ticks == run:
