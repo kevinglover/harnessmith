@@ -13,7 +13,7 @@ Separate tool metadata preservation, preapproval grants, and restrictions. Keep
 legacy capability keys for discoverability, but correct their statuses and
 explain their replacement semantics. A field that can be serialized does not
 prove runtime enforcement. Document source dates and known version constraints;
-all runtime claims remain unverified until measured under OPT-004.
+all runtime claims remain unverified until measured in versioned runtime runs.
 
 The shared contract, adapter behavior, schemas, and consumer documentation change
 together and are checked by capability, metadata, and schema tests. This is one
