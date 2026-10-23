@@ -109,12 +109,66 @@ class BodySyntaxTests(unittest.TestCase):
                 self.write(body)
                 self.assertEqual([expected], [d.rule_id for d in self.findings()])
                 result = subprocess.run(
-                    [sys.executable, "-m", "harnessmith", str(self.source),
-                     "--target", "generic", "--audit", "--json", "--fail-on", "warning"],
-                    capture_output=True, text=True,
+                    [
+                        sys.executable,
+                        "-m",
+                        "harnessmith",
+                        str(self.source),
+                        "--target",
+                        "generic",
+                        "--audit",
+                        "--json",
+                        "--fail-on",
+                        "warning",
+                    ],
+                    capture_output=True,
+                    text=True,
                 )
-                self.assertEqual(1 if expected == "HS307" else 0, result.returncode,
-                                 result.stderr)
+                self.assertEqual(
+                    1 if expected == "HS307" else 0, result.returncode, result.stderr
+                )
+
+    def test_markdown_block_and_comment_boundaries(self) -> None:
+        cases = [
+            "`\n# Run $ARGUMENTS\n`",
+            "# ` title\nUse $ARGUMENTS `",
+            "`\n- Run $ARGUMENTS\n`",
+            "`\n---\nUse $ARGUMENTS `",
+            "<!--\n```\n-->\nActive $ARGUMENTS",
+            "\\<!--\n\nUse $ARGUMENTS",
+            "    <!--\n\nUse $ARGUMENTS",
+            "\t<!--\n\nUse $ARGUMENTS",
+        ]
+        for body in cases:
+            with self.subTest(body=body):
+                self.write(body)
+                self.assertEqual(["HS307"], [d.rule_id for d in self.findings()])
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "harnessmith",
+                        str(self.source),
+                        "--target",
+                        "generic",
+                        "--audit",
+                        "--json",
+                        "--fail-on",
+                        "warning",
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(1, result.returncode, result.stderr)
+        for body in [
+            "<!--\n```\n$ARGUMENTS\n-->",
+            r"\\<!-- $ARGUMENTS -->",
+            "` text\n$ARGUMENTS `",
+            "`<!--` $ARGUMENTS",
+        ]:
+            self.write(body)
+            expected = "HS307" if body.startswith("`<!--`") else "HS308"
+            self.assertEqual([expected], [d.rule_id for d in self.findings()])
 
     def test_named_arguments_are_scanned_only_when_declared(self) -> None:
         for arguments in ["issue branch", "[issue, branch]", "\n  - issue\n  - branch"]:

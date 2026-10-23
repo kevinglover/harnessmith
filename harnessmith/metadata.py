@@ -33,6 +33,8 @@ _TIMESTAMP = re.compile(
 
 def _without_comment(value: str) -> str:
     quote = None
+    scalar_start = True
+    flow_depth = 0
     index = 0
     while index < len(value):
         char = value[index]
@@ -45,12 +47,28 @@ def _without_comment(value: str) -> str:
                     index += 2
                     continue
                 quote = None
-        elif char in "\"'" and (
-            index == 0 or value[index - 1].isspace() or value[index - 1] in "[{,:"
-        ):
-            quote = char
         elif char == "#" and (index == 0 or value[index - 1].isspace()):
             return value[:index].rstrip()
+        elif char in "\"'" and scalar_start:
+            quote = char
+            scalar_start = False
+        elif char in "[{" and scalar_start:
+            flow_depth += 1
+        elif char in "]}" and flow_depth:
+            flow_depth -= 1
+            scalar_start = False
+        elif char == "," and flow_depth:
+            scalar_start = True
+        elif char == ":" and (
+            index + 1 == len(value)
+            or value[index + 1].isspace()
+            or (flow_depth and value[index + 1] in "\"'")
+        ):
+            scalar_start = True
+        elif char == "-" and scalar_start and value[index + 1 : index + 2].isspace():
+            pass
+        elif not char.isspace():
+            scalar_start = False
         index += 1
     return value.rstrip()
 
@@ -59,7 +77,7 @@ def string_value(field: FrontmatterField) -> str:
     """Read a string scalar, rejecting collections and implicit YAML types."""
     lines = field.raw.splitlines()
     value = _without_comment(lines[0].split(":", 1)[1].strip())
-    if not value or value[0] in "[{&*!":
+    if not value or value[0] in "[]{},&*!#%@`":
         raise SkillCompilerError("must be a string scalar")
     if value.startswith("'") and not re.fullmatch(r"'(?:[^']|'')*'", value):
         raise SkillCompilerError("invalid single-quoted string")
@@ -83,18 +101,33 @@ def string_value(field: FrontmatterField) -> str:
             for line in lines[1:]
         ):
             raise SkillCompilerError("scalar continuation must be indented")
-        tail = [_without_comment(line).strip() for line in lines[1:]]
-        tail = [line for line in tail if line]
+        tail = [
+            _without_comment(line).strip()
+            for line in lines[1:]
+            if not line.lstrip().startswith("#")
+        ]
+        while tail and not tail[-1]:
+            tail.pop()
         if tail:
             if value[0] in "\"'" or any(
                 re.match(r"(?:-\s|[^:]+:\s)", line) for line in tail
             ):
                 raise SkillCompilerError("unsupported scalar continuation")
-            value = " ".join([value, *tail])
+            blank_lines = 0
+            for line in tail:
+                if not line:
+                    blank_lines += 1
+                    continue
+                value += ("\n" * blank_lines if blank_lines else " ") + line
+                blank_lines = 0
         if _NUMBER.fullmatch(value) or _TIMESTAMP.fullmatch(value):
             raise SkillCompilerError("must be a string scalar")
-        parsed = scalar_value(
-            FrontmatterField(field.key, field.key + ": " + value, 1, 1)
+        parsed = (
+            value
+            if "\n" in value
+            else scalar_value(
+                FrontmatterField(field.key, field.key + ": " + value, 1, 1)
+            )
         )
     if not isinstance(parsed, str):
         raise SkillCompilerError("must be a string scalar")
@@ -122,10 +155,14 @@ def _flow_parts(value: str, *, mapping: bool = False) -> List[str]:
         elif char in "\"'" and scalar_start:
             quote = char
             scalar_start = False
-        elif mapping and char == ":" and (
-            index + 1 == len(value)
-            or value[index + 1].isspace()
-            or value[start:index].strip().startswith(("'", '"'))
+        elif (
+            mapping
+            and char == ":"
+            and (
+                index + 1 == len(value)
+                or value[index + 1].isspace()
+                or value[start:index].strip().startswith(("'", '"'))
+            )
         ):
             scalar_start = True
         elif char in "[]{}":

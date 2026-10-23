@@ -19,12 +19,28 @@ _SUBSTITUTION = (
 _DYNAMIC = r"!`[^`\n]+`"
 _FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
 
+_BLOCK_BOUNDARY = re.compile(
+    r"^ {0,3}(?:#{1,6}(?:[ \t]|$)|>|(?:[-+*]|[0-9]{1,9}[.)])[ \t]+|"
+    r"(?:[-*_][ \t]*){3,}$|(?:=+|-+)[ \t]*$|</?[A-Za-z][^>]*>)"
+)
+
+
+def _block_boundary(line: str) -> bool:
+    return not line.strip() or bool(_FENCE.match(line) or _BLOCK_BOUNDARY.match(line))
+
+
+def _escaped(line: str, index: int) -> bool:
+    preceding = line[:index]
+    return (len(preceding) - len(preceding.rstrip("\\"))) % 2 == 1
+
 
 def _has_closing_ticks(lines: List[str], line_index: int, start: int, run: int) -> bool:
     """Only matched delimiters within the current paragraph form code spans."""
     for offset in range(line_index, len(lines)):
         line = lines[offset]
-        if offset != line_index and (not line.strip() or _FENCE.match(line)):
+        if offset != line_index and (
+            _block_boundary(line) or _block_boundary(lines[line_index])
+        ):
             return False
         for match in re.finditer(r"`+", line[start:] if offset == line_index else line):
             # Backslashes are literal inside an already opened code span.
@@ -61,6 +77,9 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
     for line_index, line in enumerate(lines):
         line_number = ir.body_start_line + line_index
         marker = _FENCE.match(line)
+        if _block_boundary(line):
+            inline_ticks = None
+        indented = line.startswith(("    ", "\t"))
         if fence:
             context = "fenced code"
             if (
@@ -71,7 +90,9 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
             ):
                 fence = None
                 continue
-        elif marker and not (marker[1][0] == "`" and "`" in marker[2]):
+        elif (
+            not in_comment and marker and not (marker[1][0] == "`" and "`" in marker[2])
+        ):
             fence, fence_length = marker[1][0], len(marker[1])
             inline_ticks = None
             continue
@@ -100,16 +121,17 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
             if not fence:
                 if in_comment and line.startswith("-->", index):
                     in_comment = False
-                elif not inline_ticks and line.startswith("<!--", index):
+                elif (
+                    not inline_ticks
+                    and not indented
+                    and not _escaped(line, index)
+                    and line.startswith("<!--", index)
+                ):
                     in_comment = True
                 elif not in_comment and line[index] == "`":
                     run = len(line[index:]) - len(line[index:].lstrip("`"))
                     if inline_ticks is None:
-                        preceding = line[:index]
-                        escaped_tick = (
-                            len(preceding) - len(preceding.rstrip("\\"))
-                        ) % 2 == 1
-                        if not escaped_tick and _has_closing_ticks(
+                        if not _escaped(line, index) and _has_closing_ticks(
                             lines, line_index, index + run, run
                         ):
                             inline_ticks = run

@@ -8,7 +8,7 @@ from pathlib import Path
 from harnessmith.audit import audit_skill
 from harnessmith.compiler import CompileOptions, compile_skill, write_package
 from harnessmith.errors import SkillCompilerError
-from harnessmith.metadata import metadata_diagnostics
+from harnessmith.metadata import metadata_diagnostics, string_value
 from harnessmith.parser import parse_skill
 from harnessmith.targets import TARGET_NAMES
 from harnessmith.verification import verify_compiled_package
@@ -67,7 +67,7 @@ class MetadataValidationTests(unittest.TestCase):
                 "[]",
                 "{}",
                 "{version: 1.2.3}",
-            '{"key":"literal # value"}',
+                '{"key":"literal # value"}',
                 "[text]",
                 "{value: text}",
                 '""',
@@ -103,8 +103,12 @@ class MetadataValidationTests(unittest.TestCase):
                 with self.subTest(description=description, target=target):
                     package = compile_skill(self.source, CompileOptions(target))
                     self.assertIn(fields, package.files["SKILL.md"])
-        for value in ["42", "2026-10-22", "2026-10-22T12:30:45Z",
-                      "2026-10-22 12:30:45.123 -05:00"]:
+        for value in [
+            "42",
+            "2026-10-22",
+            "2026-10-22T12:30:45Z",
+            "2026-10-22 12:30:45.123 -05:00",
+        ]:
             self.check_invalid("name: valid-name\ndescription: " + value + "\n")
 
     def test_flow_scalars_preserve_embedded_quotes(self) -> None:
@@ -114,18 +118,78 @@ class MetadataValidationTests(unittest.TestCase):
             "{author: O'Reilly, label: 'hello, world'}",
             '{author: Say"Hello, label: "hello, world"}',
         ]:
-            fields = "name: valid-name\ndescription: valid\nmetadata: " + metadata + "\n"
+            fields = (
+                "name: valid-name\ndescription: valid\nmetadata: " + metadata + "\n"
+            )
             self.write(fields)
             for target in TARGET_NAMES:
                 with self.subTest(metadata=metadata, target=target):
                     package = compile_skill(self.source, CompileOptions(target))
                     self.assertIn(fields, package.files["SKILL.md"])
-        for tools in ["[Bash(O'Reilly), Read]", '[Bash(say"hello), Read]',
-                      "['Bash(one,two)', Read]", '["Bash(one,two)", Read]']:
-            fields = "name: valid-name\ndescription: valid\nallowed-tools: " + tools + "\n"
+        for tools in [
+            "[Bash(O'Reilly), Read]",
+            '[Bash(say"hello), Read]',
+            "['Bash(one,two)', Read]",
+            '["Bash(one,two)", Read]',
+        ]:
+            fields = (
+                "name: valid-name\ndescription: valid\nallowed-tools: " + tools + "\n"
+            )
             self.write(fields)
             package = compile_skill(self.source, CompileOptions("claude"))
             self.assertIn(fields, package.files["SKILL.md"])
+
+    def test_plain_scalar_quotes_do_not_hide_comments(self) -> None:
+        self.write("name: Review '90s # keep this comment\ndescription: valid\n")
+        package = compile_skill(self.source, CompileOptions("claude"))
+        self.assertEqual("Review '90s", package.skill_name)
+        for description in [
+            "Review '90s",
+            'Review "90s',
+            "'quoted # text'",
+            '"quoted # text"',
+        ]:
+            self.write(
+                "name: valid-name\ndescription: "
+                + description
+                + " # "
+                + "x" * 1100
+                + "\n"
+            )
+            for target in TARGET_NAMES:
+                compile_skill(self.source, CompileOptions(target))
+
+    def test_reserved_plain_scalar_indicators(self) -> None:
+        for indicator in "@`%]},":
+            self.check_invalid(
+                "name: valid-name\ndescription: " + indicator + "example\n"
+            )
+            self.write("name: valid-name\ndescription: '" + indicator + "example'\n")
+            for target in TARGET_NAMES:
+                compile_skill(self.source, CompileOptions(target))
+
+    def test_paragraph_folding_and_length_limits(self) -> None:
+        self.check_invalid("name: alpha\n\n  beta\ndescription: valid\n", ("claude",))
+        for raw, expected in [
+            ("alpha\n  beta", "alpha beta"),
+            ("alpha\n\n  beta", "alpha\nbeta"),
+            ("alpha\n\n\n  beta", "alpha\n\nbeta"),
+            ("alpha\n# comment\n  beta", "alpha beta"),
+        ]:
+            self.write("name: valid-name\ndescription: " + raw + "\n")
+            self.assertEqual(
+                expected, string_value(parse_skill(self.source).field("description"))
+            )
+        for key, limit in [("description", 1024), ("compatibility", 500)]:
+            base = "name: valid-name\n" + (
+                "description: valid\n" if key == "compatibility" else ""
+            )
+            for block in [False, True]:
+                prefix = ">-\n  " if block else ""
+                value = prefix + "a" * (limit // 2) + "\n\n  " + "b" * (limit // 2 - 1)
+                self.write(base + key + ": " + value + "\n")
+                compile_skill(self.source, CompileOptions("generic"))
+                self.check_invalid(base + key + ": " + value + "b\n", ("generic",))
 
     def test_length_boundaries_and_claude_extensions(self) -> None:
         for key, limit in [("description", 1024), ("compatibility", 500)]:
