@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import tempfile
 import unittest
@@ -218,7 +219,15 @@ class RuntimeEvidenceTests(unittest.TestCase):
         )
         with self.assertRaises(TypeError):
             self.provider.requests[0].files["SKILL.md"] = b"mutated"
+
+    @unittest.skipUnless(
+        importlib.util.find_spec("jsonschema") is not None,
+        "schema validation requires .[dev]; exercised by the CI quality job",
+    )
+    def test_runtime_evidence_matches_published_schema(self):
         from jsonschema import validate
+
+        evidence = self.run_evidence()
 
         validate(
             json.loads(json.dumps(evidence)),
