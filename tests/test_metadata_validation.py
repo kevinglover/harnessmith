@@ -139,6 +139,29 @@ class MetadataValidationTests(unittest.TestCase):
             package = compile_skill(self.source, CompileOptions("claude"))
             self.assertIn(fields, package.files["SKILL.md"])
 
+    def test_folded_plain_scalar_rejects_colon_separators(self) -> None:
+        for value in [
+            "first\n  second:",
+            "first\n  second: # comment",
+            "first\n\n  second:",
+            "first\n  second:\n  third",
+            "first\n  second: third",
+        ]:
+            self.check_invalid("name: valid-name\ndescription: " + value + "\n")
+        for value in [
+            "first\n  https://example.com",
+            "'first second:'",
+            '"first second:"',
+            ">-\n  first\n  second:",
+            "|-\n  first\n  second:",
+        ]:
+            fields = "name: valid-name\ndescription: " + value + "\n"
+            self.write(fields)
+            for target in TARGET_NAMES:
+                with self.subTest(value=value, target=target):
+                    package = compile_skill(self.source, CompileOptions(target))
+                    self.assertIn(fields, package.files["SKILL.md"])
+
     def test_plain_scalar_quotes_do_not_hide_comments(self) -> None:
         self.write("name: Review '90s # keep this comment\ndescription: valid\n")
         package = compile_skill(self.source, CompileOptions("claude"))

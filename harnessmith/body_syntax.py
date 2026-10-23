@@ -124,8 +124,8 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
                 elif (
                     not inline_ticks
                     and not indented
-                    and not _escaped(line, index)
                     and line.startswith("<!--", index)
+                    and not _escaped(line, index)
                 ):
                     in_comment = True
                 elif not in_comment and line[index] == "`":

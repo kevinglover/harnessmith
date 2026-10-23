@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from harnessmith.audit import audit_skill
 from harnessmith.body_syntax import body_syntax_diagnostics
@@ -169,6 +170,12 @@ class BodySyntaxTests(unittest.TestCase):
             self.write(body)
             expected = "HS307" if body.startswith("`<!--`") else "HS308"
             self.assertEqual([expected], [d.rule_id for d in self.findings()])
+
+    def test_long_plain_paragraph_skips_escape_checks(self) -> None:
+        self.write("Ordinary prose with no host syntax. " * 3000)
+        with patch("harnessmith.body_syntax._escaped", return_value=False) as escaped:
+            self.assertEqual([], self.findings())
+        escaped.assert_not_called()
 
     def test_named_arguments_are_scanned_only_when_declared(self) -> None:
         for arguments in ["issue branch", "[issue, branch]", "\n  - issue\n  - branch"]:

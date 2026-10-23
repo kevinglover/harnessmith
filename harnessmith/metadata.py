@@ -81,10 +81,6 @@ def string_value(field: FrontmatterField) -> str:
         raise SkillCompilerError("must be a string scalar")
     if value.startswith("'") and not re.fullmatch(r"'(?:[^']|'')*'", value):
         raise SkillCompilerError("invalid single-quoted string")
-    if value[0] not in "\"'|>" and (
-        re.search(r":(?:\s|$)", value) or re.match(r"[-?:](?:\s|$)", value)
-    ):
-        raise SkillCompilerError("must be a string scalar")
     if value[0] in "|>":
         # Top-level comments belong to the raw field span, not its string value.
         content = [lines[0]] + [line for line in lines[1:] if not line.startswith("#")]
@@ -120,6 +116,10 @@ def string_value(field: FrontmatterField) -> str:
                     continue
                 value += ("\n" * blank_lines if blank_lines else " ") + line
                 blank_lines = 0
+        if value[0] not in "\"'" and (
+            re.search(r":(?:\s|$)", value) or re.match(r"[-?:](?:\s|$)", value)
+        ):
+            raise SkillCompilerError("must be a string scalar")
         if _NUMBER.fullmatch(value) or _TIMESTAMP.fullmatch(value):
             raise SkillCompilerError("must be a string scalar")
         parsed = (
