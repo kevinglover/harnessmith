@@ -91,6 +91,31 @@ class BodySyntaxTests(unittest.TestCase):
             ["HS308", "HS308", "HS307"], [d.rule_id for d in self.findings()]
         )
 
+    def test_only_matched_unescaped_backticks_open_code(self) -> None:
+        cases = [
+            (r"\` $ARGUMENTS", "HS307"),
+            ("\\` text\n$ARGUMENTS", "HS307"),
+            ("` $ARGUMENTS", "HS307"),
+            ("` text\n$ARGUMENTS", "HS307"),
+            ("` $ARGUMENTS\n\n`", "HS307"),
+            ("`` $ARGUMENTS `", "HS307"),
+            (r"\\` $ARGUMENTS `", "HS308"),
+            ("` text\n$ARGUMENTS`", "HS308"),
+            (r"` $ARGUMENTS \`", "HS308"),
+            (r"` text \` $ARGUMENTS", "HS307"),
+        ]
+        for body, expected in cases:
+            with self.subTest(body=body):
+                self.write(body)
+                self.assertEqual([expected], [d.rule_id for d in self.findings()])
+                result = subprocess.run(
+                    [sys.executable, "-m", "harnessmith", str(self.source),
+                     "--target", "generic", "--audit", "--json", "--fail-on", "warning"],
+                    capture_output=True, text=True,
+                )
+                self.assertEqual(1 if expected == "HS307" else 0, result.returncode,
+                                 result.stderr)
+
     def test_named_arguments_are_scanned_only_when_declared(self) -> None:
         for arguments in ["issue branch", "[issue, branch]", "\n  - issue\n  - branch"]:
             self.write(

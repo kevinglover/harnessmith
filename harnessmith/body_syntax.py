@@ -20,6 +20,19 @@ _DYNAMIC = r"!`[^`\n]+`"
 _FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
 
 
+def _has_closing_ticks(lines: List[str], line_index: int, start: int, run: int) -> bool:
+    """Only matched delimiters within the current paragraph form code spans."""
+    for offset in range(line_index, len(lines)):
+        line = lines[offset]
+        if offset != line_index and (not line.strip() or _FENCE.match(line)):
+            return False
+        for match in re.finditer(r"`+", line[start:] if offset == line_index else line):
+            # Backslashes are literal inside an already opened code span.
+            if len(match[0]) == run:
+                return True
+    return False
+
+
 def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
     target = get_target(target).name
     if target == "claude":
@@ -44,7 +57,9 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
     fence_length = 0
     in_comment = False
     inline_ticks: Optional[int] = None
-    for line_number, line in enumerate(ir.body.splitlines(), ir.body_start_line):
+    lines = ir.body.splitlines()
+    for line_index, line in enumerate(lines):
+        line_number = ir.body_start_line + line_index
         marker = _FENCE.match(line)
         if fence:
             context = "fenced code"
@@ -90,7 +105,14 @@ def body_syntax_diagnostics(ir: SkillIR, target: str) -> List[Diagnostic]:
                 elif not in_comment and line[index] == "`":
                     run = len(line[index:]) - len(line[index:].lstrip("`"))
                     if inline_ticks is None:
-                        inline_ticks = run
+                        preceding = line[:index]
+                        escaped_tick = (
+                            len(preceding) - len(preceding.rstrip("\\"))
+                        ) % 2 == 1
+                        if not escaped_tick and _has_closing_ticks(
+                            lines, line_index, index + run, run
+                        ):
+                            inline_ticks = run
                     elif inline_ticks == run:
                         inline_ticks = None
                     for offset in range(1, run):

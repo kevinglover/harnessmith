@@ -23,6 +23,13 @@ _NUMBER = re.compile(
     re.I,
 )
 
+_TIMESTAMP = re.compile(
+    r"[0-9]{4}-[0-9]{2}-[0-9]{2}|"
+    r"[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}(?:[Tt]|[ \t]+)"
+    r"[0-9]{1,2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]*)?"
+    r"(?:[ \t]*(?:Z|[-+][0-9]{1,2}(?::[0-9]{2})?))?"
+)
+
 
 def _without_comment(value: str) -> str:
     quote = None
@@ -52,12 +59,7 @@ def string_value(field: FrontmatterField) -> str:
     """Read a string scalar, rejecting collections and implicit YAML types."""
     lines = field.raw.splitlines()
     value = _without_comment(lines[0].split(":", 1)[1].strip())
-    if (
-        not value
-        or value[0] in "[{&*!"
-        or _NUMBER.fullmatch(value)
-        or re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}(?:[Tt ].*)?", value)
-    ):
+    if not value or value[0] in "[{&*!":
         raise SkillCompilerError("must be a string scalar")
     if value.startswith("'") and not re.fullmatch(r"'(?:[^']|'')*'", value):
         raise SkillCompilerError("invalid single-quoted string")
@@ -89,6 +91,8 @@ def string_value(field: FrontmatterField) -> str:
             ):
                 raise SkillCompilerError("unsupported scalar continuation")
             value = " ".join([value, *tail])
+        if _NUMBER.fullmatch(value) or _TIMESTAMP.fullmatch(value):
+            raise SkillCompilerError("must be a string scalar")
         parsed = scalar_value(
             FrontmatterField(field.key, field.key + ": " + value, 1, 1)
         )
@@ -97,10 +101,11 @@ def string_value(field: FrontmatterField) -> str:
     return parsed
 
 
-def _flow_parts(value: str) -> List[str]:
+def _flow_parts(value: str, *, mapping: bool = False) -> List[str]:
     """Split a flat flow collection, retaining commas within quoted strings."""
     parts: List[str] = []
     start = 0
+    scalar_start = True
     quote = None
     index = 0
     while index < len(value):
@@ -114,13 +119,23 @@ def _flow_parts(value: str) -> List[str]:
                     index += 2
                     continue
                 quote = None
-        elif char in "\"'":
+        elif char in "\"'" and scalar_start:
             quote = char
+            scalar_start = False
+        elif mapping and char == ":" and (
+            index + 1 == len(value)
+            or value[index + 1].isspace()
+            or value[start:index].strip().startswith(("'", '"'))
+        ):
+            scalar_start = True
         elif char in "[]{}":
             raise SkillCompilerError("nested flow collections are unsupported")
         elif char == ",":
             parts.append(value[start:index].strip())
             start = index + 1
+            scalar_start = True
+        elif not char.isspace():
+            scalar_start = False
         index += 1
     if quote:
         raise SkillCompilerError("unterminated quoted value")
@@ -168,7 +183,7 @@ def _validate_mapping(field: FrontmatterField) -> None:
     if first.startswith("{") and first.endswith("}"):
         if any(_without_comment(line).strip() for line in lines[1:]):
             raise SkillCompilerError("unsupported mapping continuation")
-        entries = _flow_parts(first[1:-1])
+        entries = _flow_parts(first[1:-1], mapping=True)
     elif not first:
         entries = []
         indentation: Optional[int] = None

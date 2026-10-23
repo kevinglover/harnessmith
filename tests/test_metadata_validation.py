@@ -90,6 +90,43 @@ class MetadataValidationTests(unittest.TestCase):
         self.check_invalid("name: valid-name\ndescription: |-\nunindented\n")
         self.check_invalid("name: valid-name\ndescription: value\nunindented\n")
 
+    def test_plain_strings_are_typed_after_folding(self) -> None:
+        for description in [
+            "2026-10-22 release notes",
+            "42\n  release instructions.",
+            "2026-10-22\n  release notes",
+            "true\n  story",
+        ]:
+            fields = "name: valid-name\ndescription: " + description + "\n"
+            self.write(fields)
+            for target in TARGET_NAMES:
+                with self.subTest(description=description, target=target):
+                    package = compile_skill(self.source, CompileOptions(target))
+                    self.assertIn(fields, package.files["SKILL.md"])
+        for value in ["42", "2026-10-22", "2026-10-22T12:30:45Z",
+                      "2026-10-22 12:30:45.123 -05:00"]:
+            self.check_invalid("name: valid-name\ndescription: " + value + "\n")
+
+    def test_flow_scalars_preserve_embedded_quotes(self) -> None:
+        for metadata in [
+            "{author: O'Reilly}",
+            '{author: Say"Hello}',
+            "{author: O'Reilly, label: 'hello, world'}",
+            '{author: Say"Hello, label: "hello, world"}',
+        ]:
+            fields = "name: valid-name\ndescription: valid\nmetadata: " + metadata + "\n"
+            self.write(fields)
+            for target in TARGET_NAMES:
+                with self.subTest(metadata=metadata, target=target):
+                    package = compile_skill(self.source, CompileOptions(target))
+                    self.assertIn(fields, package.files["SKILL.md"])
+        for tools in ["[Bash(O'Reilly), Read]", '[Bash(say"hello), Read]',
+                      "['Bash(one,two)', Read]", '["Bash(one,two)", Read]']:
+            fields = "name: valid-name\ndescription: valid\nallowed-tools: " + tools + "\n"
+            self.write(fields)
+            package = compile_skill(self.source, CompileOptions("claude"))
+            self.assertIn(fields, package.files["SKILL.md"])
+
     def test_length_boundaries_and_claude_extensions(self) -> None:
         for key, limit in [("description", 1024), ("compatibility", 500)]:
             fields = "name: valid-name\n" + (
