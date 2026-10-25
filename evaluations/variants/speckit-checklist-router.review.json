@@ -1,0 +1,41 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "files": {
+    "SKILL.md": "83da4dfc6856ef8998b30f280ac47b564202e54264641a1e740a0244c0ea397d",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "6df0a110bb5dfadccd6010a21ddbda13ab58858358d57cb4d07733941a2fe4e7"
+  },
+  "verbatim_source_spans": {
+    "references/project-generation.md": [
+      [
+        "## Pre-Execution Checks",
+        "## Example Checklist Types & Sample Items"
+      ],
+      [
+        "## Post-Execution Checks",
+        null
+      ]
+    ],
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "Root purpose and repeated examples consolidated into shared rules; not byte-preserving or proven semantically equivalent.",
+    "Project execution guidance is loaded only for project creation/appending; consultations use supplied context.",
+    "Original generation and hook procedures and both example sections retained verbatim in references.",
+    "Original discovery frontmatter retained to isolate body organization; no discovery optimization claim.",
+    "Full project generation, hooks, and writes require separate workflow evaluation before promotion."
+  ]
+}

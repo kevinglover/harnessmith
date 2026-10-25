@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "scenario_id": "checklist-optional-most-codex",
+  "fixture_id": "local-speckit-checklist",
+  "target": "codex",
+  "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Review a proposed requirements-quality checklist for an invoice export portal. First consult Example Checklist Types & Sample Items, then Anti-Examples: What NOT To Do. Quote verbatim the API sample question about retries/timeouts and the security sample question about breach response. Then quote verbatim the first corrected checklist item from the Anti-Examples section (the one corresponding to featured episode layout), and explain how that correction illustrates why the proposed item “Verify the export button downloads a CSV” is an implementation test. End by rewriting that proposed item as a requirements-quality question about documented export behavior. Keep the answer under 250 words.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Example Checklist Types & Sample Items",
+      "Anti-Examples: What NOT To Do"
+    ]
+  },
+  "required_constraints": [
+    "Never delete or replace existing checklist content - always preserve and append"
+  ],
+  "forbidden_actions": [
+    "item:fileChange",
+    "item:mcpToolCall"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Review a proposed requirements-quality checklist for an invoice export portal. First consult Example Checklist Types & Sample Items, then Anti-Examples: What NOT To Do. Quote verbatim the API sample question about retries/timeouts and the security sample question about breach response. Then quote verbatim the first corrected checklist item from the Anti-Examples section (the one corresponding to featured episode layout), and explain how that correction illustrates why the proposed item “Verify the export button downloads a CSV” is an implementation test. End by rewriting that proposed item as a requirements-quality question about documented export behavior. Keep the answer under 250 words.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [
+        "references/example-checklist-types-sample-items.md",
+        "references/anti-examples-what-not-to-do.md"
+      ],
+      "output_contains": [
+        "Are retry/timeout requirements defined for external dependencies?",
+        "Are security failure/breach response requirements defined?",
+        "Are the number and layout of featured episodes explicitly specified?"
+      ],
+      "output_not_contains": [
+        "[x]",
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Are retry/timeout requirements defined for external dependencies? [Coverage, Gap]\nAre security failure/breach response requirements defined? [Gap, Exception Flow]\nAre the number and layout of featured episodes explicitly specified? [Completeness, Spec §FR-001]\nThe proposed item tests running behavior instead of requirement clarity.\nAre CSV export behavior requirements explicitly documented? [Gap]",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Are retry/timeout requirements defined for external dependencies? [Coverage, Gap]\nAre security failure/breach response requirements defined? [Gap, Exception Flow]\nAre the number and layout of featured episodes explicitly specified? [Completeness, Spec §FR-001]\nThe proposed item tests running behavior instead of requirement clarity.\nAre CSV export behavior requirements explicitly documented? [Gap]",
+        "actions": [],
+        "reference_loads": [
+          "references/example-checklist-types-sample-items.md",
+          "references/anti-examples-what-not-to-do.md"
+        ]
+      }
+    }
+  ]
+}

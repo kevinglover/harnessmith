@@ -36,7 +36,9 @@ def build_parser() -> argparse.ArgumentParser:
             "harnessmith catalog DIRECTORY --target codex|claude [--json]"
         ),
     )
-    parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s " + __version__
+    )
     parser.add_argument(
         "source", type=Path, help="Path to a SKILL.md or its containing directory"
     )
@@ -107,8 +109,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--fail-on",
         choices=("note", "warning", "error"),
         help=(
-            "Return exit code 1 when an audit diagnostic meets or exceeds this "
-            "severity"
+            "Return exit code 1 when an audit diagnostic meets or exceeds this severity"
         ),
     )
     preview = parser.add_mutually_exclusive_group()
@@ -195,6 +196,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             CompileOptions(
                 target=target,
                 extract_sections=extract_sections,
+                conditional_sections=recipe.conditional_sections if recipe else (),
                 optimize_extension_hooks=(
                     args.optimize_extension_hooks
                     or "spec-kit-extension-hooks" in optimizations
@@ -264,17 +266,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print("Added: %s" % (", ".join(diff.added) or "none"))
             print("Modified: %s" % (", ".join(diff.modified) or "none"))
             print("Removed: %s" % (", ".join(diff.removed) or "none"))
-        print("Output: %s%s" % (args.output, " (not written)" if args.dry_run or args.diff else ""))
+        print(
+            "Output: %s%s"
+            % (args.output, " (not written)" if args.dry_run or args.diff else "")
+        )
     return 0
 
 
 def _catalog_main(argv: Sequence[str]) -> int:
     parser = argparse.ArgumentParser(
-        prog="harnessmith catalog", description="Audit a skill catalog without writing files."
+        prog="harnessmith catalog",
+        description="Audit a skill catalog without writing files.",
     )
     parser.add_argument("root", type=Path)
     parser.add_argument("--target", required=True, choices=("codex", "claude"))
-    parser.add_argument("--profile", type=Path, help="Versioned JSON listing assumptions")
+    parser.add_argument(
+        "--profile", type=Path, help="Versioned JSON listing assumptions"
+    )
     parser.add_argument("--json", action="store_true", help="Print the complete report")
     parser.add_argument("--format", choices=("text", "json", "sarif"))
     parser.add_argument("--fail-on", choices=("note", "warning", "error"))
@@ -294,16 +302,26 @@ def _catalog_main(argv: Sequence[str]) -> int:
     elif args.format == "sarif":
         print(render_diagnostics_sarif(diagnostics, __version__))
     else:
-        print("Audited %d skills for %s: %d listing characters (%d estimated tokens)"
-              % (int(report["skill_count"]), args.target, int(report["listing_characters"]),
-                 int(report["listing_token_estimate"])))
+        print(
+            "Audited %d skills for %s: %d listing characters (%d estimated tokens)"
+            % (
+                int(report["skill_count"]),
+                args.target,
+                int(report["listing_characters"]),
+                int(report["listing_token_estimate"]),
+            )
+        )
         print("Measured components: %s" % report["components_characters"])
         print("Assumptions: %s" % json.dumps(report["profile"], sort_keys=True))
         print("Static synthetic listing only; runtime discovery remains unverified.")
         if diagnostics:
             print(render_diagnostics_text(diagnostics))
         print("No files written.")
-    return 1 if args.fail_on and diagnostics_fail_threshold(diagnostics, args.fail_on) else 0
+    return (
+        1
+        if args.fail_on and diagnostics_fail_threshold(diagnostics, args.fail_on)
+        else 0
+    )
 
 
 def _verify_main(argv: Sequence[str]) -> int:

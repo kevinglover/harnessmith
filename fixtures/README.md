@@ -44,3 +44,12 @@ python3 -m unittest tests.test_fixture_corpus -v
 Validation rejects unknown fields, duplicate IDs, unsafe paths, missing files,
 unknown targets, malformed diagnostic IDs, and hash drift. Updating fixture
 content therefore requires an intentional manifest hash update.
+
+## Existing repository skill
+
+`local-speckit-checklist` pins the existing `skills/speckit-checklist/SKILL.md`
+without copying or modifying it. Unlike the synthetic fixtures, this entry uses
+its local Git source revision and the repository's AGPL-3.0-only license; the
+skill retains its spec-kit attribution. It supports the larger-skill Codex
+benchmark's three optional-reference workloads. Diagnostic IDs are unique even
+when a rule occurs at multiple source spans.

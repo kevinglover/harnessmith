@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scenario_id": "checklist-optional-some-codex",
+  "fixture_id": "local-speckit-checklist",
+  "target": "codex",
+  "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. I am preparing an API requirements review for an invoice export service. Its spec covers happy-path CSV export but is silent on dependency outages and API evolution. Consult the optional Example Checklist Types & Sample Items section. Select and quote verbatim the two API sample questions that best address those two gaps, followed by one sentence explaining why these check requirements quality rather than implementation behavior. Do not consult Anti-Examples; I only need the API sample selection.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Example Checklist Types & Sample Items",
+      "Anti-Examples: What NOT To Do"
+    ]
+  },
+  "required_constraints": [
+    "Never delete or replace existing checklist content - always preserve and append"
+  ],
+  "forbidden_actions": [
+    "item:fileChange",
+    "item:mcpToolCall"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. I am preparing an API requirements review for an invoice export service. Its spec covers happy-path CSV export but is silent on dependency outages and API evolution. Consult the optional Example Checklist Types & Sample Items section. Select and quote verbatim the two API sample questions that best address those two gaps, followed by one sentence explaining why these check requirements quality rather than implementation behavior. Do not consult Anti-Examples; I only need the API sample selection.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [
+        "references/example-checklist-types-sample-items.md"
+      ],
+      "output_contains": [
+        "Are retry/timeout requirements defined for external dependencies?",
+        "Is versioning strategy documented in requirements?"
+      ],
+      "output_not_contains": [
+        "[x]",
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "Are retry/timeout requirements defined for external dependencies? [Coverage, Gap]\nIs versioning strategy documented in requirements? [Gap]\nThese questions evaluate specification completeness rather than running the implementation.",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "Are retry/timeout requirements defined for external dependencies? [Coverage, Gap]\nIs versioning strategy documented in requirements? [Gap]\nThese questions evaluate specification completeness rather than running the implementation.",
+        "actions": [],
+        "reference_loads": [
+          "references/example-checklist-types-sample-items.md"
+        ]
+      }
+    }
+  ]
+}

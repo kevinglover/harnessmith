@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import List, Mapping
 
 from .errors import SkillCompilerError
+from .load_policy import parse_conditional_sections
 
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -61,8 +62,10 @@ def manifest_validation_errors(manifest: object) -> List[str]:
     }
     allowed = required | {"recipe", "executables"}
     errors: List[str] = []
-    if manifest.get("schema_version") != 1:
-        errors.append("manifest schema_version must be 1")
+    if type(manifest.get("schema_version")) is not int or manifest.get(
+        "schema_version"
+    ) not in (1, 2):
+        errors.append("manifest schema_version must be 1 or 2")
     if set(manifest) - allowed or not required.issubset(manifest):
         errors.append("manifest has missing or unknown top-level fields")
 
@@ -91,14 +94,18 @@ def manifest_validation_errors(manifest: object) -> List[str]:
     else:
         for index, item in enumerate(transformations):
             if (
+                isinstance(item, dict)
+                and "load_policy" in item
+                and manifest.get("schema_version") != 2
+            ):
+                errors.append("conditional load policy requires manifest version 2")
+            if (
                 not isinstance(item, dict)
                 or not isinstance(item.get("type"), str)
                 or item.get("type") not in TRANSFORMATION_TYPES
                 or not _valid_transformation(item)
             ):
-                errors.append(
-                    "manifest transformation %d is invalid" % index
-                )
+                errors.append("manifest transformation %d is invalid" % index)
 
     metrics = manifest.get("metrics")
     if (
@@ -140,9 +147,7 @@ def require_valid_manifest(manifest: object) -> Mapping[str, object]:
 
     errors = manifest_validation_errors(manifest)
     if errors:
-        raise SkillCompilerError(
-            "invalid Harnessmith manifest: %s" % "; ".join(errors)
-        )
+        raise SkillCompilerError("invalid Harnessmith manifest: %s" % "; ".join(errors))
     assert isinstance(manifest, dict)
     return manifest
 
@@ -151,11 +156,7 @@ def is_safe_relative_path(relative: str) -> bool:
     if not relative or "\x00" in relative or "\\" in relative:
         return False
     path = Path(relative)
-    return (
-        not path.is_absolute()
-        and ".." not in path.parts
-        and path.as_posix() != "."
-    )
+    return not path.is_absolute() and ".." not in path.parts and path.as_posix() != "."
 
 
 def _valid_record(value: object) -> bool:
@@ -194,8 +195,17 @@ def _valid_transformation(item: Mapping[str, object]) -> bool:
             and _valid_policy(item.get("output"))
         )
     if kind == "extract-section":
+        if "load_policy" in item:
+            try:
+                parse_conditional_sections(
+                    {str(item.get("heading", "")): item["load_policy"]}
+                )
+            except SkillCompilerError:
+                return False
+            item = {k: v for k, v in item.items() if k != "load_policy"}
         return (
-            set(item) in (
+            set(item)
+            in (
                 {"type", "heading", "source_lines", "source_sha256", "output"},
                 {
                     "type",
@@ -207,18 +217,14 @@ def _valid_transformation(item: Mapping[str, object]) -> bool:
                 },
             )
             and _nonempty_string(item.get("heading"))
-            and (
-                "section_id" not in item
-                or _nonempty_string(item.get("section_id"))
-            )
+            and ("section_id" not in item or _nonempty_string(item.get("section_id")))
             and _valid_lines(item.get("source_lines"))
             and _valid_sha256(item.get("source_sha256"))
             and _safe_output(item.get("output"))
         )
     if kind == "preserve-resource":
         return (
-            set(item)
-            == {"type", "path", "content", "source_sha256", "executable"}
+            set(item) == {"type", "path", "content", "source_sha256", "executable"}
             and _safe_output(item.get("path"))
             and item.get("content") in ("text", "binary")
             and _valid_sha256(item.get("source_sha256"))

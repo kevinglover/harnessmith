@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class ContractTests(unittest.TestCase):
     def test_all_published_schemas_are_versioned_json(self) -> None:
         schemas = sorted((ROOT / "schemas").glob("*.schema.json"))
-        self.assertEqual(11, len(schemas))
+        self.assertEqual(15, len(schemas))
         for path in schemas:
             document = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(

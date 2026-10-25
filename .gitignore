@@ -209,3 +209,6 @@ __marimo__/
 
 # Local research and review notes
 /docs/weekly-reviews/
+
+# Private runtime traces and local evidence bundles
+/evaluations/local-evidence/
