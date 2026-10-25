@@ -128,7 +128,9 @@ def audit_skill(
             "invocation": "source",
             "extract_sections": [],
             "optimizations": [],
-            "budgets": {"root_tokens": 5000},
+            # Keep leaving sections inline usable even above the advisory budget.
+            # A reviewer may add an explicit host constraint; size is not usage.
+            "budgets": {},
         },
     }
 

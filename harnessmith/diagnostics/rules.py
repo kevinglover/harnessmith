@@ -68,21 +68,19 @@ def analyze_audit_diagnostics(
                 rule_id="HS201",
                 severity=Severity.WARNING,
                 message=(
-                    "Root is %d estimated tokens; recommended maximum is %d"
+                    "Root is %d estimated tokens; advisory review threshold is %d"
                     % (root_tokens, ROOT_TOKEN_BUDGET)
                 ),
                 rationale=(
-                    "Always-loaded instructions above the recommended budget increase "
-                    "context pressure for every invocation."
+                    "This static size heuristic identifies context pressure, not "
+                    "measured runtime savings. Extraction adds reference-read overhead."
                 ),
                 source_span=_document_span(ir),
-                estimated_savings_tokens=root_tokens - ROOT_TOKEN_BUDGET,
                 remediation=Remediation(
                     summary=(
-                        "Review HS214 candidates for lossless extraction into "
-                        "references."
+                        "Leave inline unless a reviewed load policy or explicit host "
+                        "budget justifies extraction; review HS214 candidates."
                     ),
-                    recipe_fragment={"budgets": {"root_tokens": ROOT_TOKEN_BUDGET}},
                     requires_review=True,
                 ),
             )
@@ -107,13 +105,15 @@ def analyze_audit_diagnostics(
                     "Section '%s' is a reference-extraction candidate (%d tokens)"
                     % (section.heading, tokens)
                 ),
-                rationale=reasons,
+                rationale=(
+                    reasons
+                    + "; static heuristic only; runtime savings are unmeasured"
+                ),
                 source_span=_section_span(ir, section),
-                estimated_savings_tokens=tokens,
                 remediation=Remediation(
                     summary=(
-                        "Review load gates and behavior-bearing instructions, then "
-                        "extract this section losslessly."
+                        "Leave inline or review load gates and behavior-bearing "
+                        "instructions before selecting exact extraction."
                     ),
                     recipe_fragment={"extract_sections": [section.heading]},
                     requires_review=True,

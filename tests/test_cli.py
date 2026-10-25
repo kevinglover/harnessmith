@@ -133,6 +133,48 @@ class CliTests(unittest.TestCase):
                 "Harnessmith", document["runs"][0]["tool"]["driver"]["name"]
             )
 
+    def test_oversized_audit_recipe_can_leave_inline_and_honor_explicit_budget(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill = root / "SKILL.md"
+            body = "# Workflow\n\n## Detailed Examples\n\n" + (
+                "A synthetic supporting example remains authoritative.\n" * 500
+            )
+            source = (
+                "---\nname: inline-example\ndescription: Large inline fixture.\n---\n\n"
+                + body
+            )
+            skill.write_text(source, encoding="utf-8")
+            audit = subprocess.run(
+                [sys.executable, "-m", "harnessmith", str(skill),
+                 "--target", "generic", "--audit", "--json"],
+                cwd=ROOT, check=False, capture_output=True, text=True,
+            )
+            self.assertEqual(0, audit.returncode, audit.stderr)
+            report = json.loads(audit.stdout)
+            self.assertTrue(report["metrics"]["over_recommended_root_budget"])
+            self.assertGreater(report["metrics"]["review_candidate_count"], 0)
+            self.assertEqual([], report["recipe_template"]["extract_sections"])
+            self.assertEqual({}, report["recipe_template"]["budgets"])
+            recipe = root / "recipe.json"
+            recipe.write_text(json.dumps(report["recipe_template"]), encoding="utf-8")
+            output = root / "compiled"
+            command = [sys.executable, "-m", "harnessmith", str(skill),
+                       "--recipe", str(recipe), "--output", str(output), "--json"]
+            compiled = subprocess.run(
+                command, cwd=ROOT, check=False, capture_output=True, text=True,
+            )
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            self.assertIn(body, (output / "SKILL.md").read_text(encoding="utf-8"))
+            self.assertFalse((output / "references").exists())
+            self.assertEqual(source, skill.read_text(encoding="utf-8"))
+            budgeted = subprocess.run(
+                [*command, "--max-root-tokens", "5000", "--dry-run"],
+                cwd=ROOT, check=False, capture_output=True, text=True,
+            )
+            self.assertEqual(2, budgeted.returncode, budgeted.stderr)
+            self.assertIn("root token budget exceeded", budgeted.stderr)
+
     def test_cli_audit_fail_on_uses_severity_threshold_and_exit_code_one(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             skill = self._write_diagnostic_skill(directory)

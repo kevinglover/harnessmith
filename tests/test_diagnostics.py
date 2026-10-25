@@ -83,7 +83,7 @@ class AuditDiagnosticTests(unittest.TestCase):
     def test_audit_emits_ordered_efficiency_and_duplicate_rules(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             skill = Path(directory) / "SKILL.md"
-            detail = "A supporting example without normative requirements. " * 100
+            detail = "A supporting example without normative requirements. " * 500
             skill.write_text(
                 "---\nname: diagnostic-example\ndescription: Exercises rules.\n---\n\n"
                 "# Diagnostic Example\n\n"
@@ -111,6 +111,13 @@ class AuditDiagnosticTests(unittest.TestCase):
         for diagnostic in diagnostics:
             by_rule.setdefault(diagnostic["rule_id"], []).append(diagnostic)
         self.assertIn("HS214", by_rule)
+        self.assertIn("HS201", by_rule)
+        for rule_id in ("HS201", "HS214"):
+            for diagnostic in by_rule[rule_id]:
+                self.assertNotIn("estimated_savings_tokens", diagnostic)
+                self.assertIn("static", diagnostic["rationale"])
+                self.assertIn("Leave inline", diagnostic["remediation"]["summary"])
+        self.assertNotIn("recipe_fragment", by_rule["HS201"][0]["remediation"])
         self.assertEqual(2, len(by_rule["HS101"]))
         candidate = by_rule["HS214"][0]
         self.assertEqual("fixture/SKILL.md", candidate["source_span"]["path"])
