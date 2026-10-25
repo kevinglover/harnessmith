@@ -1,0 +1,40 @@
+hooks:
+  before_checklist:
+    - extension: Synthetic automatic pre
+      command: pilot.pre.marker
+      description: Record that generation has not begun.
+      optional: false
+    - extension: Synthetic optional pre
+      command: pilot.optional.pre
+      description: Optional marker; offer this command but do not execute it.
+      prompt: Run the optional pre marker only if requested later.
+      optional: true
+      condition: null
+    - extension: Synthetic disabled pre
+      command: pilot.disabled.pre
+      optional: false
+      enabled: false
+    - extension: Synthetic conditional pre
+      command: pilot.conditional.pre
+      optional: false
+      condition: "unsupported_fixture_expression()"
+  after_checklist:
+    - extension: Synthetic automatic post
+      command: pilot.post.marker
+      description: Record the generated checklist hash.
+      optional: false
+      enabled: true
+      condition: ""
+    - extension: Synthetic optional post
+      command: pilot.optional.post
+      description: Optional marker; offer this command but do not execute it.
+      prompt: Run the optional post marker only if requested later.
+      optional: true
+    - extension: Synthetic disabled post
+      command: pilot.disabled.post
+      optional: false
+      enabled: false
+    - extension: Synthetic conditional post
+      command: pilot.conditional.post
+      optional: false
+      condition: "unsupported_fixture_expression()"
