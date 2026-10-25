@@ -23,6 +23,13 @@ All fields other than `schema_version` are optional, but maintained recipes
 should normally set a target and source hash. Unknown keys, transforms, targets,
 and budget names are rejected.
 
+Leaving sections inline is a valid recipe: keep `extract_sections` and
+`optimizations` empty and omit budgets or set `budgets` to `{}`. Audit emits this
+baseline with the current source hash. Its advisory root-size threshold does not
+become a compilation requirement unless a reviewer adds an explicit budget.
+See [decision rules](optimization-model.md#audit-before-extraction) before
+selecting extraction; a smaller root is not proof of runtime savings.
+
 ## Fields
 
 - `target`: `generic`, `cursor`, `claude`, or `codex`.
@@ -96,3 +103,10 @@ live behavioral equivalence or runtime savings. Run them with:
 ```bash
 python3 -m unittest tests.test_reviewed_recipes -v
 ```
+
+## Conditional reference loading
+
+Recipe version 2 supports explicitly reviewed optional sections with source-pinned
+load conditions. See [conditional loading](conditional-loading.md) for the policy
+contract, compatibility boundaries, verification, and three-way runtime comparison.
+Existing version-1 recipes retain mandatory extraction behavior.

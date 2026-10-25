@@ -7,8 +7,44 @@ published.
 
 ## Unreleased
 
+### Changed
+
+- Audit starter recipes leave sections inline without imposing an automatic root
+  budget. Explicit recipe and CLI budgets remain enforced. Size-based diagnostics
+  retain their IDs but no longer present root or section size as estimated savings;
+  extraction guidance separates static heuristics from measured runtime evidence.
+
 ### Added
 
+- Router v4 and checker/collector v4, retaining the frozen v3 trace normalizer,
+  with targeted offline controls for post-hook messages, bounded reuse wording,
+  evidence-supported hook claims, policy-neutral questions and safe discovery.
+  Rubric v5 and the separately approved two-session Luna follow-up preserve all
+  earlier scores and the original skill. Both sessions completed without retries
+  or additions: 0/2 full automated passes, 2/2 semantic content passes. All results
+  are retained; parser limits and genuine pre-hook/context/narrative gaps keep
+  the targeted gate open. No router promotion or further live batch is queued.
+- Workflow parser/checker/collector v3, router v3 and prospective rubric v4 for
+  the remaining absence-check, literal-write, hook-message and artifact-verification
+  gaps. Targeted synthetic regressions preserve all historical evidence and the
+  original skill. The separately approved two-session Luna follow-up completed
+  without retries or additions: 1/2 frozen automated passes, 0/2 complete reviewed
+  passes. All results remain retained; post-hook messages, unsupported narration
+  and a semantic policy gap keep the targeted gate open. No router is promoted
+  and no further live batch is queued.
+- Versioned workflow checker/normalizer v2 and router v2 candidate repairs, with
+  targeted offline regressions and a two-slot opt-in collector tested against a
+  fake server. Rubric v3 and the proposed append/hooks pilot preserve all prior
+  scores, instruments and original skill bytes. The separately approved two-session
+  Luna follow-up completed with no retries: both content/format/reference checks
+  pass, but full workflow results remain 0/2. All traces, artifacts, failures and
+  separate semantic/raw reviews are retained without promoting the router.
+- Offline preparation and artifact/trace checks for a six-session checklist
+  workflow pilot, plus an OPT-004 acceptance map and versioned promotion criteria.
+  An opt-in write-capable collector retains raw events, workspace snapshots,
+  provenance and all attempts, with bounded permissions and no session retries.
+  Six approved Luna sessions completed; frozen failures and separate review are
+  documented without promoting the router or claiming runtime savings.
 - Read-only catalog auditing for Codex and Claude, with versioned listing
   profiles/reports, component accounting, and advisory duplicate/overflow findings.
 - Source-pinned Cursor root-budget recipes for checklist and clarify, with

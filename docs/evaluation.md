@@ -99,8 +99,9 @@ setting its expected result to true. Action order, unexpected actions, and
 activity after an abort are checked per turn. A missing or extra runtime turn
 fails the turn-count check.
 
-The corpus now has 14 scenarios: three legacy scenarios, four lifecycle
-scenarios, four non-trigger scenarios, and three explicit-channel scenarios.
+The corpus now has 20 scenarios: three legacy scenarios, four lifecycle
+scenarios, four non-trigger scenarios, three explicit-channel scenarios, and
+one explicit Codex runtime probe, plus five larger-skill checklist scenarios.
 The lifecycle and non-trigger cases cover every target; explicit-only cases
 cover the three targets that represent that policy. The new synthetic lifecycle
 fixture models approval, continuation, compaction, hook failure, reference
@@ -122,7 +123,8 @@ compatible but its bare observations are not a complete evidence report.
 The new collector requires a version-2 scenario, a passing offline contract,
 an explicit `enabled=True`, and at least two paired samples (default three).
 An `EvidenceEvaluator` adapter implements `evaluate(request) -> RuntimeSample`.
-No provider ships with Harnessmith, and normal CI never contacts one.
+The opt-in [Codex adapter](codex-runtime-evidence.md) supports explicit
+single-turn probes. Normal CI never contacts a provider.
 
 ```python
 from pathlib import Path
@@ -178,3 +180,92 @@ Real runs are still needed before making fidelity, token, latency, or cost
 claims. Compare like environment/configuration identifiers, inspect individual
 failures and cache conditions, and retain repeated samples rather than treating
 one successful pair as proof.
+
+## Larger-skill comparison
+
+The [checklist runtime benchmark](checklist-runtime-benchmark.md) uses the existing
+23 KB checklist skill for matched none/some/most optional-reference workloads.
+Its offline contracts are pinned. The initial live batch completed the no-reference
+case (four passing sessions) and one pair of the one-reference case before an
+account usage limit stopped collection. The benchmark document records the
+partial results and remaining coverage; no broad efficiency claim is established.
+
+The [savings follow-up](checklist-savings-followup.md) adds security and append-policy
+consultations and distinguishes total, cached, and uncached runtime input. Its
+16-session batch completed: output checks passed throughout, while four compiled
+core-task sessions loaded unexpected references. Every compiled scenario mean
+used more input and took longer. This identifies conditional reference loading
+as a future experiment, not a verified optimization.
+
+## Conditional strategy comparison
+
+The [three-way experiment](conditional-loading.md) compares canonical, mandatory
+and reviewed conditional extraction using frozen tasks and rotated execution
+order. It prepares packages without network access by default. Its schema and
+reports are separate from paired evidence. The completed
+[Astra conditional results](conditional-loading-results.md) and
+[Luna router results](router-luna-results.md) remain separate model-specific
+evidence. Historical assertions and scores are unchanged.
+
+## OPT-004 status and next fidelity work
+
+[OPT-004 status](opt-004-status.md) maps the actual acceptance criteria to reports,
+provenance and open coverage. It does not mark the wider task complete.
+The prospective [v2 promotion rubric](../evaluations/variants/router-quality-rubric-v2.md)
+reports content, formatting, reference behavior, workflow and efficiency separately;
+it does not retroactively replace the frozen consultation rubric.
+
+The [workflow fidelity pilot](workflow-fidelity-pilot.md) prepares six isolated
+canonical/router sessions for creation, append preservation and harmless local
+hooks. After explicit approval, the [write-capable collector](workflow-runtime-collector.md)
+completed exactly six GPT-6 Luna sessions without replacements. The
+[workflow results](workflow-fidelity-results.md) retain 0/6 full frozen passes,
+successful append preservation/automatic-hook ordering, and separate raw/semantic
+review. The pilot identifies workflow and instrumentation gaps; it cannot
+establish broad efficiency or equivalence. Further live runs need new approval.
+
+The [versioned follow-up](workflow-fidelity-pilot-v2.md) adds router v2,
+checker/normalizer v2 and prospective rubric v3. Synthetic regressions distinguish
+valid compound reads and final-answer formatting from masked command failures,
+missing context, unusable hook offers and combined topics. A separate collector
+is fixed to two Luna sessions and was validated against a local fake server
+before launch. After separate approval, the [two-session results](workflow-fidelity-v2-results.md)
+record 0/2 full frozen passes, with content/format/reference checks passing in
+both. Required context, append preservation and distinct topic allocation were
+observed; hook offers, a denied heredoc and remaining parser limits keep the
+workflow gate open. Every result is retained, no historical observation is
+regraded, and no retry or additional session ran. The batch used 239,966 input
+and 2,541 output tokens; it provides no baseline efficiency comparison.
+
+The subsequent [v3 repair proposal](workflow-fidelity-pilot-v3.md) adds new
+parser/checker/collector versions, router v3 and rubric v4. Offline controls
+cover pinned absent-file checks, bounded literal writes, timely rendered hook
+blocks and verified final artifacts. After separate approval, the
+[two-session v3 results](workflow-fidelity-v3-results.md) record 1/2 frozen
+automated passes and 0/2 complete reviewed passes, without retries or additions.
+Native writes, append preservation, pinned absence checks and final readbacks
+are corroborated. Missing post-hook blocks, unsupported narration, one failed
+directory listing and a semantic policy presupposition keep the targeted gate
+open. A reuse paraphrase exposes a keyword-screen limitation, retained without
+regrading. Usage is 264,071 input and 2,482 output tokens, with no baseline
+efficiency comparison. All earlier reports, grades and instruments remain
+unchanged; no further live batch is queued.
+
+The [v4 repair proposal](workflow-fidelity-pilot-v4.md) adds an isolated router
+revision and checker/collector v4 with
+[rubric v5](../evaluations/variants/router-quality-rubric-v5.md), retaining the
+frozen v3 normalizer. The new topic screen records bounded reuse cues, and a
+limited final-hook-claim screen records supporting message/event IDs. Semantic
+policy neutrality and general narrative truthfulness remain separate mandatory
+reviews. Offline tests preserve failed-action handling and cover paraphrases,
+distractors, timed versus promised blocks, truthful negation, unsupported claims,
+safe discovery and fixed two-slot fake collection. After separate approval,
+the [v4 results](workflow-fidelity-v4-results.md) retain exactly two completed
+Luna sessions, with zero retries or additions: 0/2 full automated passes and
+2/2 semantic content passes. Append preserves bytes using an internal Python
+write/readback outside the frozen parser grammar. Hooks renders correct post
+blocks but has invented/late pre messages, a skipped constitution read after a
+masked failure and unsupported commentary. All grades and evidence remain
+unchanged. Usage is 247,946 input and 2,644 output tokens; efficiency and the
+broader OPT-004 acceptance criteria remain unproven. No further live batch is
+queued.

@@ -37,16 +37,19 @@ permits name overrides. See [Metadata validation](targets.md#metadata-validation
 ### HS201 — Recommended root budget exceeded
 
 The always-loaded source exceeds the 5,000-token portable estimate. Review
-`HS214` candidates before setting or enforcing the recommended recipe budget.
-The estimate is deterministic and uses Harnessmith's documented
-four-characters-per-token proxy; it is not measured runtime usage.
+the threshold as an advisory heuristic; leaving sections inline is valid. Only
+an explicit recipe or CLI budget constrains compilation. The estimate uses
+Harnessmith's documented four-characters-per-token proxy; it is not measured
+runtime usage. This rule supplies no automatic budget fragment or savings estimate.
 
 ### HS214 — Reference-extraction candidate
 
-A section is large, conditional, or clearly supporting material. Harnessmith
+A section's size or heading suggests possible supporting material. Harnessmith
 provides an exact-heading recipe fragment, but marks it as review-required
 because a person must confirm load gates and the placement of behavior-bearing
-instructions before extraction.
+instructions before extraction. Leave inline when the review does not justify
+extraction. The heuristic cannot establish optionality, runtime savings, or
+workflow fidelity, and no savings estimate is emitted.
 
 ### HS305 — Target semantics unsupported
 

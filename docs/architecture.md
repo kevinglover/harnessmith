@@ -28,8 +28,10 @@ SKILL.md + optional recipe
                                       independent package verifier
 ```
 
-The current general transform moves explicitly selected sections into mandatory
-references without rewriting their text. The `spec-kit-extension-hooks`
+The default general transform moves explicitly selected sections into mandatory
+references without rewriting their text. Recipe version 2 additionally supports
+reviewed conditional load policies for explicitly optional sections; see
+[conditional loading](conditional-loading.md). The `spec-kit-extension-hooks`
 optimization is a named, narrow pass for the repository's Spec Kit input; it is
 not a general Markdown heuristic.
 
@@ -43,7 +45,9 @@ not a general Markdown heuristic.
 - `harnessmith.compiler` builds packages and performs in-process invariants.
 - `harnessmith.verification` verifies packages from disk and compares previews.
 - `schemas/` defines versioned JSON contracts: adapter capabilities use version 2;
-  other durable formats remain at version 1.
+  recipes and package manifests support versions 1 and 2. Conditional loading
+  requires version 2; runtime comparison has separate version-1 (three-way) and
+  version-2 (router-inclusive) schemas.
 
 Recipes record reviewed intent. Manifests record what happened. Audit reports
 are advisory observations and never mutate the source.

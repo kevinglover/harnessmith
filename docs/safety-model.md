@@ -54,3 +54,12 @@ Bundled `references/`, `scripts/`, and `assets/` must contain regular files and
 directories only. Symlinks and collisions with compiler-generated paths are
 rejected. File contents are preserved byte-for-byte, including binary assets;
 executable script metadata is recorded and verified separately.
+
+## Reviewed conditional extraction
+
+Recipe version 2 requires a pinned source and explicit optionality, condition and
+review rationale for each conditional section. This changes loading behavior and
+is not automatically a semantic-equivalence proof. Reviewers must confirm that
+skipped content contains no unique mandatory requirement. Version-2 manifests
+record the policy; verification checks the generated gate and regeneration.
+Unmarked sections retain mandatory loading. See [conditional loading](conditional-loading.md).
