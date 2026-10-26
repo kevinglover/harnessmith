@@ -16,6 +16,49 @@ published.
 
 ### Added
 
+- Normalizer v8 and checker/collector v9 as offline instrumentation repairs for
+  same-path `else test ! -e` probes, independent complete-read overlap and
+  explicitly null absence output. Exact proofs retain superseded artificial
+  failures without weakening workflow boundaries. Router v7, the original skill
+  and all historical evidence remain unchanged. Rubric v10 and a one-session
+  Luna low append proposal are prospective; no live session is authorized or
+  queued, and the frozen v8 full gate remains 0/1.
+- Router v7, normalizer v7 and checker/collector v8 as an offline repair for
+  terminal file-discovery attribution and command separation. New regressions
+  distinguish exact successful listing evidence from workflow compliance and
+  retain real failures. Rubric v9 and a one-session Luna low append proposal
+  preserve every historical score, package and the original skill. The separately
+  approved v8 session completed without retry or expansion: content, formatting,
+  references, prefix preservation and final readback pass, but the frozen full
+  gate is 0/1. Unsupported else-test conditionals and overlapping-read attribution
+  block context/absence and downstream discovery certificates despite positive
+  raw evidence. All results are retained; OPT-004 remains open.
+- Normalizer v6 and checker/collector v7 as an offline instrumentation repair for
+  the literal `else printf` absence certificate, with pinned-state, exact-output,
+  lifecycle and read-only-prefix regressions. Router v6 and all hard gates stay
+  unchanged. Prospective rubric v8 and a one-session Luna low append proposal
+  preserve historical scores and the original skill. The separately approved
+  session completed without retry or expansion: content, formatting, reference
+  behavior, append preservation and final readback pass, but the full gate is
+  0/1 after failed compound discovery and unverified terminal discovery. The
+  standalone certificate lacks qualifying live coverage. All evidence is retained.
+- Router v6, normalizer v5 and checker/collector v6 as a new offline append
+  candidate. Synthetic regressions cover bounded Python reads, separate
+  reference/setup/verification checkpoints, exact prefix preservation and
+  evidence-backed verification/Git claims. Rubric v7 retains historical scores
+  and separate review requirements. The approved one-session Luna follow-up
+  completed without retries or expansion: content and raw append behavior pass,
+  but the frozen full gate remains 0/1 because a literal `else printf` absence
+  check lacks certification. All evidence is retained; OPT-004 remains open.
+- Router v5, trace normalizer v4 and checker/collector v5 as an offline repair
+  candidate. New synthetic controls cover internal append/readback, constituent
+  reads without clearing failed commands, singular count modifiers, configured
+  pre-hook blocks, grounded commentary, hidden discovery and required context.
+  Rubric v6 keeps historical grades frozen. The separately approved two-session
+  Luna follow-up completed without retries or additions: 1/2 automated and
+  complete reviewed case passes, 2/2 semantic content passes. Hooks passes;
+  append retains parser limits, missing final readback and unsupported narration.
+  All results are retained, the router remains experimental, and OPT-004 is open.
 - Router v4 and checker/collector v4, retaining the frozen v3 trace normalizer,
   with targeted offline controls for post-hook messages, bounded reuse wording,
   evidence-supported hook claims, policy-neutral questions and safe discovery.
