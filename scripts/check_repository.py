@@ -136,6 +136,15 @@ def check_docs() -> List[str]:
                 )
                 continue
             if not local.exists():
+                private_root = ROOT.resolve() / "evaluations" / "local-evidence"
+                # Private evidence is intentionally absent from clean checkouts.
+                # When retained locally, every linked target must still exist.
+                if (
+                    not private_root.exists()
+                    and not private_root.is_symlink()
+                    and (local == private_root or private_root in local.parents)
+                ):
+                    continue
                 errors.append(
                     f"{path.relative_to(ROOT)}: missing link target: {target}"
                 )
