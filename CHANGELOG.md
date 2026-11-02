@@ -16,6 +16,14 @@ published.
 
 ### Added
 
+- The subsequently approved [v11 Luna low append result](docs/workflow-fidelity-v11-results.md):
+  one completed session with no retry, replacement, expansion or extra judge.
+  Content, formatting, references, exact prefix and separate readback pass; the
+  frozen full gate remains 0/1. A fresh post-generation extension action is
+  recorded, but null output lacks the required proof. Unsupported Python
+  verification/pipeline forms and retained cache diagnostics also fail the
+  workflow gate. All evidence is retained; authorization is consumed and OPT-004
+  stays open. This execution supersedes the earlier proposal's pending status.
 - Router v8, normalizer v10 and checker/collector v11 for bounded `if test -f`
   attribution and a mandatory fresh post-generation extension checkpoint.
   Offline regressions distinguish a correct append from a completed final

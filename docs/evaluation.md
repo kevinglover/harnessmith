@@ -459,3 +459,25 @@ at 0/1. The smallest proposed live follow-up is one fresh GPT-6 Luna low append
 session, one turn, no retry, replacement, expansion or extra judge. It is not
 authorized or queued. Offline readiness proves neither live compliance nor
 efficiency, reliability, compiler equivalence or router promotion.
+
+The subsequently approved [v11 Luna low append session](workflow-fidelity-v11-results.md)
+completed one turn with no retry, replacement, expansion, baseline, hooks rerun
+or extra judge. Content, formatting, references, exact 694-byte prefix and
+separate complete readback pass. The frozen automated and complete reviewed
+gates remain **0/1**: unsupported Python verification and a pipeline fail
+classification, cache diagnostics remain failed constituents, and the fresh
+post-generation check lacks the required post-append absence proof.
+
+Raw review confirms that the later extension action was performed after the
+write/readback and before reporting; this differs from v10's omitted action.
+Its null output and absent certificate do not satisfy the frozen v11 gate.
+Inherited early null-absence, conditional context-read and terminal-discovery
+proofs are observed; the new `if test -f` / `printf` grammar was not chosen.
+Historical scores remain untouched, and no rerun manufactures grammar coverage.
+
+Usage is 305,997 input and 1,506 output tokens, with 36.142 seconds latency.
+Input exceeds the planning heuristic, which was not a cap or price. The CLI
+changed from 0.163 to 0.164; a non-model compatibility/sandbox check preceded
+collection, and versions remain separate. Private evidence and separate reviews
+retain their provenance and blinding limits. The single authorization is
+consumed; leave inline remains default and OPT-004 remains incomplete.

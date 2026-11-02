@@ -654,3 +654,40 @@ turn, no retries, replacements, expansion, baseline or extra judge. It is not
 authorized or queued. Unused grammar would remain unobserved; a single pass
 would not establish reliability, configured-hook fidelity, efficiency or
 promotion. Leave inline remains the default and broader OPT-004 work stays open.
+
+## V11 approved append follow-up results
+
+The [one approved v11 Luna low session](workflow-fidelity-v11-results.md) completed
+on 2026-11-02, one turn without retry, replacement, expansion, baseline, hooks
+rerun or extra judge. This execution supersedes the preceding proposal's pending
+status; the proposal, rubric and historical evidence remain frozen. Content,
+formatting, references, exact 694-byte prefix preservation and separate complete
+readback pass. The final file has 1,170 bytes and three unchecked CHK008–010 items.
+
+The frozen automated and complete reviewed gates are **0/1**. Three unsupported
+Python verification commands and a final-newline pipeline fail classification;
+denied macOS cache diagnostics remain failed constituents in the unsupported
+Python envelopes. All 14 shell commands exit zero. The final extension check
+returns null output and has no qualifying post-append certificate, so the new
+checkpoint gate also fails. There are three failed criteria and 11 retained
+normalized issues; none is waived or regraded.
+
+Raw review confirms a fresh isolated extension action after the native append,
+full readback and prefix comparison, before reporting. This action was absent
+in v10; its presence here is separate from the frozen proof failure. The early
+null-output absence adapter, conditional constitution read and terminal-discovery
+certificate are observed live in this sample. The new `if test -f` / `printf`
+grammar and a qualifying post-append proof remain unobserved.
+
+Fresh preparation exactly matched the archived manifest, nine workspace files
+and 23 instruments. The installed CLI changed from 0.163 to 0.164; its schema and
+a credential-free non-model sandbox check were verified before launch. Usage is
+305,997 input, 277,120 cached, 28,877 uncached and 1,506 output tokens, with
+36.142 seconds latency. Input exceeded the heuristic planning range, not a hard
+cap. No efficiency, causal improvement or billing claim follows.
+
+The private bundle retains all outcomes and separate semantic-first/raw reviews,
+with involved-reviewer and blinding limits disclosed. The authorized slot is
+consumed. No repair or further live session is part of this batch. Leave inline
+remains default, the router remains an authored semantic redesign, and broader
+OPT-004 acceptance remains open.
