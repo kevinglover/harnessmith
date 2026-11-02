@@ -209,6 +209,13 @@ evidence. Historical assertions and scores are unchanged.
 
 ## OPT-004 status and next fidelity work
 
+The [offline completion plan](opt-004-completion-plan.md) retains the full
+Codex/Claude/Cursor scope with a finite matrix, staged collection ceilings and
+stopping rules. Evidence completeness, observed behavior and router promotion
+are separate outcomes. Existing cohorts are reused within their recorded scope;
+new collection still requires its own exact approval. The plan itself launches
+no sessions and changes no instruments or historical grades.
+
 [OPT-004 status](opt-004-status.md) maps the actual acceptance criteria to reports,
 provenance and open coverage. It does not mark the wider task complete.
 The prospective [v2 promotion rubric](../evaluations/variants/router-quality-rubric-v2.md)

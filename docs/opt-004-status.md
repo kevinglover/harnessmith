@@ -1,5 +1,13 @@
 # OPT-004 evidence and remaining acceptance work
 
+Planning update, 2026-11-02: the user chose to retain the full Codex/Claude/Cursor
+scope and stage the remaining work. The [completion plan](opt-004-completion-plan.md)
+defines a finite acceptance matrix, separates evidence completeness from behavior
+and router promotion, reuses historical consultations, and sets batch ceilings
+and stopping rules. Its implementation and live stages remain pending; the plan
+authorizes zero sessions. The [completed v11 result](workflow-fidelity-v11-results.md)
+remains frozen at 0/1. Dated proposal/execution statements below are preserved.
+
 Latest offline update, 2026-10-28: [v11 repairs](workflow-fidelity-pilot-v11.md)
 add bounded `if test -f` attribution and a fresh post-generation extension
 checkpoint in new instruments and router v8. Synthetic regressions and local
