@@ -419,3 +419,43 @@ The proposed next pilot remains exactly one Luna low append session with no
 retry, replacement, expansion or extra judge, pending separate approval. Router,
 original skill, fixtures and prompt remain unchanged. Offline proof coverage is
 not live workflow reliability, efficiency, compiler equivalence or promotion.
+
+The subsequently approved [v10 Luna low append session](workflow-fidelity-v10-results.md)
+completed one turn without retry, replacement, expansion or extra judge.
+Content, formatting, references, exact 694-byte prefix and separate final
+readback pass. The frozen full gate stays **0/1**: two unsupported `if test -f`
+conditionals leave context/absence uncertified and block discovery attribution.
+Raw review separately finds the required post-generation extension check
+unrecorded; the frozen append checker has no dedicated gate for this checkpoint.
+Initial/final absence is not evidence of performing the later check.
+
+All 85 original collection files and 3,607 prelaunch protected files plus two
+symlinks remain unchanged. Separate reviews preserve their authorship/blinding
+limits and leave original grades untouched. Usage is 202,594 input and 1,480
+output tokens with 26.810 seconds latency; no paired baseline or efficiency
+claim follows. New guarded-echo, post-append, concurrent-read and null-adapter
+proofs remain unobserved live. The authorized slot is consumed; further parser
+and checkpoint repairs require separate work in new versions. No live session
+is queued, no router is promoted and OPT-004 remains incomplete.
+
+The [v11 offline repair](workflow-fidelity-pilot-v11.md) introduces normalizer
+v10, checker/collector v11, authored router v8 and
+[rubric v12](../evaluations/variants/router-quality-rubric-v12.md). Bounded
+same-path `if test -f` / literal-printf proofs cover complete pinned reads and
+extension absence, including safe wrapper quoting. Independent parser evidence
+does not waive workflow ordering or command boundaries.
+
+A new mandatory append gate requires a fresh extension-state action after the
+last write and complete separate final readback, before reporting. Its narrow
+single-fact command contract verifies returned readback text as well as hashes,
+certificate identity and append/readback accounting. Before-only checks, final
+snapshots, labels, claims, overlap and late checks cannot substitute. Router v8
+makes the checkpoint explicit even when configuration was absent before setup.
+Fresh synthetic/fake-server controls distinguish a passing complete workflow
+from an otherwise correct append with the postcheck omitted.
+
+Historical evidence and the original skill remain unchanged; v10 stays frozen
+at 0/1. The smallest proposed live follow-up is one fresh GPT-6 Luna low append
+session, one turn, no retry, replacement, expansion or extra judge. It is not
+authorized or queued. Offline readiness proves neither live compliance nor
+efficiency, reliability, compiler equivalence or router promotion.

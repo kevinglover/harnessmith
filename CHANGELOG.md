@@ -16,6 +16,21 @@ published.
 
 ### Added
 
+- Router v8, normalizer v10 and checker/collector v11 for bounded `if test -f`
+  attribution and a mandatory fresh post-generation extension checkpoint.
+  Offline regressions distinguish a correct append from a completed final
+  workflow, including exact captured readback and separate extension-state proof.
+  [Rubric v12](evaluations/variants/router-quality-rubric-v12.md) and the
+  [one-session Luna low proposal](docs/workflow-fidelity-pilot-v11.md) preserve
+  all historical evidence and the original skill. The frozen v10 full gate
+  remains 0/1; no live session is authorized or queued.
+- The subsequently approved [v10 Luna low append result](docs/workflow-fidelity-v10-results.md):
+  one completed session, no retry, replacement, expansion or extra judge. Content,
+  formatting, references, exact prefix and separate readback pass; the frozen
+  full gate remains 0/1 after unsupported `if test -f` conditionals and downstream
+  discovery rejection. Raw review separately records the missing post-generation
+  extension check. All evidence is retained, new certificate coverage remains
+  unobserved live, and the single authorization is consumed. OPT-004 stays open.
 - Prospective normalizer v9 and checker/collector v10 for exact same-path
   `test ! -e ... && echo ABSENT` conditionals, including a narrowly verified
   post-append extension check and downstream attribution recovery. Fresh offline

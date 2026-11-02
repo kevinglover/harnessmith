@@ -1,5 +1,22 @@
 # OPT-004 evidence and remaining acceptance work
 
+Latest offline update, 2026-10-28: [v11 repairs](workflow-fidelity-pilot-v11.md)
+add bounded `if test -f` attribution and a fresh post-generation extension
+checkpoint in new instruments and router v8. Synthetic regressions and local
+fake-server controls cover both parser behavior and the missing workflow action;
+no historical score changes. The v10 full gate remains **0/1**. The proposed next
+scope is exactly one GPT-6 Luna low append session, pending separate approval.
+No live session has been launched or queued; OPT-004 remains incomplete.
+
+Latest execution update, 2026-10-27: the approved [v10 append follow-up](workflow-fidelity-v10-results.md)
+completed exactly one GPT-6 Luna low session without retry or expansion. Content,
+formatting, references, prefix preservation and final readback pass; the full
+gate remains **0/1**. Unsupported `if test -f` conditionals block certified
+context/absence and discovery, and raw review separately finds no post-generation
+extension check. All results and historical evidence are retained. The slot is
+consumed; no live session is queued and OPT-004 remains incomplete. This dated
+execution update supersedes the earlier pending-approval statements preserved below.
+
 Latest offline update, 2026-10-26: [v9 instrumentation repairs](workflow-fidelity-pilot-v9.md)
 add exact same-path conditional proofs, safe attribution of complete independent
 reads and narrowly certified explicit-null absence backing. Router v7 and every
@@ -568,3 +585,72 @@ extra judge. It is **not authorized or launched**. Unused grammar would remain
 unobserved live; no rerun may manufacture coverage. Reliability, efficiency,
 equivalence, broader workflows and OPT-004 acceptance remain open. Leave inline
 remains the compiler default.
+
+## V10 approved append follow-up results
+
+The [one approved v10 Luna low session](workflow-fidelity-v10-results.md) completed
+one turn without retry, replacement, expansion or extra judge. This execution
+supersedes the preceding v10 proposal's pending-approval status; the proposal
+and rubric remain frozen. Content, formatting and reference behavior pass.
+The native append preserves all 694 original bytes and mixed checkbox states
+as an exact prefix of 1,156 final bytes. Three unchecked questions cover the
+allocated topics, and a separate full readback precedes the accurate report.
+
+The frozen automated and complete reviewed gates remain **0/1**, with seven
+failed criteria. Two unsupported `if test -f` / `printf` conditionals prevent
+certified extension/context facts and propagate into discovery-proof rejection.
+All nine shell commands exit zero and all operations are sequential. The new
+guarded-echo and post-append certificates, safe concurrent-read recovery and
+explicit-null adapter remain unobserved live; no successful discovery
+certificate is established.
+
+Raw review separately finds no fresh extension check after generation, although
+the unchanged reference calls for one. Initial/final configuration absence and
+the target-only edit show no configured hook was missed in this fixture; they
+do not demonstrate the later checkpoint was performed. The frozen checker lacks
+a dedicated append-case post-generation absence requirement. Preserve this
+finding separately without adding a criterion or changing an old score.
+
+All 85 original collection files and all 3,607 prelaunch protected files plus
+two symlinks remain unchanged. Semantic judgments preceded grades/usage/raw
+review, with involved-reviewer and blinding limits disclosed. Usage is 202,594
+input, 180,480 cached, 22,114 uncached and 1,480 output tokens, with 26.810 seconds
+collector latency. These are descriptive figures, not an efficiency comparison;
+Luna/Astra and version cohorts stay separate.
+
+The single authorization is consumed. No repair or additional live run is part
+of this batch. Further work, if separately requested, should begin offline with
+bounded `if test -f` / `printf` and wrapper-quoting controls, plus a prospective
+post-generation checkpoint gate and workflow guidance. Leave inline remains
+the default, and broader OPT-004 acceptance remains open.
+
+## V11 offline parser and final-checkpoint repair
+
+The [v11 proposal](workflow-fidelity-pilot-v11.md) separates two v10 findings:
+successful `if test -f` commands that lacked attribution, and an actually
+unrecorded post-generation extension check. Normalizer v10 adds a bounded
+same-path literal test/cat/printf proof with safe wrapper quoting and complete
+output/lifecycle/pin checks. Both branches must be supported; unknown, failed,
+mutating or overlapping operations remain unverified. Historical failures and
+precisely superseded synthetic attribution failures remain retained.
+
+Checker v11 adds `fresh-post-generation-extension-checkpoint`. After the final
+target write and a separate complete readback, a fresh isolated extension-state
+action must complete before reporting. Captured readback text must equal final
+bytes, and the absent fixture needs a qualifying certificate tied to the actual
+append/readback. The narrow contract uses one fact per readback/check command;
+earlier absence, snapshots, unsupported labels and stale proof cannot pass it.
+All inherited content, formatting, reference, separation and narration gates
+remain binding. The full v10 gate is still 0/1; nothing is regraded.
+
+Router v8 clarifies this action in the generation route and step 8, even after
+an absent precheck. All other package bytes and all original-skill bytes are
+unchanged. The package remains an authored semantic redesign. Offline instrument
+and instruction review cannot establish live model compliance or compiler
+equivalence. Fresh preparation and validation evidence are linked in the proposal.
+
+The smallest proposed live follow-up is one new Luna low append session, one
+turn, no retries, replacements, expansion, baseline or extra judge. It is not
+authorized or queued. Unused grammar would remain unobserved; a single pass
+would not establish reliability, configured-hook fidelity, efficiency or
+promotion. Leave inline remains the default and broader OPT-004 work stays open.
