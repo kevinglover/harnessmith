@@ -102,6 +102,10 @@ def audit_catalog(
             if field is None:
                 raise SkillCompilerError("%s: missing %s" % (relative, key))
             values[key] = string_value(field)
+            if not values[key].strip():
+                raise SkillCompilerError(
+                    "%s: %s must be a non-empty string" % (relative, key)
+                )
         values["path"] = relative
         line = json.dumps(values, ensure_ascii=False, separators=(",", ":")) + "\n"
         sizes = {key: len(value) for key, value in values.items()}
