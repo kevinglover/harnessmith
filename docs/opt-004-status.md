@@ -509,3 +509,62 @@ regressions while retaining failures for uncertain or mutating overlap. No
 instrument repair or new launch is part of this completed batch. Leave inline
 remains the compiler default; broader replication, baseline, independent review,
 hooks/lifecycle and other-runtime acceptance work remains open.
+
+## V9 approved append follow-up results
+
+The [one approved v9 Luna low session](workflow-fidelity-v9-results.md) completed
+one turn without retry, replacement, expansion or extra judge. Content,
+formatting and reference behavior pass. The native append preserves all 694
+original bytes and checkbox states as an exact prefix of 1,140 final bytes;
+three unchecked questions cover the allocated topics, and a separate complete
+readback precedes the accurate final report.
+
+The frozen automated and complete reviewed gates remain **0/1**, with seven
+failed criteria. Raw review corroborates isolated extension checks, separate
+setup/discovery, required full context before editing and supported narration.
+Three conditionals add `&& echo ABSENT` after the same-path absence test, outside
+the frozen grammar. Their classification failures prevent certified context and
+extension facts and propagate into terminal-discovery rejection. Every shell
+command exits zero; all operations are sequential. The new exact else-test,
+null-output adapter and concurrent-read rules remain unobserved live. Empty
+bounded narration arrays and discovery-isolation passing without a recognized
+fact do not establish fidelity or grammar coverage.
+
+All 81 original collection files and all 3,099 prelaunch protected files plus two
+symlinks retain their bytes/modes or link targets. Semantic review preceded
+grades/usage/raw review; author involvement and blinding limits are disclosed.
+Usage is 201,255 input, 179,584 cached, 21,671 uncached and 1,298 output tokens,
+with 22.383 seconds collector latency. These are descriptive figures, not an
+efficiency comparison; Luna/Astra and version cohorts stay separate.
+
+The single pending v9 proposal has now been executed and its authorization is
+consumed. No new launch or repair is part of this batch. If separately requested,
+next work should use fresh offline fixtures for guarded literal-marker
+conditionals and downstream discovery, while rejecting unsafe variants and
+preserving old grades. Leave inline remains the default, and OPT-004 stays open.
+
+## V10 offline guarded-marker repair
+
+The [v10 proposal](workflow-fidelity-pilot-v10.md) versions the normalizer to v9,
+checker/collector to v10 and rubric to v11. It admits the exact same-path
+`test ! -e PATH && echo ABSENT` conditional only with complete lifecycle, pinned
+state and exact output evidence. Both branches must be safe. A post-append
+extension certificate can account for one verified native target-only append
+with exact prefix preservation and a separate complete readback, without
+generalizing to arbitrary writes, hooks or unknown operations. Correlated
+superseded failures remain in proof metadata; command boundaries and every other
+hard gate remain binding.
+
+All evidence, including the v9 **0/1** full gate, stays frozen. Router v7, the
+original skill, prompt and fixtures are unchanged, and no historical trace is
+replayed or regraded. Fresh synthetic and fake-server controls exercise the new
+proof and preserve inherited null-output, reference, verification and Git-claim
+requirements. This establishes offline readiness only, subject to the validation
+and preparation records linked in the proposal.
+
+The smallest proposed live follow-up is one GPT-6 Luna low append session, one
+turn and repetition, no retry, replacement, expansion, baseline, hooks rerun or
+extra judge. It is **not authorized or launched**. Unused grammar would remain
+unobserved live; no rerun may manufacture coverage. Reliability, efficiency,
+equivalence, broader workflows and OPT-004 acceptance remain open. Leave inline
+remains the compiler default.

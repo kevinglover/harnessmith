@@ -387,3 +387,35 @@ replacement, expansion or extra judge. It is not approved or queued. Grammar
 forms unused by a future model remain unobserved live; no rerun may manufacture
 coverage. No efficiency, reliability, equivalence or promotion claim follows
 from the offline repairs.
+
+The subsequently approved [v9 Luna low append session](workflow-fidelity-v9-results.md)
+completed one turn with no retry, replacement, expansion or extra judge. Its
+content, formatting, references, exact 694-byte prefix and separate final
+readback pass. The frozen full gate stays **0/1**: unsupported same-path
+`else test ! -e PATH && echo ABSENT` conditionals leave required context and
+extension state uncertified, also blocking downstream discovery. Raw commands
+corroborate those checkpoints and all exit zero; the failed criteria remain
+binding. The new exact else-test, explicit-null and concurrent-read rules are
+unobserved live, and no successful discovery certificate is established.
+
+All 81 original collection files and 3,099 prelaunch protected files plus two
+symlinks remain unchanged. Separate semantic-first and raw reviews retain their
+authorship/blinding limits and do not overwrite pending grades. Usage is 201,255
+input and 1,298 output tokens with 22.383 seconds latency; there is no paired
+baseline, efficiency claim or version/model pooling. The authorized slot is
+consumed. Any guarded-marker parser repair is separate offline work; no further
+live session is queued and OPT-004 remains incomplete.
+
+The [v10 offline repair](workflow-fidelity-pilot-v10.md) adds guarded literal-marker
+attribution in normalizer v9 with checker/collector v10 and rubric v11. Safe
+same-path conditionals can supply exact pinned reads or extension absence; the
+post-append case requires one target-only native update, original-prefix
+preservation, unchanged remaining state and separate complete final readback.
+Every hard gate remains binding. Superseded attribution failures are retained
+inside new certificates, while historical observations and scores stay frozen.
+
+Fresh synthetic/fake-server controls cover the new proof and its unsafe variants.
+The proposed next pilot remains exactly one Luna low append session with no
+retry, replacement, expansion or extra judge, pending separate approval. Router,
+original skill, fixtures and prompt remain unchanged. Offline proof coverage is
+not live workflow reliability, efficiency, compiler equivalence or promotion.

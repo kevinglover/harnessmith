@@ -16,6 +16,20 @@ published.
 
 ### Added
 
+- Prospective normalizer v9 and checker/collector v10 for exact same-path
+  `test ! -e ... && echo ABSENT` conditionals, including a narrowly verified
+  post-append extension check and downstream attribution recovery. Fresh offline
+  regressions keep all workflow gates binding. Rubric v11 and the
+  [one-session Luna low proposal](docs/workflow-fidelity-pilot-v10.md) preserve
+  router v7, the original skill and every historical result. No live session
+  is authorized or queued; the v9 full gate remains 0/1.
+- The approved one-session [v9 Luna low append result](docs/workflow-fidelity-v9-results.md),
+  with no retry, replacement, expansion or extra judge. Content, formatting,
+  references, exact prefix and separate final readback pass; the frozen full gate
+  remains 0/1 because guarded `test ! -e ... && echo ABSENT` conditionals are
+  unclassified and block downstream discovery proof. All historical evidence and
+  original collection bytes remain intact. New null-output and concurrent-read
+  grammar coverage remains unobserved live; no efficiency or promotion claim.
 - Normalizer v8 and checker/collector v9 as offline instrumentation repairs for
   same-path `else test ! -e` probes, independent complete-read overlap and
   explicitly null absence output. Exact proofs retain superseded artificial
