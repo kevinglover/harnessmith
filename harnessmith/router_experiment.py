@@ -54,11 +54,12 @@ def quality_checks(scenario_id, output):
     """Structural/exact-content checks, not a semantic quality verdict."""
     checks = []
     if scenario_id == "checklist-core-security-codex":
+        checklist_lines = re.findall(r"^\s*[-*+] \[[^\]\r\n]*\].*$", output, re.M)
         items = re.findall(r"^\s*- \[([ xX])\] (CHK\d+)\s+(.+)$", output, re.M)
         checks.append(
             (
                 "quality-item-format",
-                len(items) == 4
+                len(items) == len(checklist_lines) == 4
                 and [i[1] for i in items] == ["CHK001", "CHK002", "CHK003", "CHK004"]
                 and all(i[0] == " " and "?" in i[2] for i in items),
                 "exactly four unchecked sequential questions",
