@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "invocation": "source",
+  "optimizations": [],
+  "extract_sections": [
+    "Review examples"
+  ],
+  "budgets": {},
+  "target": "cursor",
+  "source_sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20"
+}

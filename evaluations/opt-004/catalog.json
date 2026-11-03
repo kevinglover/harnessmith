@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "target_position": 8,
+  "ordering": "ascending exact name",
+  "host_order_must_be_observed": true,
+  "entries": [
+    {
+      "position": 1,
+      "name": "a-api-contract-review",
+      "description": "Review API schema definitions and identify contract consistency issues.",
+      "placement": "<native-skill-root>/a-api-contract-review",
+      "kind": "near-topic",
+      "skill_sha256": "ab19774100bff9321e80ff781154ac7c75ca036143bb22aa93aac4461ae6034b"
+    },
+    {
+      "position": 2,
+      "name": "b-api-test-plan",
+      "description": "Create API implementation test plans covering success and failure behavior.",
+      "placement": "<native-skill-root>/b-api-test-plan",
+      "kind": "near-topic",
+      "skill_sha256": "396a9fe9c05a8d36db98c67a3903c52bb2e79f0867ec4d30a718e833c9f6e46d"
+    },
+    {
+      "position": 3,
+      "name": "c-release-checklist",
+      "description": "Create release readiness checklists for deployment operations.",
+      "placement": "<native-skill-root>/c-release-checklist",
+      "kind": "near-topic",
+      "skill_sha256": "dd6e4a0ce81af14c2595f27138efa7e60ee78693287da7ad5bdfe624af4ceb82"
+    },
+    {
+      "position": 4,
+      "name": "d-requirements-summary",
+      "description": "Summarize feature requirements and unresolved questions.",
+      "placement": "<native-skill-root>/d-requirements-summary",
+      "kind": "near-topic",
+      "skill_sha256": "c9463575a16571207be0cbd1b136b14bcb9f5425586cb43e44e23af8f90f3da6"
+    },
+    {
+      "position": 5,
+      "name": "e-security-code-review",
+      "description": "Review implementation code for security defects and risky data handling.",
+      "placement": "<native-skill-root>/e-security-code-review",
+      "kind": "near-topic",
+      "skill_sha256": "c808fcb939581635006c1c309b8866025e6b9bf45484393390c78aa2deb6cd9f"
+    },
+    {
+      "position": 6,
+      "name": "f-task-checklist",
+      "description": "Create implementation task checklists from a feature plan.",
+      "placement": "<native-skill-root>/f-task-checklist",
+      "kind": "near-topic",
+      "skill_sha256": "e8647e2b04cc89e1a8590f098b71a9c0a98d4c810814cf88b669a071862cbec4"
+    },
+    {
+      "position": 7,
+      "name": "g-ui-review",
+      "description": "Review interface designs for usability and visual consistency.",
+      "placement": "<native-skill-root>/g-ui-review",
+      "kind": "near-topic",
+      "skill_sha256": "df561c9bb733dec481c69a15a82ba397f0b457285b169e49d3efe27446d42aa5"
+    },
+    {
+      "position": 8,
+      "name": "speckit-checklist",
+      "description": "Generate a custom checklist for the current feature based on user requirements.",
+      "placement": "<native-skill-root>/speckit-checklist",
+      "kind": "target",
+      "canonical_source": "skills/speckit-checklist",
+      "canonical_skill_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+    },
+    {
+      "position": 9,
+      "name": "z-a-baking",
+      "description": "Convert baking ingredient quantities between servings.",
+      "placement": "<native-skill-root>/z-a-baking",
+      "kind": "unrelated",
+      "skill_sha256": "5c11a519eb671efa9cbe9fe423cf8272813a8c89b27e32c30ccd8908d274eb0e"
+    },
+    {
+      "position": 10,
+      "name": "z-b-gardening",
+      "description": "Plan watering schedules for indoor plants.",
+      "placement": "<native-skill-root>/z-b-gardening",
+      "kind": "unrelated",
+      "skill_sha256": "6cb5fc0e32549af40f947ba6d5de5ace0351db2bcb1163e7f1035c49e392033b"
+    },
+    {
+      "position": 11,
+      "name": "z-c-music",
+      "description": "Explain common musical chord progressions.",
+      "placement": "<native-skill-root>/z-c-music",
+      "kind": "unrelated",
+      "skill_sha256": "64edfd4e06f2ee2bcaff771353583abba746d957deadd640e96023ca769cc1a7"
+    },
+    {
+      "position": 12,
+      "name": "z-d-travel",
+      "description": "Draft a packing list for a weekend trip.",
+      "placement": "<native-skill-root>/z-d-travel",
+      "kind": "unrelated",
+      "skill_sha256": "0d59ea1aab61f259f98ecf30cba977b33ff63257aa38044ad2a79a69ec596595"
+    },
+    {
+      "position": 13,
+      "name": "z-e-poetry",
+      "description": "Write short poems about a supplied topic.",
+      "placement": "<native-skill-root>/z-e-poetry",
+      "kind": "unrelated",
+      "skill_sha256": "f9977dad59742d1fcefa48e2487a223ba215a10c908c5bb700d7907580cda9fe"
+    },
+    {
+      "position": 14,
+      "name": "z-f-language",
+      "description": "Explain grammatical tense in simple example sentences.",
+      "placement": "<native-skill-root>/z-f-language",
+      "kind": "unrelated",
+      "skill_sha256": "002e0a8f7b4b4a89b97a3aace6042b87b35f5c876c1ca1b0571e0067cbd7d265"
+    },
+    {
+      "position": 15,
+      "name": "z-g-fitness",
+      "description": "Describe the rules of common recreational sports.",
+      "placement": "<native-skill-root>/z-g-fitness",
+      "kind": "unrelated",
+      "skill_sha256": "fc1ec24017e79cfba2599e5d4607467c4fba72b9c28384864771fd996b081843"
+    },
+    {
+      "position": 16,
+      "name": "z-h-astronomy",
+      "description": "Explain constellations and basic night-sky terminology.",
+      "placement": "<native-skill-root>/z-h-astronomy",
+      "kind": "unrelated",
+      "skill_sha256": "84214a7c852d5d140a41193d43ba5604809a5c7f6c278d7a65cf3c71a28c2b32"
+    }
+  ]
+}

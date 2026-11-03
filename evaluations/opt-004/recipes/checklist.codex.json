@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "target": "codex",
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "invocation": "source",
+  "extract_sections": [
+    "Example Checklist Types & Sample Items",
+    "Anti-Examples: What NOT To Do"
+  ],
+  "conditional_sections": {
+    "Example Checklist Types & Sample Items": {
+      "optional": true,
+      "when": "The user requests sample checklist questions or examples from this section, or the core requirements-quality rules are insufficient to construct the requested items.",
+      "rationale": "Illustrative domain examples; the root already defines item structure, quality dimensions, traceability and reviewer ownership."
+    },
+    "Anti-Examples: What NOT To Do": {
+      "optional": true,
+      "when": "The user requests this section or its examples, or asks to compare or correct implementation-test wording into requirements-quality questions.",
+      "rationale": "Illustrative wrong/right pairs; the root already prohibits implementation testing and states the required question patterns."
+    }
+  },
+  "budgets": {
+    "root_tokens": 5200,
+    "normal_path_tokens": 5200
+  }
+}

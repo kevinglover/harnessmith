@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "before_checklist": [
+      {
+        "extension": "opt004-pre",
+        "command": "opt004.pre",
+        "description": "Synthetic pre fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?"
+      },
+      {
+        "extension": "opt004-disabled",
+        "command": "opt004.disabled",
+        "description": "Synthetic disabled fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?",
+        "enabled": false
+      },
+      {
+        "extension": "opt004-conditional",
+        "command": "opt004.conditional",
+        "description": "Synthetic conditional fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?",
+        "condition": "never-evaluate-this"
+      }
+    ],
+    "after_checklist": [
+      {
+        "extension": "opt004-post",
+        "command": "opt004.post",
+        "description": "Synthetic post fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?"
+      },
+      {
+        "extension": "opt004-optional",
+        "command": "opt004.optional",
+        "description": "Synthetic optional fixture",
+        "optional": true,
+        "prompt": "Run this optional fixture hook?"
+      }
+    ]
+  }
+}

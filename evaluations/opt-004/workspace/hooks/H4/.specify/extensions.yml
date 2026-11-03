@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "after_checklist": [
+      {
+        "extension": "opt004-post-fail",
+        "command": "opt004.post-fail",
+        "description": "Synthetic post-fail fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "packages": [
+    {
+      "fixture": "checklist",
+      "target": "generic",
+      "canonical": {
+        "path": "skills/speckit-checklist",
+        "inventory_sha256": "cc02663bda62680518c40cead4ac07ecc6e4e6ebfee0f09859a2ab3e1f9e15bc",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+            "mode": "0o644",
+            "bytes": 22786
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/checklist.generic.json",
+      "recipe_sha256": "bd792c6ed778b077a1b44b0e9ce314aba970e4f42b43218e1016458cb5ce8208",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/generic/speckit-checklist",
+        "inventory_sha256": "aab5ca6c5fabd1d15361b9cde573b42c49500f56a4e43df546a1fa7756794a92",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "0c76bee17b48cbacf707524f42d263de65b3880a850efdd8221c9cda7509e50e",
+            "mode": "0o644",
+            "bytes": 3338
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "6a714b28af33101d81bf76bad17b851aa51dbeb3ad677a0dd1b09256e72f9639",
+            "mode": "0o644",
+            "bytes": 20292
+          },
+          {
+            "path": "references/anti-examples-what-not-to-do.md",
+            "sha256": "f94e0ec7578b157dd8cf9c1fef30127a3df8af2fb890e99b91236b918f774e3c",
+            "mode": "0o644",
+            "bytes": 1457
+          },
+          {
+            "path": "references/example-checklist-types-sample-items.md",
+            "sha256": "598fe2e3641b3c9c5744098444224e65404451dc5af2520ac84c15df0118f95c",
+            "mode": "0o644",
+            "bytes": 2167
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "checklist",
+      "target": "codex",
+      "canonical": {
+        "path": "skills/speckit-checklist",
+        "inventory_sha256": "cc02663bda62680518c40cead4ac07ecc6e4e6ebfee0f09859a2ab3e1f9e15bc",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+            "mode": "0o644",
+            "bytes": 22786
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/checklist.codex.json",
+      "recipe_sha256": "25f22085ebf5aee5a868f5256b53193bd7b3c6f854e56e977af8a78e5326d96e",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/codex/speckit-checklist",
+        "inventory_sha256": "c4cea75801f2617666520e32c0f5e83483c63bbb4cfb92c162feb0d0c61dd769",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "4e5d098f285438cceea9fcb7107c638dd0c127881a5c1467768e60512b4891e8",
+            "mode": "0o644",
+            "bytes": 3334
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "6a714b28af33101d81bf76bad17b851aa51dbeb3ad677a0dd1b09256e72f9639",
+            "mode": "0o644",
+            "bytes": 20292
+          },
+          {
+            "path": "references/anti-examples-what-not-to-do.md",
+            "sha256": "f94e0ec7578b157dd8cf9c1fef30127a3df8af2fb890e99b91236b918f774e3c",
+            "mode": "0o644",
+            "bytes": 1457
+          },
+          {
+            "path": "references/example-checklist-types-sample-items.md",
+            "sha256": "598fe2e3641b3c9c5744098444224e65404451dc5af2520ac84c15df0118f95c",
+            "mode": "0o644",
+            "bytes": 2167
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "checklist",
+      "target": "claude",
+      "canonical": {
+        "path": "skills/speckit-checklist",
+        "inventory_sha256": "cc02663bda62680518c40cead4ac07ecc6e4e6ebfee0f09859a2ab3e1f9e15bc",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+            "mode": "0o644",
+            "bytes": 22786
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/checklist.claude.json",
+      "recipe_sha256": "1ba4c524eecb5713a3b73d2d2e7521d92188596eea633479f899bf43c67d6939",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/claude/speckit-checklist",
+        "inventory_sha256": "5a0de50491317001db5cb4f7d08a30d4cbf3412487132a1314bd97a0b0d305ee",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "092919686c717e7a67b525664f3c8740b3423a6749c579fdc5ebfdc1591ae1a0",
+            "mode": "0o644",
+            "bytes": 3072
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "648a0e00c065adff3089818210a764739546195992977c4828c5fc945d3b7367",
+            "mode": "0o644",
+            "bytes": 20401
+          },
+          {
+            "path": "references/anti-examples-what-not-to-do.md",
+            "sha256": "f94e0ec7578b157dd8cf9c1fef30127a3df8af2fb890e99b91236b918f774e3c",
+            "mode": "0o644",
+            "bytes": 1457
+          },
+          {
+            "path": "references/example-checklist-types-sample-items.md",
+            "sha256": "598fe2e3641b3c9c5744098444224e65404451dc5af2520ac84c15df0118f95c",
+            "mode": "0o644",
+            "bytes": 2167
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "checklist",
+      "target": "cursor",
+      "canonical": {
+        "path": "skills/speckit-checklist",
+        "inventory_sha256": "cc02663bda62680518c40cead4ac07ecc6e4e6ebfee0f09859a2ab3e1f9e15bc",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+            "mode": "0o644",
+            "bytes": 22786
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/checklist.cursor.json",
+      "recipe_sha256": "cefe3227e802ffab0922a1c7f0e8be2223321737fb192e36efaf25d95486b0d5",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/cursor/speckit-checklist",
+        "inventory_sha256": "dbb774881342135e40e27de3c0f4907157bfd0aba4ff28beb77bcf555e6d291f",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "e7680b246e921432e8927a5f1145962c398b3995edcdc4cd2c31cf26cf49d57d",
+            "mode": "0o644",
+            "bytes": 3300
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "e96121db74fd8aa59b214c2e9acfb4f164d40041318d335614f3163056a32ede",
+            "mode": "0o644",
+            "bytes": 20324
+          },
+          {
+            "path": "references/anti-examples-what-not-to-do.md",
+            "sha256": "f94e0ec7578b157dd8cf9c1fef30127a3df8af2fb890e99b91236b918f774e3c",
+            "mode": "0o644",
+            "bytes": 1457
+          },
+          {
+            "path": "references/example-checklist-types-sample-items.md",
+            "sha256": "598fe2e3641b3c9c5744098444224e65404451dc5af2520ac84c15df0118f95c",
+            "mode": "0o644",
+            "bytes": 2167
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "continuity",
+      "target": "generic",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/continuity-review",
+        "inventory_sha256": "37ab52485f0e2fcfef2d0d7a0d91807b365f0ce87f805e69661734efaf1b167d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30",
+            "mode": "0o644",
+            "bytes": 1358
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/continuity.generic.json",
+      "recipe_sha256": "269db62c565a304de48dff29038770ae22c117b349b57539459f68bbd5b5d6de",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/generic/continuity-review",
+        "inventory_sha256": "2250ad63fb8696de4116bfa08b1bca67963ebecd11c23445c47b6380b77d0bfb",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "391d9239c4dc13e00e47e8ce9dc6c7d5ecd4f2d55ae7ea082fadba1f8c89352c",
+            "mode": "0o644",
+            "bytes": 1766
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "131e5261d8e073c1b11660106566a04e869259749c480ce2ed6ac35a9fb5e398",
+            "mode": "0o644",
+            "bytes": 1208
+          },
+          {
+            "path": "references/procedure-examples.md",
+            "sha256": "7f062e51ea63f70fdfa2ea6f22aeb5bd768ee87c5f35752693a5a39a9e7800a0",
+            "mode": "0o644",
+            "bytes": 468
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "continuity",
+      "target": "codex",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/continuity-review",
+        "inventory_sha256": "37ab52485f0e2fcfef2d0d7a0d91807b365f0ce87f805e69661734efaf1b167d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30",
+            "mode": "0o644",
+            "bytes": 1358
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/continuity.codex.json",
+      "recipe_sha256": "9843b03588e97ee1660149abdb828bc07b80d01991b3a5957589f5b0ac8ca575",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/codex/continuity-review",
+        "inventory_sha256": "233571e1e3d1e034d14b049c0f011b6ade6b0de39ccd6e61b169f490898b7d13",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "78af3c1e1ce37b45995e848e98939979e4a60780866f85a68b2531b307d3ce4d",
+            "mode": "0o644",
+            "bytes": 1762
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "131e5261d8e073c1b11660106566a04e869259749c480ce2ed6ac35a9fb5e398",
+            "mode": "0o644",
+            "bytes": 1208
+          },
+          {
+            "path": "references/procedure-examples.md",
+            "sha256": "7f062e51ea63f70fdfa2ea6f22aeb5bd768ee87c5f35752693a5a39a9e7800a0",
+            "mode": "0o644",
+            "bytes": 468
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "continuity",
+      "target": "claude",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/continuity-review",
+        "inventory_sha256": "37ab52485f0e2fcfef2d0d7a0d91807b365f0ce87f805e69661734efaf1b167d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30",
+            "mode": "0o644",
+            "bytes": 1358
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/continuity.claude.json",
+      "recipe_sha256": "ec42fd7878c6a1e8c16e1ca1439f2afdebbc16dfd0fbba63d6da971da7f09525",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/claude/continuity-review",
+        "inventory_sha256": "c5d6358bb4c1d2bbceabbca497b87b5cc66a4b741d6d664f5e8dc7e33753bfa8",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "b7c4187a29833aa1af7d0245acd22b51f8b8d374c931538f412fefa32a91dae9",
+            "mode": "0o644",
+            "bytes": 1762
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "008aa1f4d9dd1949c7d6844f5ac779f3cf0ea26d65137ac101886bb733536fe1",
+            "mode": "0o644",
+            "bytes": 1261
+          },
+          {
+            "path": "references/procedure-examples.md",
+            "sha256": "7f062e51ea63f70fdfa2ea6f22aeb5bd768ee87c5f35752693a5a39a9e7800a0",
+            "mode": "0o644",
+            "bytes": 468
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "continuity",
+      "target": "cursor",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/continuity-review",
+        "inventory_sha256": "37ab52485f0e2fcfef2d0d7a0d91807b365f0ce87f805e69661734efaf1b167d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30",
+            "mode": "0o644",
+            "bytes": 1358
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/continuity.cursor.json",
+      "recipe_sha256": "b39d0e5206c5514fa09335f3775edb6b342409c4fa88dfaecd03bcb8f6802b46",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/cursor/continuity-review",
+        "inventory_sha256": "f4d200edad404f4a73a0dffee79c7a53dc2a523428659accb6c658ec50458e30",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "f703da22c5313a7aa772230256b75d2bcfba20594698c5f53999f7e8b18d9d6c",
+            "mode": "0o644",
+            "bytes": 1763
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "cd0e35f4dd022298021ccc31fd09659d30a0b94b7a0bbf417283727999213c5e",
+            "mode": "0o644",
+            "bytes": 1240
+          },
+          {
+            "path": "references/procedure-examples.md",
+            "sha256": "7f062e51ea63f70fdfa2ea6f22aeb5bd768ee87c5f35752693a5a39a9e7800a0",
+            "mode": "0o644",
+            "bytes": 468
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "explicit",
+      "target": "generic",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/explicit-review",
+        "inventory_sha256": "b1d563a38855bf4a7ed35c8365922aef26c887d18a8c9b950d7e9a134f4244a9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20",
+            "mode": "0o644",
+            "bytes": 627
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/explicit.generic.json",
+      "recipe_sha256": "9716fe172c2310cfbf18cb3bd92572d8bb4cf41e921182024d4793522ff167cc",
+      "status": "expected-offline-rejection",
+      "reason": "the generic Agent Skills standard has no portable invocation policy for this source"
+    },
+    {
+      "fixture": "explicit",
+      "target": "codex",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/explicit-review",
+        "inventory_sha256": "b1d563a38855bf4a7ed35c8365922aef26c887d18a8c9b950d7e9a134f4244a9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20",
+            "mode": "0o644",
+            "bytes": 627
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/explicit.codex.json",
+      "recipe_sha256": "0c896dc353be0fbcaed19a7b76565bb374bb2f31bef5225adf85c07456abbdbb",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/codex/explicit-review",
+        "inventory_sha256": "95fc807b6fde805090f3a553d49e6a8c7ab5bd15a0177d024265d7fd3ddcd837",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "eaee737051008a03ab1fb8c09579d7c88866e097360ad20e9cce735751ee91d3",
+            "mode": "0o644",
+            "bytes": 2261
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "c56f91e5ea8835ac63359adaeab18f864a479ca6dcdce9d6806dceefc9dafed9",
+            "mode": "0o644",
+            "bytes": 649
+          },
+          {
+            "path": "agents/openai.yaml",
+            "sha256": "a1499d95abd8447558c535fe5554adcc3c9b988a0a39264a6283d430effe1e94",
+            "mode": "0o644",
+            "bytes": 43
+          },
+          {
+            "path": "references/review-examples.md",
+            "sha256": "973c30126d838e6543664fb308e175b6464aab76efc073ab588132e2a8fbb7b7",
+            "mode": "0o644",
+            "bytes": 235
+          }
+        ]
+      },
+      "canonical_binding_blocker": "Unedited canonical frontmatter does not establish Codex native explicit-only policy. A host-level policy applied identically to both arms must be qualified without editing the canonical package; otherwise D3 remains blocked."
+    },
+    {
+      "fixture": "explicit",
+      "target": "claude",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/explicit-review",
+        "inventory_sha256": "b1d563a38855bf4a7ed35c8365922aef26c887d18a8c9b950d7e9a134f4244a9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20",
+            "mode": "0o644",
+            "bytes": 627
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/explicit.claude.json",
+      "recipe_sha256": "854e7d67de21c4838d2f20d16dd102dcba3f31a2ab61d2429a773f4b1aba51ef",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/claude/explicit-review",
+        "inventory_sha256": "0c328852300a3a9fe255ae845a660cf487b9d611c5c739fc60b8ce2b1b1c486a",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "2333647d74ee8e8a5cd5270d420317778083486e62f9d0aec678008ab3b906f3",
+            "mode": "0o644",
+            "bytes": 1743
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "39ca9026bc7c214ffce65473f10e2edc91858e3027271df60870efe0f30b88bf",
+            "mode": "0o644",
+            "bytes": 701
+          },
+          {
+            "path": "references/review-examples.md",
+            "sha256": "973c30126d838e6543664fb308e175b6464aab76efc073ab588132e2a8fbb7b7",
+            "mode": "0o644",
+            "bytes": 235
+          }
+        ]
+      }
+    },
+    {
+      "fixture": "explicit",
+      "target": "cursor",
+      "canonical": {
+        "path": "evaluations/opt-004/sources/explicit-review",
+        "inventory_sha256": "b1d563a38855bf4a7ed35c8365922aef26c887d18a8c9b950d7e9a134f4244a9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20",
+            "mode": "0o644",
+            "bytes": 627
+          }
+        ]
+      },
+      "recipe": "evaluations/opt-004/recipes/explicit.cursor.json",
+      "recipe_sha256": "5e22e7494908708f55efdee26d1512b77a8e28569408984afec8919cbca8ee2a",
+      "status": "prepared-not-qualified",
+      "compiled": {
+        "path": "evaluations/opt-004/packages/cursor/explicit-review",
+        "inventory_sha256": "f0b73be6e8a585402618a5dd84b7472aadaa7e5408f652fe19c5a8742216ccda",
+        "files": [
+          {
+            "path": ".harnessmith.json",
+            "sha256": "31cde2ea245e306b580a5b484e36783f98b4f7894a25a89dfcfae091b5f736ff",
+            "mode": "0o644",
+            "bytes": 1945
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "35c397628e60cb335ce9293dab49dfd34eb604388e1c76225c8160a26cc9fcbd",
+            "mode": "0o644",
+            "bytes": 680
+          },
+          {
+            "path": "references/review-examples.md",
+            "sha256": "973c30126d838e6543664fb308e175b6464aab76efc073ab588132e2a8fbb7b7",
+            "mode": "0o644",
+            "bytes": 235
+          }
+        ]
+      }
+    }
+  ]
+}

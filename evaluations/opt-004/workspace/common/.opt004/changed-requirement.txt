@@ -1,0 +1,2 @@
+Before: Invitations expire quickly.
+After: Invitations expire within 15 minutes of creation.
