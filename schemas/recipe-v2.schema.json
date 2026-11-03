@@ -81,12 +81,18 @@
           "when": {
             "type": "string",
             "minLength": 1,
-            "pattern": "\\S"
+            "pattern": "\\S",
+            "not": {
+              "pattern": "[\\u0000-\\u001f]"
+            }
           },
           "rationale": {
             "type": "string",
             "minLength": 1,
-            "pattern": "\\S"
+            "pattern": "\\S",
+            "not": {
+              "pattern": "[\\u0000-\\u001f]"
+            }
           }
         }
       }
