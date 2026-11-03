@@ -2,6 +2,7 @@ from dataclasses import replace
 import importlib.util
 import json
 from pathlib import Path
+import re
 import shutil
 import tempfile
 import unittest
@@ -112,6 +113,64 @@ class RouterTests(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             self.run_comparison(recipe=replace(self.recipe, source_sha256="0" * 64))
+
+    def test_quality_accepts_complete_traceability_labels_and_spec_references(self):
+        good = self.scenario.turns[0].mock_canonical.output
+        for marker in (
+            "[Gap]",
+            "[Ambiguity]",
+            "[Conflict]",
+            "[Assumption]",
+            "[Spec §FR-1]",
+            "[Spec §2.1]",
+            "[Coverage, Gap]",
+            "[ Gap , Coverage ]",
+            "[Clarity, Spec §FR-1]",
+            "[Coverage] [Gap]",
+        ):
+            with self.subTest(marker=marker):
+                output = re.sub(r"\[(?! \])[^]]+\]", marker, good)
+                self.assertTrue(
+                    all(c[1] for c in quality_checks(self.scenario.scenario_id, output))
+                )
+
+    def test_quality_rejects_unsupported_traceability_labels(self):
+        good = self.scenario.turns[0].mock_canonical.output
+        for marker in (
+            "[Gapless]",
+            "[NoGap]",
+            "[AmbiguityExtra]",
+            "[ConflictExtra]",
+            "[AssumptionExtra]",
+            "[Coverage, Gapless]",
+            "[Coverage Gap]",
+            "[Gap; Coverage]",
+            "[Spec §]",
+            "[Spec §   ]",
+            "[Not Spec §FR-1]",
+            "[Spec §FR-1 extra]",
+            "[Spec §][FR-1]",
+        ):
+            with self.subTest(marker=marker):
+                output = re.sub(r"\[(?! \])[^]]+\]", marker, good)
+                checks = {
+                    name: passed
+                    for name, passed, _ in quality_checks(
+                        self.scenario.scenario_id, output
+                    )
+                }
+                self.assertTrue(checks["quality-item-format"])
+                self.assertFalse(checks["quality-traceability"])
+
+    def test_quality_requires_supported_traceability_on_every_item(self):
+        good = self.scenario.turns[0].mock_canonical.output
+        output = good.replace("[Gap]", "[Gapless]", 1)
+        checks = {
+            name: passed
+            for name, passed, _ in quality_checks(self.scenario.scenario_id, output)
+        }
+        self.assertTrue(checks["quality-item-format"])
+        self.assertFalse(checks["quality-traceability"])
 
     @unittest.skipUnless(
         importlib.util.find_spec("jsonschema"), "requires development dependencies"

@@ -7,6 +7,12 @@ published.
 
 ## Unreleased
 
+### Fixed
+
+- Router security traceability checks require complete comma-delimited supported
+  labels or nonempty `Spec §…` references, rejecting unsupported labels such as
+  `[Gapless]`.
+
 ### Changed
 
 - Audit starter recipes leave sections inline without imposing an automatic root

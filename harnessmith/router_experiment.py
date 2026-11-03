@@ -65,15 +65,19 @@ def quality_checks(scenario_id, output):
                 "exactly four unchecked sequential questions",
             )
         )
-        markers = ("Spec §", "Gap", "Ambiguity", "Conflict", "Assumption")
+        markers = {"Gap", "Ambiguity", "Conflict", "Assumption"}
         checks.append(
             (
                 "quality-traceability",
                 len(items) == 4
                 and all(
-                    any(m in b for m in markers)
+                    any(
+                        label.strip() in markers
+                        or re.fullmatch(r"Spec §[^\s,\[\]]+", label.strip())
+                        for bracket in re.findall(r"\[([^\[\]\n]+)\]", line)
+                        for label in bracket.split(",")
+                    )
                     for _, _, line in items
-                    for b in [" ".join(re.findall(r"\[([^]]+)\]", line))]
                 ),
                 "each requested item has a traceability marker",
             )
