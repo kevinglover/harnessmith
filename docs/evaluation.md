@@ -224,6 +224,9 @@ adapters or change the historical cohorts. The
 offline preparation/verification commands. The additive
 [native trajectory contract](opt-004-native-contract.md) supplies structural and
 causal validation; legacy mock scenario loading remains unchanged.
+The [O3 collection increment](opt-004-collection.md) adds continuous raw capture,
+durable mock-stage scheduling and bounded Codex observation. Native launch and
+full O3 completion remain blocked on the documented host bindings.
 
 [OPT-004 status](opt-004-status.md) maps the actual acceptance criteria to reports,
 provenance and open coverage. It does not mark the wider task complete.

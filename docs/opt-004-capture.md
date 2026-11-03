@@ -1,5 +1,10 @@
 # OPT-004 O3 durable capture — November 3, 2026
 
+Follow-up: the [transport and stage increment](opt-004-collection.md) now adds
+continuous stream capture, durable mock scheduling and bounded Codex observation.
+The foundation checkpoint below records the earlier increment; the linked
+follow-up supersedes its pending shared-transport and scheduling statements.
+
 Status: **retention foundation implemented and tested offline; O3 remains partial**.
 The new [capture module](../harnessmith/native_capture.py) is additive. Historical
 collectors, instruments and scores are unchanged. No native adapter is qualified

@@ -319,7 +319,7 @@ turn contracts and collectors remain unchanged.
 | --- | --- | --- |
 | O1 | Offline inventory recorded; local Codex schema pinned; Claude/Cursor access and accounting gaps explicit. | Resolve version-specific surface, capability and usage questions needed by each stage. |
 | O2 | Fixture/package/case preparation and native event contract implemented; partial. | Qualify exact host bindings, permission enforcement, Codex D3 equal canonical policy and lifecycle accounting; resolve L5 timing. |
-| O3 | Partial: [November 3 retention foundation](opt-004-capture.md) tested with synthetic sources. | Native transports/normalizers, independent invocation attribution, permission/accounting bindings and durable stage scheduling remain open. |
+| O3 | Partial: [November 3 collection increment](opt-004-collection.md) adds continuous stdio capture, durable mock stages and bounded Codex observation. | Effective native permissions, broader tools/discovery/lifecycle mappings, complete lifecycle accounting and Claude/Cursor collectors remain open. |
 | O4 | Pending. | One bounded operation-verification design/qualification cycle with fresh controls. |
 | O5 | Structural synthetic tests and package-pin checks pass; full qualification pending. | Native fake-server controls, permission isolation, immutable stage manifest and independent instrument review. |
 | O6 | Pending. | Approved-stage reviews and final independent evidence audit. |

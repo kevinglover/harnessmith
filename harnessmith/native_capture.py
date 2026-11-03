@@ -6,16 +6,26 @@ are committed before decoding; a decoder must never consult expected answers.
 from __future__ import annotations
 
 from dataclasses import asdict
+from functools import wraps
 import hashlib
 import json
 import os
 from pathlib import Path
 import stat
+import threading
 import time
 
 from .native_contract import integrity_findings, parse_trajectory, usage_totals
 
-INSTRUMENTATION = "native-capture-v1"
+INSTRUMENTATION = "native-capture-v2"
+
+
+def _locked(method):
+    @wraps(method)
+    def call(self, *args, **kwargs):
+        with self.lock:
+            return method(self, *args, **kwargs)
+    return call
 
 
 def _json(value):
@@ -40,13 +50,14 @@ def _create(path, data):
 
 
 class AttemptJournal:
-    """Single-writer journal in a new, controller-owned evidence directory.
+    """Serialized journal in a new, controller-owned evidence directory.
 
     Directory must be outside the measured workspace. Never reopen an attempt
     for writing: recovery is read-only and a partial attempt consumes its slot.
     """
 
     def __init__(self, directory, manifest):
+        self.lock = threading.RLock()
         self.directory = Path(directory)
         self.directory.mkdir(mode=0o700, parents=False, exist_ok=False)
         _sync_directory(self.directory.parent)
@@ -62,6 +73,7 @@ class AttemptJournal:
     def elapsed_ms(self):
         return (time.monotonic_ns() - self.started) // 1_000_000
 
+    @_locked
     def blob(self, data):
         if self.closed:
             raise RuntimeError("attempt is closed")
@@ -76,6 +88,7 @@ class AttemptJournal:
             _create(path, data)
         return "blobs/" + digest
 
+    @_locked
     def append(self, kind, data):
         if self.closed:
             raise RuntimeError("attempt is closed")
@@ -88,6 +101,7 @@ class AttemptJournal:
         self.sequence += 1
         return record
 
+    @_locked
     def raw(self, channel, payload):
         if channel not in {"send", "receive", "stderr", "controller"}:
             raise ValueError("unknown raw channel")
@@ -140,9 +154,14 @@ class AttemptJournal:
 def recover_attempt(directory):
     """Read intact journal prefix; report truncation/corruption, never repair it."""
     root = Path(directory)
-    records, findings = [], []
+    records: list[dict] = []
+    findings: list[str] = []
     previous_ms = -1
-    raw = (root / "journal.jsonl").read_bytes()
+    try:
+        raw = (root / "journal.jsonl").read_bytes()
+    except OSError as exc:
+        raw = b""
+        findings.append("journal unavailable: " + type(exc).__name__)
     for line in raw.splitlines(keepends=True):
         try:
             if not line.endswith(b"\n"):
@@ -163,7 +182,12 @@ def recover_attempt(directory):
             break
     # Every retained blob is hashed, including snapshot contents and orphan blobs
     # from a crash between blob commit and journal commit.
-    for path in sorted((root / "blobs").iterdir()):
+    try:
+        blobs = sorted((root / "blobs").iterdir())
+    except OSError as exc:
+        blobs = []
+        findings.append("blob directory unavailable: " + type(exc).__name__)
+    for path in blobs:
         if path.is_symlink() or not path.is_file():
             findings.append("invalid blob: " + path.name)
         elif hashlib.sha256(path.read_bytes()).hexdigest() != path.name:
@@ -194,7 +218,7 @@ def recover_attempt(directory):
     terminal = records[-1] if records and records[-1]["kind"] == "attempt.finished" else None
     if terminal is None:
         findings.append("attempt has no terminal record")
-    elif terminal["data"].get("status") not in {"complete", "incomplete", "interrupted"}:
+    elif terminal["data"].get("status") not in ("complete", "incomplete", "interrupted"):
         findings.append("invalid terminal status")
     if not records or records[0]["kind"] != "attempt.started":
         findings.append("attempt has no start record")

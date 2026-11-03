@@ -250,15 +250,15 @@ def integrity_findings(trajectory: NativeTrajectory) -> Tuple[IntegrityFinding, 
     active = {}
     approvals = {}
     decisions = {}
-    actions = {}
+    actions: Dict[str, NativeEvent] = {}
     completed_actions = set()
-    action_results = {}
+    action_results: Dict[str, Dict[str, Any]] = {}
     interrupts = {}
     interrupt_ids = set()
     stopped = set()
     compactions = {}
     completed_compactions = set()
-    permissions = {}
+    permissions: Dict[str, Mapping[str, Any]] = {}
     permission_refresh = set()
     previous_sequence = -1
     previous_elapsed = -1
@@ -317,20 +317,20 @@ def integrity_findings(trajectory: NativeTrajectory) -> Tuple[IntegrityFinding, 
         elif event.turn_id is not None and active.get(tid) != event.turn_id:
             flag("turn-lifecycle", eid, "event is outside its active turn")
         if kind == "permission.snapshot":
-            old = permissions.get(tid)
-            if old is not None and (
-                not set(data["allow_read"]).issubset(old["allow_read"])
-                or not set(data["allow_write"]).issubset(old["allow_write"])
-                or (data["network"] and not old["network"])
-                or data["approval_policy"] != old["approval_policy"]
+            old_permissions = permissions.get(tid)
+            if old_permissions is not None and (
+                not set(data["allow_read"]).issubset(old_permissions["allow_read"])
+                or not set(data["allow_write"]).issubset(old_permissions["allow_write"])
+                or (data["network"] and not old_permissions["network"])
+                or data["approval_policy"] != old_permissions["approval_policy"]
             ):
                 flag("permission-transition", eid, "permission widening or changed approval policy")
             permissions[tid] = data
             permission_refresh.discard(tid)
         if kind == "read.observed":
-            action = actions.get(str(data["action_id"]))
-            if (action is None or data["action_id"] not in completed_actions
-                    or action.thread_id != tid or action.turn_id != event.turn_id
+            read_action = actions.get(str(data["action_id"]))
+            if (read_action is None or data["action_id"] not in completed_actions
+                    or read_action.thread_id != tid or read_action.turn_id != event.turn_id
                     or action_results.get(str(data["action_id"]), {}).get("status") != "succeeded"
                     or action_results.get(str(data["action_id"]), {}).get("exit_code") not in (None, 0)
                     or event.causal_event_id != action_results.get(str(data["action_id"]), {}).get("event_id")
@@ -424,9 +424,9 @@ def integrity_findings(trajectory: NativeTrajectory) -> Tuple[IntegrityFinding, 
     required_work = {e.event_id for e in trajectory.events if e.kind in ("turn.started", "compaction.started")}
     if not required_work:
         flag("work-missing", trajectory.trajectory_id, "trajectory contains no task turn or compaction")
-    covered = set()
+    covered: set[str] = set()
     intervals = set()
-    meters = {}
+    meters: Dict[Tuple[str, str, str], Dict[str, int]] = {}
     for interval in trajectory.usage:
         iid = interval.interval_id
         if iid in intervals:
@@ -435,8 +435,8 @@ def integrity_findings(trajectory: NativeTrajectory) -> Tuple[IntegrityFinding, 
         if covered.intersection(interval.work_ids):
             flag("usage-overlap", iid, "work counted in multiple intervals")
         for work in interval.work_ids:
-            event = seen.get(work)
-            if event is None or work not in required_work or event.thread_id != interval.thread_id:
+            work_event = seen.get(work)
+            if work_event is None or work not in required_work or work_event.thread_id != interval.thread_id:
                 flag("usage-attribution", iid, "unknown work or wrong thread")
         covered.update(interval.work_ids)
         if (interval.final is None or interval.unavailable_reason is not None

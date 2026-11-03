@@ -75,3 +75,8 @@ exclude = ["examples/compiled", "fixtures/sources"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F"]
+
+# Standalone preparation tools add the repository root before project imports.
+[tool.ruff.lint.per-file-ignores]
+"evaluations/opt-004/prepare_contracts.py" = ["E402"]
+"evaluations/opt-004/verify_contracts.py" = ["E402"]

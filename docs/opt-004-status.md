@@ -1,5 +1,14 @@
 # OPT-004 evidence and remaining acceptance work
 
+Further offline implementation, 2026-11-03: O3 now adds
+[continuous stdio capture, durable mock stages and a bounded Codex observer](opt-004-collection.md).
+Stages consume slots before launch, retain partial attempts and stop on integrity
+or measurement failure. Codex explicit invocation requires a successful exact
+root read, and cumulative usage retains unavailable counters. Native modes stay
+disabled. Effective permissions, broader native tool/lifecycle mappings and
+Claude/Cursor collectors remain unresolved, so O3 and S1 are still incomplete.
+All processes exercised by this increment are synthetic local test helpers.
+
 Offline implementation update, 2026-11-03: O3 now has an additive
 [durable capture foundation](opt-004-capture.md), with raw-before-decoding
 retention, exclusive per-attempt journals, before/after workspace snapshots,

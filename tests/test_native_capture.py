@@ -206,6 +206,12 @@ os._exit(17)
         self.assertEqual("incomplete", recovered["status"])
         self.assertIn("missing/invalid blob reference", recovered["findings"])
 
+    def test_recovery_handles_crash_during_directory_initialization(self):
+        self.destination.mkdir()
+        recovered = recover_attempt(self.destination)
+        self.assertEqual("incomplete", recovered["status"])
+        self.assertTrue(any("journal unavailable" in finding for finding in recovered["findings"]))
+
 
 if __name__ == "__main__":
     unittest.main()
