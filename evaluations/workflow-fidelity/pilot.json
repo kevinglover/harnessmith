@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "pilot_id": "opt-004-workflow-fidelity-v1",
+  "evidence_kind": "offline-preparation",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "repetitions": 1,
+  "strategies": ["canonical", "router"],
+  "source": "skills/speckit-checklist/SKILL.md",
+  "router": "evaluations/variants/speckit-checklist-router",
+  "target": "specs/001-invitations/checklists/security.md",
+  "cases": [
+    {"id": "create", "prompt": "prompts/create.md", "new_items": 4, "first_id": 1, "overlay": null},
+    {"id": "append", "prompt": "prompts/append.md", "new_items": 3, "first_id": 8, "overlay": "append"},
+    {"id": "hooks", "prompt": "prompts/hooks.md", "new_items": 4, "first_id": 1, "overlay": "hooks"}
+  ]
+}

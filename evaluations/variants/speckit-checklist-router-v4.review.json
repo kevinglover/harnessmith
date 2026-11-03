@@ -1,0 +1,50 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 4,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v3",
+    "review_sha256": "6a56ac384ee1389c65895e51b056f864cf49a346a2237d054448c01d6a3807e2",
+    "files": {
+      "SKILL.md": "4e947cf6c61062b8be97fd25b4e435652904a7859e44aa3220c372e90b0a03f4",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "1c13f73304fd509ec74c418294fe37cbc8f347727efcc6088e7eba87861b449e"
+    }
+  },
+  "files": {
+    "SKILL.md": "7c6bc95d897c59d9200ffddfa7233df97ecee45a26f4603a4900166b39ae3fdc",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "aa626172e3eae88d009fd0d597fc6dafc3d8d550806efc7f0e6beedbd0cb2020"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V4 is an authored semantic revision of router v3, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter and both example references remain byte-for-byte unchanged. Only the two example references retain complete verbatim-source mappings.",
+    "The complete post-hook procedure and field templates now reside inside the numbered post-hook action checkpoint before final reporting, replacing the end-of-document procedure and pointer. The checkpoint requires the sent message itself to contain the selected blocks before automatic invocation; a promise to render them is insufficient. Both phases render at the left margin, without copying documentation indentation or code fences.",
+    "Reporting uses returned file bytes, completed messages and completed tool results as evidence. Missing metadata and untried tools do not establish unavailable capabilities; unsupported detail is omitted without adding exploratory commands solely to justify narration.",
+    "Questions about unspecified policies remain neutral about the eventual handling. A Gap marker cannot justify presupposing a restriction or other policy outcome.",
+    "Checklist discovery inventories the known-existing feature directory rather than directly listing a possibly absent checklist directory. Initial absence remains normal creation state.",
+    "V3 native-write and sandbox boundaries, pre-hook rules, constitution loading, per-topic allocation, Gap markers, exact append preservation and reviewer checkbox ownership remain in force."
+  ],
+  "validation_scope": {
+    "offline": "Package integrity, predecessor/source/discovery/example retention, routed-reference availability, retained-source mapping and tamper rejection. Checker/trace fixture tests are separate; no model instruction-compliance test is claimed.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. Instruction changes and deterministic offline tests do not prove model compliance, semantic equivalence, sandbox behavior on a future host or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v3-results.md"
+}

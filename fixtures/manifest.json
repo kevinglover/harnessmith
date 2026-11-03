@@ -115,6 +115,36 @@
         "codex"
       ],
       "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "harnessmith-runtime-probe",
+      "repository": "https://github.com/kevinglover/harnessmith",
+      "revision": "synthetic-runtime-probe-v1",
+      "license": "CC0-1.0",
+      "source_path": "fixtures/sources/harnessmith-runtime-probe/SKILL.md",
+      "source_sha256": "fad78ea994a07f8fc11f8be56cfada47e7311f9847bc0d964022c7d74df208cc",
+      "expected_targets": [
+        "generic",
+        "cursor",
+        "claude",
+        "codex"
+      ],
+      "expected_diagnostics": []
+    },
+    {
+      "fixture_id": "local-speckit-checklist",
+      "repository": "https://github.com/kevinglover/harnessmith",
+      "revision": "fed1b592b1e79fddd013c6f783df1a7410d5d3b7",
+      "license": "AGPL-3.0-only",
+      "source_path": "skills/speckit-checklist/SKILL.md",
+      "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+      "expected_targets": [
+        "generic",
+        "cursor",
+        "claude",
+        "codex"
+      ],
+      "expected_diagnostics": ["HS201", "HS214", "HS308"]
     }
   ]
 }

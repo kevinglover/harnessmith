@@ -1,0 +1,58 @@
+{
+  "schema_version": 2,
+  "scenario_id": "checklist-core-security-codex",
+  "fixture_id": "local-speckit-checklist",
+  "target": "codex",
+  "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Draft exactly four unchecked requirements-quality checklist items for a peer's standard security review. Supplied spec: FR-1: A workspace administrator can invite collaborators by email. FR-2: Invitation links expire eventually. FR-3: Members can remove collaborators. Nothing specifies workspace boundaries, expired or reused invitations, member roles, or retention of invitation records. Cover authorization and tenant isolation, measurable expiry, reuse/error cases, and record retention. Use CHK001 through CHK004, question form, and traceability markers. Do not invent policy values.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Example Checklist Types & Sample Items",
+      "Anti-Examples: What NOT To Do"
+    ]
+  },
+  "required_constraints": [
+    "Never delete or replace existing checklist content - always preserve and append"
+  ],
+  "forbidden_actions": [
+    "item:fileChange",
+    "item:mcpToolCall"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Draft exactly four unchecked requirements-quality checklist items for a peer's standard security review. Supplied spec: FR-1: A workspace administrator can invite collaborators by email. FR-2: Invitation links expire eventually. FR-3: Members can remove collaborators. Nothing specifies workspace boundaries, expired or reused invitations, member roles, or retention of invitation records. Cover authorization and tenant isolation, measurable expiry, reuse/error cases, and record retention. Use CHK001 through CHK004, question form, and traceability markers. Do not invent policy values.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "CHK001",
+        "CHK002",
+        "CHK003",
+        "CHK004",
+        "?"
+      ],
+      "output_not_contains": [
+        "[x]",
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "- [ ] CHK001 Are authorization roles and workspace boundaries defined? [Gap, Spec §FR-1]\n- [ ] CHK002 Is invitation expiry quantified? [Ambiguity, Spec §FR-2]\n- [ ] CHK003 Are requirements for expired and reused links defined? [Gap]\n- [ ] CHK004 Are invitation-record retention requirements defined? [Gap]",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "- [ ] CHK001 Are authorization roles and workspace boundaries defined? [Gap, Spec §FR-1]\n- [ ] CHK002 Is invitation expiry quantified? [Ambiguity, Spec §FR-2]\n- [ ] CHK003 Are requirements for expired and reused links defined? [Gap]\n- [ ] CHK004 Are invitation-record retention requirements defined? [Gap]",
+        "actions": [],
+        "reference_loads": []
+      }
+    }
+  ]
+}

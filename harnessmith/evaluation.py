@@ -273,8 +273,10 @@ def evaluate_scenario(
     audit = audit_skill(
         source, scenario.target, source_id=record.source_path, check_directory=False
     )
+    # Fixture contracts pin unique rule IDs; a real skill can trigger a rule
+    # at several source spans. Preserve first-occurrence order without duplicates.
     actual_diagnostics = tuple(
-        diagnostic["rule_id"] for diagnostic in audit["diagnostics"]
+        dict.fromkeys(diagnostic["rule_id"] for diagnostic in audit["diagnostics"])
     )
     checks.append(
         _check(

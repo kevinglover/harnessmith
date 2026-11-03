@@ -1,0 +1,50 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 3,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v2",
+    "review_sha256": "8d45dba4f67ea54d90248a5d1729edb21594e3c0f2654e8b1877138bb2abfb54",
+    "files": {
+      "SKILL.md": "1d72977ce6fcc9618ac855a320fafedecce5569475b53c6462bc3ae79661e1bd",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "53e5baee8d07d5108b921173dfddfa5467a852d946e230bed455816c08f42a5e"
+    }
+  },
+  "files": {
+    "SKILL.md": "4e947cf6c61062b8be97fd25b4e435652904a7859e44aa3220c372e90b0a03f4",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "1c13f73304fd509ec74c418294fe37cbc8f347727efcc6088e7eba87861b449e"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V3 is an authored semantic revision of router v2, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter and both example references remain byte-for-byte unchanged; only those example references retain complete verbatim-source mappings.",
+    "Action checkpoints require completed user-visible pre/post automatic announcements and usable optional offers as actual Markdown prose, not fenced or quoted examples, before any automatic hook in the relevant phase; pre precedes setup, post follows verified writes, and final reporting follows post-hook completion.",
+    "Automatic announcements include the configured description alongside the normalized command ID and EXECUTE_COMMAND; optional offers retain their configured prompt and usable To execute command. Enabled/condition filtering and optional authorization rules remain unchanged.",
+    "Native apply_patch or file-edit tools are first choice for both creation and append. Under restricted temporary permissions, prohibit heredocs, here-strings, temporary-permission probes and retries of denied shell writes; direct file I/O fallback must fit existing permissions and preserve append bytes.",
+    "Action reporting must cite observed tool outcomes rather than imagined invocations or errors; final artifact verification precedes post hooks, and any hook-modified artifact is verified before reporting.",
+    "V2 constitution loading, exact per-topic allocation, Gap markers, complete append prefix and reviewer checkbox ownership remain in force."
+  ],
+  "validation_scope": {
+    "offline": "Package integrity, predecessor/source/discovery/example retention, routed-reference availability and tamper rejection. Checker/trace fixture tests are separate; no model instruction-compliance test is claimed.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. Instruction changes and deterministic offline tests do not prove model compliance, semantic equivalence, sandbox behavior on a future host or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v2-results.md"
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 6,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v5",
+    "review_sha256": "6e6127ad37ca236d3c9bb20fca17918de44451dfcecc268d02b3fbe177808944",
+    "files": {
+      "SKILL.md": "f0a0db774ce2a03f77cf2f580b4397c42934cd0962c9ee12f1b320a4b40ed341",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "5a29a57ca5aaeb79edc03ecb665398080d572a6a3c8cb7b1c245d854ed301776"
+    }
+  },
+  "files": {
+    "SKILL.md": "a6cab26cd66d34c081c23bb000686a2fc90aaaf3ee367172618d83e4b9397290",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "c9e635c027cb8f6cf3e8c22eae1b92c2db87098330cdd6005407f545008f79c0"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V6 is an authored semantic revision of router v5, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter and both example references remain byte-for-byte unchanged. Only the two example references retain complete verbatim-source mappings.",
+    "Project creation and append must finish the complete generation-reference read as a separate tool action before project actions, then finish extension presence/configuration checks before setup. Setup remains separate from required context reads.",
+    "Append captures original bytes before a native edit and performs a separate full saved-artifact read after the last write. Comparison must verify the exact original prefix and checkbox states, the added item count, sequential IDs and unchecked new items; any later artifact change requires renewed verification.",
+    "Prewrite reads, edit diffs, successful writes and collector snapshots cannot stand in for model postwrite verification. Incomplete verification must be reported as incomplete with only the actual blocker.",
+    "Preservation claims require the completed postwrite read and byte comparison. Git history is unnecessary for this proof; attempted, failed or unavailable Git comparisons cannot be inferred from missing metadata or invented without invocation/result evidence.",
+    "All v5 hook selection and rendering templates, optional-hook authorization, condition skipping, setup arguments, native-write sandbox boundaries, feature-context/content guidance, neutral Gap questions, topic allocation and reviewer checkbox ownership remain unchanged."
+  ],
+  "validation_scope": {
+    "offline": "Package integrity; frozen predecessor, source, discovery and example retention; routed-reference availability; retained-source mapping and tamper rejection; exact preservation of hook selection/rendering, clarification and requirements-quality guidance. These checks do not test model instruction compliance. Checker/trace regressions are separate.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. Instruction changes and deterministic offline tests do not prove model compliance, semantic equivalence, sandbox behavior on a future host or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v5-results.md"
+}

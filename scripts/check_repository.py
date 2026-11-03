@@ -60,6 +60,16 @@ def check_schemas() -> List[str]:
         for path in paths:
             try:
                 instance = json.loads(path.read_text(encoding="utf-8"))
+                if schema_name in (
+                    "recipe.schema.json",
+                    "package-manifest.schema.json",
+                ):
+                    selected_name = (
+                        schema_name.replace(".schema.json", "-v2.schema.json")
+                        if instance.get("schema_version") == 2
+                        else schema_name
+                    )
+                    validator = validators[selected_name]
                 for error in sorted(
                     validator.iter_errors(instance),
                     key=lambda item: tuple(str(part) for part in item.absolute_path),
@@ -84,7 +94,9 @@ def check_schemas() -> List[str]:
                 continue
             validator = validators.get(name)
             if validator is None:
-                errors.append(f"{path.relative_to(ROOT)}: missing or invalid schema {name}")
+                errors.append(
+                    f"{path.relative_to(ROOT)}: missing or invalid schema {name}"
+                )
                 continue
             for error in validator.iter_errors(instance):
                 errors.append(f"{path.relative_to(ROOT)}: {error.message}")
@@ -124,6 +136,15 @@ def check_docs() -> List[str]:
                 )
                 continue
             if not local.exists():
+                private_root = ROOT.resolve() / "evaluations" / "local-evidence"
+                # Private evidence is intentionally absent from clean checkouts.
+                # When retained locally, every linked target must still exist.
+                if (
+                    not private_root.exists()
+                    and not private_root.is_symlink()
+                    and (local == private_root or private_root in local.parents)
+                ):
+                    continue
                 errors.append(
                     f"{path.relative_to(ROOT)}: missing link target: {target}"
                 )

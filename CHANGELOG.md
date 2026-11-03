@@ -7,8 +7,130 @@ published.
 
 ## Unreleased
 
+### Fixed
+
+- Router security traceability checks require complete comma-delimited supported
+  labels or nonempty `Spec §…` references, rejecting unsupported labels such as
+  `[Gapless]`.
+
+### Changed
+
+- Audit starter recipes leave sections inline without imposing an automatic root
+  budget. Explicit recipe and CLI budgets remain enforced. Size-based diagnostics
+  retain their IDs but no longer present root or section size as estimated savings;
+  extraction guidance separates static heuristics from measured runtime evidence.
+
 ### Added
 
+- The subsequently approved [v11 Luna low append result](docs/workflow-fidelity-v11-results.md):
+  one completed session with no retry, replacement, expansion or extra judge.
+  Content, formatting, references, exact prefix and separate readback pass; the
+  frozen full gate remains 0/1. A fresh post-generation extension action is
+  recorded, but null output lacks the required proof. Unsupported Python
+  verification/pipeline forms and retained cache diagnostics also fail the
+  workflow gate. All evidence is retained; authorization is consumed and OPT-004
+  stays open. This execution supersedes the earlier proposal's pending status.
+- Router v8, normalizer v10 and checker/collector v11 for bounded `if test -f`
+  attribution and a mandatory fresh post-generation extension checkpoint.
+  Offline regressions distinguish a correct append from a completed final
+  workflow, including exact captured readback and separate extension-state proof.
+  [Rubric v12](evaluations/variants/router-quality-rubric-v12.md) and the
+  [one-session Luna low proposal](docs/workflow-fidelity-pilot-v11.md) preserve
+  all historical evidence and the original skill. The frozen v10 full gate
+  remains 0/1; no live session is authorized or queued.
+- The subsequently approved [v10 Luna low append result](docs/workflow-fidelity-v10-results.md):
+  one completed session, no retry, replacement, expansion or extra judge. Content,
+  formatting, references, exact prefix and separate readback pass; the frozen
+  full gate remains 0/1 after unsupported `if test -f` conditionals and downstream
+  discovery rejection. Raw review separately records the missing post-generation
+  extension check. All evidence is retained, new certificate coverage remains
+  unobserved live, and the single authorization is consumed. OPT-004 stays open.
+- Prospective normalizer v9 and checker/collector v10 for exact same-path
+  `test ! -e ... && echo ABSENT` conditionals, including a narrowly verified
+  post-append extension check and downstream attribution recovery. Fresh offline
+  regressions keep all workflow gates binding. Rubric v11 and the
+  [one-session Luna low proposal](docs/workflow-fidelity-pilot-v10.md) preserve
+  router v7, the original skill and every historical result. No live session
+  is authorized or queued; the v9 full gate remains 0/1.
+- The approved one-session [v9 Luna low append result](docs/workflow-fidelity-v9-results.md),
+  with no retry, replacement, expansion or extra judge. Content, formatting,
+  references, exact prefix and separate final readback pass; the frozen full gate
+  remains 0/1 because guarded `test ! -e ... && echo ABSENT` conditionals are
+  unclassified and block downstream discovery proof. All historical evidence and
+  original collection bytes remain intact. New null-output and concurrent-read
+  grammar coverage remains unobserved live; no efficiency or promotion claim.
+- Normalizer v8 and checker/collector v9 as offline instrumentation repairs for
+  same-path `else test ! -e` probes, independent complete-read overlap and
+  explicitly null absence output. Exact proofs retain superseded artificial
+  failures without weakening workflow boundaries. Router v7, the original skill
+  and all historical evidence remain unchanged. Rubric v10 and a one-session
+  Luna low append proposal are prospective; no live session is authorized or
+  queued, and the frozen v8 full gate remains 0/1.
+- Router v7, normalizer v7 and checker/collector v8 as an offline repair for
+  terminal file-discovery attribution and command separation. New regressions
+  distinguish exact successful listing evidence from workflow compliance and
+  retain real failures. Rubric v9 and a one-session Luna low append proposal
+  preserve every historical score, package and the original skill. The separately
+  approved v8 session completed without retry or expansion: content, formatting,
+  references, prefix preservation and final readback pass, but the frozen full
+  gate is 0/1. Unsupported else-test conditionals and overlapping-read attribution
+  block context/absence and downstream discovery certificates despite positive
+  raw evidence. All results are retained; OPT-004 remains open.
+- Normalizer v6 and checker/collector v7 as an offline instrumentation repair for
+  the literal `else printf` absence certificate, with pinned-state, exact-output,
+  lifecycle and read-only-prefix regressions. Router v6 and all hard gates stay
+  unchanged. Prospective rubric v8 and a one-session Luna low append proposal
+  preserve historical scores and the original skill. The separately approved
+  session completed without retry or expansion: content, formatting, reference
+  behavior, append preservation and final readback pass, but the full gate is
+  0/1 after failed compound discovery and unverified terminal discovery. The
+  standalone certificate lacks qualifying live coverage. All evidence is retained.
+- Router v6, normalizer v5 and checker/collector v6 as a new offline append
+  candidate. Synthetic regressions cover bounded Python reads, separate
+  reference/setup/verification checkpoints, exact prefix preservation and
+  evidence-backed verification/Git claims. Rubric v7 retains historical scores
+  and separate review requirements. The approved one-session Luna follow-up
+  completed without retries or expansion: content and raw append behavior pass,
+  but the frozen full gate remains 0/1 because a literal `else printf` absence
+  check lacks certification. All evidence is retained; OPT-004 remains open.
+- Router v5, trace normalizer v4 and checker/collector v5 as an offline repair
+  candidate. New synthetic controls cover internal append/readback, constituent
+  reads without clearing failed commands, singular count modifiers, configured
+  pre-hook blocks, grounded commentary, hidden discovery and required context.
+  Rubric v6 keeps historical grades frozen. The separately approved two-session
+  Luna follow-up completed without retries or additions: 1/2 automated and
+  complete reviewed case passes, 2/2 semantic content passes. Hooks passes;
+  append retains parser limits, missing final readback and unsupported narration.
+  All results are retained, the router remains experimental, and OPT-004 is open.
+- Router v4 and checker/collector v4, retaining the frozen v3 trace normalizer,
+  with targeted offline controls for post-hook messages, bounded reuse wording,
+  evidence-supported hook claims, policy-neutral questions and safe discovery.
+  Rubric v5 and the separately approved two-session Luna follow-up preserve all
+  earlier scores and the original skill. Both sessions completed without retries
+  or additions: 0/2 full automated passes, 2/2 semantic content passes. All results
+  are retained; parser limits and genuine pre-hook/context/narrative gaps keep
+  the targeted gate open. No router promotion or further live batch is queued.
+- Workflow parser/checker/collector v3, router v3 and prospective rubric v4 for
+  the remaining absence-check, literal-write, hook-message and artifact-verification
+  gaps. Targeted synthetic regressions preserve all historical evidence and the
+  original skill. The separately approved two-session Luna follow-up completed
+  without retries or additions: 1/2 frozen automated passes, 0/2 complete reviewed
+  passes. All results remain retained; post-hook messages, unsupported narration
+  and a semantic policy gap keep the targeted gate open. No router is promoted
+  and no further live batch is queued.
+- Versioned workflow checker/normalizer v2 and router v2 candidate repairs, with
+  targeted offline regressions and a two-slot opt-in collector tested against a
+  fake server. Rubric v3 and the proposed append/hooks pilot preserve all prior
+  scores, instruments and original skill bytes. The separately approved two-session
+  Luna follow-up completed with no retries: both content/format/reference checks
+  pass, but full workflow results remain 0/2. All traces, artifacts, failures and
+  separate semantic/raw reviews are retained without promoting the router.
+- Offline preparation and artifact/trace checks for a six-session checklist
+  workflow pilot, plus an OPT-004 acceptance map and versioned promotion criteria.
+  An opt-in write-capable collector retains raw events, workspace snapshots,
+  provenance and all attempts, with bounded permissions and no session retries.
+  Six approved Luna sessions completed; frozen failures and separate review are
+  documented without promoting the router or claiming runtime savings.
 - Read-only catalog auditing for Codex and Claude, with versioned listing
   profiles/reports, component accounting, and advisory duplicate/overflow findings.
 - Source-pinned Cursor root-budget recipes for checklist and clarify, with

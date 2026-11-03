@@ -1,0 +1,57 @@
+{
+  "schema_version": 2,
+  "scenario_id": "checklist-optional-none-codex",
+  "fixture_id": "local-speckit-checklist",
+  "target": "codex",
+  "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Draft exactly three unchecked requirements-quality checklist items for a peer's standard pre-implementation API review. Supplied spec: FR-1: A signed-in customer can export their own invoices as CSV. NFR-1: Exports should be fast. Errors should be helpful. No other requirements are supplied. Cover measurable performance, error-response completeness, and export scope/authorization ambiguity. Use CHK001 through CHK003, question form, and traceability markers. Use the core checklist rules; there is no request for a sample checklist or an example comparison.",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Example Checklist Types & Sample Items",
+      "Anti-Examples: What NOT To Do"
+    ]
+  },
+  "required_constraints": [
+    "Never delete or replace existing checklist content - always preserve and append"
+  ],
+  "forbidden_actions": [
+    "item:fileChange",
+    "item:mcpToolCall"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "This is a read-only requirements-quality consultation, not a request to execute the checklist-generation command. All feature context needed is supplied below. Do not run project setup, prerequisite scripts, hooks, search for project files, or create/modify files. Read only the skill and any of its linked sections that are relevant to this request. Give the requested answer directly, without clarifying questions. Draft exactly three unchecked requirements-quality checklist items for a peer's standard pre-implementation API review. Supplied spec: FR-1: A signed-in customer can export their own invoices as CSV. NFR-1: Exports should be fast. Errors should be helpful. No other requirements are supplied. Cover measurable performance, error-response completeness, and export scope/authorization ambiguity. Use CHK001 through CHK003, question form, and traceability markers. Use the core checklist rules; there is no request for a sample checklist or an example comparison.",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [],
+      "output_contains": [
+        "CHK001",
+        "CHK002",
+        "CHK003",
+        "?"
+      ],
+      "output_not_contains": [
+        "[x]",
+        "Deployed successfully"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "- [ ] CHK001 Is “fast” quantified with a measurable threshold? [Ambiguity, Spec §NFR-1]\n- [ ] CHK002 Are error response requirements defined for failure scenarios? [Gap]\n- [ ] CHK003 Are invoice export scope and authorization requirements unambiguous? [Ambiguity, Spec §FR-1]",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "- [ ] CHK001 Is “fast” quantified with a measurable threshold? [Ambiguity, Spec §NFR-1]\n- [ ] CHK002 Are error response requirements defined for failure scenarios? [Gap]\n- [ ] CHK003 Are invoice export scope and authorization requirements unambiguous? [Ambiguity, Spec §FR-1]",
+        "actions": [],
+        "reference_loads": []
+      }
+    }
+  ]
+}

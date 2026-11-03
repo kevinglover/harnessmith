@@ -1,0 +1,49 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 2,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router",
+    "review_sha256": "db709963d00c0f2ab50c1615328a0080f708953f99f6a7a67b61ed1d11ceaf6a",
+    "files": {
+      "SKILL.md": "83da4dfc6856ef8998b30f280ac47b564202e54264641a1e740a0244c0ea397d",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "6df0a110bb5dfadccd6010a21ddbda13ab58858358d57cb4d07733941a2fe4e7"
+    }
+  },
+  "files": {
+    "SKILL.md": "1d72977ce6fcc9618ac855a320fafedecce5569475b53c6462bc3ae79661e1bd",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "53e5baee8d07d5108b921173dfddfa5467a852d946e230bed455816c08f42a5e"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V2 is an intentional semantic revision of router v1, not byte-equivalent to the source or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter and both example references remain byte-for-byte unchanged; only those example references retain complete verbatim-source mappings.",
+    "Project generation is revised, not a verbatim extraction: inspect the constitution independently of AVAILABLE_DOCS before creation or append.",
+    "Require rendered automatic/optional hook blocks with actual normalized command IDs; an execution/offer claim is insufficient. Optional hooks require explicit authorization; keep enabled/condition filtering and mandatory execution ordering.",
+    "Explicit user count and one-question-per-topic allocation take precedence over consolidation. Missing policy questions require Gap markers even when related requirements are cited.",
+    "Append preserves the complete existing byte prefix and checkbox states; select writes compatible with the current sandbox, avoiding temporary-file-dependent shell constructs when unavailable."
+  ],
+  "validation_scope": {
+    "offline": "Package integrity, original/discovery/example retention and tamper rejection; targeted workflow checker tests are separate.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. Instruction changes and offline tests do not prove model compliance, semantic equivalence or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-results.md"
+}

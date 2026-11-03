@@ -1,0 +1,49 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 7,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v6",
+    "review_sha256": "8f8f386a2f421dbc8eebc303db4d8bbc217c1c5409bffd9972917fe5b84a9315",
+    "files": {
+      "SKILL.md": "a6cab26cd66d34c081c23bb000686a2fc90aaaf3ee367172618d83e4b9397290",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "c9e635c027cb8f6cf3e8c22eae1b92c2db87098330cdd6005407f545008f79c0"
+    }
+  },
+  "files": {
+    "SKILL.md": "5140dcdfef91e48d8066610c3bdbd91362e26f9e5bd8916b00131eb3ef0484ec",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "5aed088203616ec54dc66226da07c2ae7b04f415c353630e4d878df96aef69c3"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V7 is an authored semantic revision of router v6, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter, shared rules and both example references remain byte-identical. Only the two example references retain complete verbatim-source mappings.",
+    "The extension existence/configuration check must complete in its own tool action before setup, without discovery or other project operations. Mixed output or failure cannot establish this checkpoint.",
+    "Broader discovery is optional, separate and scoped to known-existing roots. Absent optional integration directories are skipped; adapter discovery is unnecessary without config or supplied integration instructions. Stderr and exit status remain visible, and actual failures must be reported.",
+    "Required context reads may share a read-only action, but not an action containing setup, discovery, hooks or writes. Newlines and semicolons do not establish separate tool actions.",
+    "All v6 hook selection/rendering, authorization and condition handling, setup arguments, clarification and content guidance, append preservation, final readback and factual/Git narration rules remain unchanged."
+  ],
+  "validation_scope": {
+    "offline": "Package identity and predecessor/source pins; exact preserved discovery/examples/shared routes, hook-selection/rendering, setup and all content/append/final-report guidance outside the targeted command-boundary paragraphs. Parser/checker tests are separate; these package checks do not prove model instruction compliance.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. No claim of model compliance, semantic equivalence, future sandbox behavior or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v7-results.md"
+}

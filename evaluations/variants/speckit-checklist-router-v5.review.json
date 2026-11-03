@@ -1,0 +1,50 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 5,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v4",
+    "review_sha256": "20831886b935794d97ab90435b8e4d7552c85fa85bfbeec18d26c973cda49e52",
+    "files": {
+      "SKILL.md": "7c6bc95d897c59d9200ffddfa7233df97ecee45a26f4603a4900166b39ae3fdc",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "aa626172e3eae88d009fd0d597fc6dafc3d8d550806efc7f0e6beedbd0cb2020"
+    }
+  },
+  "files": {
+    "SKILL.md": "f0a0db774ce2a03f77cf2f580b4397c42934cd0962c9ee12f1b320a4b40ed341",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "5a29a57ca5aaeb79edc03ecb665398080d572a6a3c8cb7b1c245d854ed301776"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V5 is an authored semantic revision of router v4, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter and both example references remain byte-for-byte unchanged. Only the two example references retain complete verbatim-source mappings.",
+    "Both hook checkpoints require reading actual configuration before selecting or announcing hooks. Pre-hook announcements and optional offers must be completed before any pre-hook invocation or setup; example fields, guessed IDs and guessed adapter mappings cannot supply configuration.",
+    "Known hidden project paths are checked directly or discovered using an explicitly hidden-aware search scoped to existing project directories, including a supplied integration directory.",
+    "Setup executes the shell script directly or through its shebang interpreter with the required argument tokens. Required context reads are separate from setup and fallible discovery so conditional chaining or fallback masks cannot skip constitution loading.",
+    "Factual grounding covers progress commentary as well as the final report; an invented prior invocation, failure or recovery cannot explain a next step. Recovery does not erase a recorded failed action.",
+    "V4 post-hook placement and rendered block templates, native writes and sandbox boundaries, optional-hook authorization, condition skipping, policy neutrality, topic allocation, Gap markers, exact append prefix preservation and reviewer checkbox ownership remain in force."
+  ],
+  "validation_scope": {
+    "offline": "Package integrity, frozen predecessor/source/discovery/example retention, routed-reference availability, retained-source mapping and tamper rejection. Harmless temporary-fixture controls exercise hidden-path discovery, known-path absence versus empty files, exact shell argument tokens and isolated context reads after masked setup failure. These controls do not test model instruction compliance. Checker/trace regressions are separate.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate. Instruction changes and deterministic offline tests do not prove model compliance, semantic equivalence, sandbox behavior on a future host or runtime savings."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v4-results.md"
+}

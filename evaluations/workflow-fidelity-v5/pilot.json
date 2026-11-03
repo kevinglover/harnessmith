@@ -1,0 +1,32 @@
+{
+  "schema_version": 5,
+  "pilot_id": "opt-004-workflow-fidelity-v5",
+  "evidence_kind": "offline-preparation",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "repetitions": 1,
+  "strategies": [
+    "router-v5"
+  ],
+  "source": "skills/speckit-checklist/SKILL.md",
+  "router": "evaluations/variants/speckit-checklist-router-v5",
+  "router_review": "evaluations/variants/speckit-checklist-router-v5.review.json",
+  "fixtures": "evaluations/workflow-fidelity/fixtures",
+  "target": "specs/001-invitations/checklists/security.md",
+  "cases": [
+    {
+      "id": "append",
+      "prompt": "evaluations/workflow-fidelity/prompts/append.md",
+      "new_items": 3,
+      "first_id": 8,
+      "overlay": "append"
+    },
+    {
+      "id": "hooks",
+      "prompt": "evaluations/workflow-fidelity/prompts/hooks.md",
+      "new_items": 4,
+      "first_id": 1,
+      "overlay": "hooks"
+    }
+  ]
+}

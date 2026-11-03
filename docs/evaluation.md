@@ -99,8 +99,9 @@ setting its expected result to true. Action order, unexpected actions, and
 activity after an abort are checked per turn. A missing or extra runtime turn
 fails the turn-count check.
 
-The corpus now has 14 scenarios: three legacy scenarios, four lifecycle
-scenarios, four non-trigger scenarios, and three explicit-channel scenarios.
+The corpus now has 20 scenarios: three legacy scenarios, four lifecycle
+scenarios, four non-trigger scenarios, three explicit-channel scenarios, and
+one explicit Codex runtime probe, plus five larger-skill checklist scenarios.
 The lifecycle and non-trigger cases cover every target; explicit-only cases
 cover the three targets that represent that policy. The new synthetic lifecycle
 fixture models approval, continuation, compaction, hook failure, reference
@@ -122,7 +123,8 @@ compatible but its bare observations are not a complete evidence report.
 The new collector requires a version-2 scenario, a passing offline contract,
 an explicit `enabled=True`, and at least two paired samples (default three).
 An `EvidenceEvaluator` adapter implements `evaluate(request) -> RuntimeSample`.
-No provider ships with Harnessmith, and normal CI never contacts one.
+The opt-in [Codex adapter](codex-runtime-evidence.md) supports explicit
+single-turn probes. Normal CI never contacts a provider.
 
 ```python
 from pathlib import Path
@@ -178,3 +180,311 @@ Real runs are still needed before making fidelity, token, latency, or cost
 claims. Compare like environment/configuration identifiers, inspect individual
 failures and cache conditions, and retain repeated samples rather than treating
 one successful pair as proof.
+
+## Larger-skill comparison
+
+The [checklist runtime benchmark](checklist-runtime-benchmark.md) uses the existing
+23 KB checklist skill for matched none/some/most optional-reference workloads.
+Its offline contracts are pinned. The initial live batch completed the no-reference
+case (four passing sessions) and one pair of the one-reference case before an
+account usage limit stopped collection. The benchmark document records the
+partial results and remaining coverage; no broad efficiency claim is established.
+
+The [savings follow-up](checklist-savings-followup.md) adds security and append-policy
+consultations and distinguishes total, cached, and uncached runtime input. Its
+16-session batch completed: output checks passed throughout, while four compiled
+core-task sessions loaded unexpected references. Every compiled scenario mean
+used more input and took longer. This identifies conditional reference loading
+as a future experiment, not a verified optimization.
+
+## Conditional strategy comparison
+
+The [three-way experiment](conditional-loading.md) compares canonical, mandatory
+and reviewed conditional extraction using frozen tasks and rotated execution
+order. It prepares packages without network access by default. Its schema and
+reports are separate from paired evidence. The completed
+[Astra conditional results](conditional-loading-results.md) and
+[Luna router results](router-luna-results.md) remain separate model-specific
+evidence. Historical assertions and scores are unchanged.
+
+## OPT-004 status and next fidelity work
+
+The [offline completion plan](opt-004-completion-plan.md) retains the full
+Codex/Claude/Cursor scope with a finite matrix, staged collection ceilings and
+stopping rules. Evidence completeness, observed behavior and router promotion
+are separate outcomes. Existing cohorts are reused within their recorded scope;
+new collection still requires its own exact approval. The plan itself launches
+no sessions and changes no instruments or historical grades.
+
+[OPT-004 status](opt-004-status.md) maps the actual acceptance criteria to reports,
+provenance and open coverage. It does not mark the wider task complete.
+The prospective [v2 promotion rubric](../evaluations/variants/router-quality-rubric-v2.md)
+reports content, formatting, reference behavior, workflow and efficiency separately;
+it does not retroactively replace the frozen consultation rubric.
+
+The [workflow fidelity pilot](workflow-fidelity-pilot.md) prepares six isolated
+canonical/router sessions for creation, append preservation and harmless local
+hooks. After explicit approval, the [write-capable collector](workflow-runtime-collector.md)
+completed exactly six GPT-6 Luna sessions without replacements. The
+[workflow results](workflow-fidelity-results.md) retain 0/6 full frozen passes,
+successful append preservation/automatic-hook ordering, and separate raw/semantic
+review. The pilot identifies workflow and instrumentation gaps; it cannot
+establish broad efficiency or equivalence. Further live runs need new approval.
+
+The [versioned follow-up](workflow-fidelity-pilot-v2.md) adds router v2,
+checker/normalizer v2 and prospective rubric v3. Synthetic regressions distinguish
+valid compound reads and final-answer formatting from masked command failures,
+missing context, unusable hook offers and combined topics. A separate collector
+is fixed to two Luna sessions and was validated against a local fake server
+before launch. After separate approval, the [two-session results](workflow-fidelity-v2-results.md)
+record 0/2 full frozen passes, with content/format/reference checks passing in
+both. Required context, append preservation and distinct topic allocation were
+observed; hook offers, a denied heredoc and remaining parser limits keep the
+workflow gate open. Every result is retained, no historical observation is
+regraded, and no retry or additional session ran. The batch used 239,966 input
+and 2,541 output tokens; it provides no baseline efficiency comparison.
+
+The subsequent [v3 repair proposal](workflow-fidelity-pilot-v3.md) adds new
+parser/checker/collector versions, router v3 and rubric v4. Offline controls
+cover pinned absent-file checks, bounded literal writes, timely rendered hook
+blocks and verified final artifacts. After separate approval, the
+[two-session v3 results](workflow-fidelity-v3-results.md) record 1/2 frozen
+automated passes and 0/2 complete reviewed passes, without retries or additions.
+Native writes, append preservation, pinned absence checks and final readbacks
+are corroborated. Missing post-hook blocks, unsupported narration, one failed
+directory listing and a semantic policy presupposition keep the targeted gate
+open. A reuse paraphrase exposes a keyword-screen limitation, retained without
+regrading. Usage is 264,071 input and 2,482 output tokens, with no baseline
+efficiency comparison. All earlier reports, grades and instruments remain
+unchanged; no further live batch is queued.
+
+The [v4 repair proposal](workflow-fidelity-pilot-v4.md) adds an isolated router
+revision and checker/collector v4 with
+[rubric v5](../evaluations/variants/router-quality-rubric-v5.md), retaining the
+frozen v3 normalizer. The new topic screen records bounded reuse cues, and a
+limited final-hook-claim screen records supporting message/event IDs. Semantic
+policy neutrality and general narrative truthfulness remain separate mandatory
+reviews. Offline tests preserve failed-action handling and cover paraphrases,
+distractors, timed versus promised blocks, truthful negation, unsupported claims,
+safe discovery and fixed two-slot fake collection. After separate approval,
+the [v4 results](workflow-fidelity-v4-results.md) retain exactly two completed
+Luna sessions, with zero retries or additions: 0/2 full automated passes and
+2/2 semantic content passes. Append preserves bytes using an internal Python
+write/readback outside the frozen parser grammar. Hooks renders correct post
+blocks but has invented/late pre messages, a skipped constitution read after a
+masked failure and unsupported commentary. All grades and evidence remain
+unchanged. Usage is 247,946 input and 2,644 output tokens; efficiency and the
+broader OPT-004 acceptance criteria remain unproven. No further live batch is
+queued.
+
+The [v5 offline repair](workflow-fidelity-pilot-v5.md) adds router v5,
+normalizer v4 and checker/collector v5 with
+[rubric v6](../evaluations/variants/router-quality-rubric-v6.md). New synthetic
+controls recognize bounded internal append/readback and proven constituent
+reads while preserving failed envelopes and skipped-context failures. Count
+modifiers, invented pre-hook blocks and supported error narration across
+completed commentary/final messages have separate controls. Fake-server
+integration uses schema-4 observations; no provider or real project hook runs.
+These are prospective instrument/package checks, not historical rescoring or
+new evidence of model compliance. No live sessions are authorized by this work.
+
+The separately approved [v5 follow-up](workflow-fidelity-v5-results.md) completed
+exactly two Luna low sessions with no retries, replacements or expansion.
+Frozen automated and complete reviewed case passes are 1/2; semantic content
+passes are 2/2. Hooks passes every applicable gate. Append preserves its original
+bytes but omits final readback and claims an unrecorded Git comparison; read-only
+Python forms also remain unclassified. Raw review separates those parser limits
+from actual workflow/narrative gaps without changing collected grades. All 111
+collection files and separate semantic/raw reviews are retained. Usage is
+348,909 input and 2,298 output tokens; efficiency remains unproven. Both slots
+are consumed and no further live batch is queued.
+
+The [v6 offline repair](workflow-fidelity-pilot-v6.md) adds router v6, normalizer
+v5 and checker/collector v6 with
+[rubric v7](../evaluations/variants/router-quality-rubric-v7.md). Synthetic
+controls cover literal Python existence/content and byte reads, corroborated
+cache diagnostics, lifecycle-backed reference/setup ordering and a separate
+complete final read after the last write. Bounded completed verification and Git
+claims require earlier matching evidence; absence of a claim or a passing screen
+cannot certify general narrative accuracy. Internal append/readback attribution
+remains supported but alone cannot satisfy the new separate-action checkpoint.
+
+The separately approved [v6 follow-up](workflow-fidelity-v6-results.md) completed
+exactly one append-only GPT-6 Luna low session with zero retries or expansion.
+Content, formatting and reference checks pass. Raw review corroborates extension
+absence before separate setup, exact prefix preservation, separate final
+readback and supported narration; no Git comparison claim is made. The frozen
+automated and complete reviewed gates remain 0/1 because the inherited parser
+recognizes a literal `else printf` absence check without certifying it. This
+instrument limitation does not change the grade or erase the positive raw
+evidence. All 69 collection files are retained, as are the original skill and
+historical results. Usage is 178,288 input and 1,039 output tokens, with no
+efficiency comparison. V5 hooks is not a v6 result; OPT-004 remains open. The
+single approved slot is consumed and no further live work is queued.
+
+The [v7 offline repair](workflow-fidelity-pilot-v7.md) keeps router v6 unchanged
+and adds normalizer v6, checker/collector v7 and
+[rubric v8](../evaluations/variants/router-quality-rubric-v8.md). A standalone
+literal `else printf` can now certify the pinned absence checkpoint when exact
+output, safe branches/paths, consistent lifecycle and a disjoint read-only
+prefix corroborate it. Labels alone, unpinned state, output noise, earlier
+mutation/setup, unknown operations and overlapping lifecycles cannot qualify.
+Every existing append/reference/setup/verification/narration gate remains in
+force. Fresh synthetic and fake-server controls never regrade old observations.
+The proposed one-session Luna low append pilot requires separate approval;
+no live launch is authorized or queued, and the frozen v6 gate remains 0/1.
+
+After separate approval, the [v7 follow-up](workflow-fidelity-v7-results.md)
+completed exactly one Luna low session without retries or expansion. Semantic
+content, formatting, reference behavior, prefix preservation and separate final
+readback pass. The frozen automated and complete reviewed gates are 0/1: the
+model combined its absence probe with discovery that exited 2, then used another
+read/discovery action whose terminal statement remains unverified by the bounded
+parser. The new standalone certificate correctly does not apply to the failed
+compound probe; its qualifying live coverage remains open. All 73 collection
+files and separate semantic/raw reviews are retained, along with all earlier
+evidence and the original skill. Usage is 161,451 input and 1,134 output tokens;
+no efficiency comparison is made. The authorized slot is consumed; no further
+live session or repair is included in this batch. OPT-004 remains open.
+
+The [v8 offline repairs](workflow-fidelity-pilot-v8.md) add bounded terminal
+discovery attribution and independent command-separation gates. Authored router
+v7 isolates extension checks, setup, context reads and discovery, and skips absent
+optional integration roots. Normalizer v7 checks complete pinned listings and
+matching lifecycles; checker/collector v8 uses schema-7 observations and
+[rubric v9](../evaluations/variants/router-quality-rubric-v9.md). Parsing a
+successful mixed read/discovery command does not satisfy workflow separation.
+Actual failures, unsupported syntax and pending semantic/raw reviews are retained.
+All controls use fresh synthetic traces and local fake servers. Historical
+evidence is neither replayed nor regraded; the original skill stays unchanged.
+One fresh GPT-6 Luna low append session is proposed, with no retries, replacement,
+expansion or extra judge. It requires new approval; no live session is queued.
+
+After separate approval, the [v8 follow-up](workflow-fidelity-v8-results.md)
+completed exactly one GPT-6 Luna low append session without retry, replacement,
+expansion or extra judge. Content, formatting and reference behavior pass; raw
+review corroborates isolated successful checks/discovery, complete context before
+writing, exact 694-byte prefix preservation and separate final readback. The
+frozen full gate remains 0/1 with seven failed criteria: unsupported same-path
+`else test ! -e` conditionals and conservative read-overlap attribution prevent
+normalized context/absence evidence, and prior uncertainty blocks the new terminal
+discovery certificate. Every shell command exits zero. Preserve raw findings
+separately; no historical score is waived or recomputed.
+
+All 77 collection files and 2,468 prelaunch protected files plus two symlinks are
+retained unchanged. Usage is 163,744 input and 1,320 output tokens, with 22.096
+seconds collector latency; this is not an efficiency comparison. The authorized
+slot is consumed. Any further parser repair is separate offline work; no live
+session is queued and OPT-004 remains open.
+
+The [v9 offline repairs](workflow-fidelity-pilot-v9.md) keep router v7 unchanged
+and version only the instruments and [rubric v10](../evaluations/variants/router-quality-rubric-v10.md).
+Normalizer v8 can prove exact same-path `else test ! -e` conditionals and complete
+independent read-only overlaps; unknown, failed, mutating, discovery or absence
+overlaps remain unverified. Precisely superseded artificial failures stay in
+certificate metadata. Checker/collector v9 uses observation schema 8 and keeps
+all existing hard gates. A reported adapter handles explicit null absence output
+only behind a unique matching pinned certificate, without changing captured
+observations. Missing output and null reads are not admitted.
+
+Fresh synthetic traces and fake-server regressions preserve every historical
+result, including v8's 0/1 gate and its post-retention timing correction. The
+proposal is one fresh GPT-6 Luna low append session, one turn, with no retry,
+replacement, expansion or extra judge. It is not approved or queued. Grammar
+forms unused by a future model remain unobserved live; no rerun may manufacture
+coverage. No efficiency, reliability, equivalence or promotion claim follows
+from the offline repairs.
+
+The subsequently approved [v9 Luna low append session](workflow-fidelity-v9-results.md)
+completed one turn with no retry, replacement, expansion or extra judge. Its
+content, formatting, references, exact 694-byte prefix and separate final
+readback pass. The frozen full gate stays **0/1**: unsupported same-path
+`else test ! -e PATH && echo ABSENT` conditionals leave required context and
+extension state uncertified, also blocking downstream discovery. Raw commands
+corroborate those checkpoints and all exit zero; the failed criteria remain
+binding. The new exact else-test, explicit-null and concurrent-read rules are
+unobserved live, and no successful discovery certificate is established.
+
+All 81 original collection files and 3,099 prelaunch protected files plus two
+symlinks remain unchanged. Separate semantic-first and raw reviews retain their
+authorship/blinding limits and do not overwrite pending grades. Usage is 201,255
+input and 1,298 output tokens with 22.383 seconds latency; there is no paired
+baseline, efficiency claim or version/model pooling. The authorized slot is
+consumed. Any guarded-marker parser repair is separate offline work; no further
+live session is queued and OPT-004 remains incomplete.
+
+The [v10 offline repair](workflow-fidelity-pilot-v10.md) adds guarded literal-marker
+attribution in normalizer v9 with checker/collector v10 and rubric v11. Safe
+same-path conditionals can supply exact pinned reads or extension absence; the
+post-append case requires one target-only native update, original-prefix
+preservation, unchanged remaining state and separate complete final readback.
+Every hard gate remains binding. Superseded attribution failures are retained
+inside new certificates, while historical observations and scores stay frozen.
+
+Fresh synthetic/fake-server controls cover the new proof and its unsafe variants.
+The proposed next pilot remains exactly one Luna low append session with no
+retry, replacement, expansion or extra judge, pending separate approval. Router,
+original skill, fixtures and prompt remain unchanged. Offline proof coverage is
+not live workflow reliability, efficiency, compiler equivalence or promotion.
+
+The subsequently approved [v10 Luna low append session](workflow-fidelity-v10-results.md)
+completed one turn without retry, replacement, expansion or extra judge.
+Content, formatting, references, exact 694-byte prefix and separate final
+readback pass. The frozen full gate stays **0/1**: two unsupported `if test -f`
+conditionals leave context/absence uncertified and block discovery attribution.
+Raw review separately finds the required post-generation extension check
+unrecorded; the frozen append checker has no dedicated gate for this checkpoint.
+Initial/final absence is not evidence of performing the later check.
+
+All 85 original collection files and 3,607 prelaunch protected files plus two
+symlinks remain unchanged. Separate reviews preserve their authorship/blinding
+limits and leave original grades untouched. Usage is 202,594 input and 1,480
+output tokens with 26.810 seconds latency; no paired baseline or efficiency
+claim follows. New guarded-echo, post-append, concurrent-read and null-adapter
+proofs remain unobserved live. The authorized slot is consumed; further parser
+and checkpoint repairs require separate work in new versions. No live session
+is queued, no router is promoted and OPT-004 remains incomplete.
+
+The [v11 offline repair](workflow-fidelity-pilot-v11.md) introduces normalizer
+v10, checker/collector v11, authored router v8 and
+[rubric v12](../evaluations/variants/router-quality-rubric-v12.md). Bounded
+same-path `if test -f` / literal-printf proofs cover complete pinned reads and
+extension absence, including safe wrapper quoting. Independent parser evidence
+does not waive workflow ordering or command boundaries.
+
+A new mandatory append gate requires a fresh extension-state action after the
+last write and complete separate final readback, before reporting. Its narrow
+single-fact command contract verifies returned readback text as well as hashes,
+certificate identity and append/readback accounting. Before-only checks, final
+snapshots, labels, claims, overlap and late checks cannot substitute. Router v8
+makes the checkpoint explicit even when configuration was absent before setup.
+Fresh synthetic/fake-server controls distinguish a passing complete workflow
+from an otherwise correct append with the postcheck omitted.
+
+Historical evidence and the original skill remain unchanged; v10 stays frozen
+at 0/1. The smallest proposed live follow-up is one fresh GPT-6 Luna low append
+session, one turn, no retry, replacement, expansion or extra judge. It is not
+authorized or queued. Offline readiness proves neither live compliance nor
+efficiency, reliability, compiler equivalence or router promotion.
+
+The subsequently approved [v11 Luna low append session](workflow-fidelity-v11-results.md)
+completed one turn with no retry, replacement, expansion, baseline, hooks rerun
+or extra judge. Content, formatting, references, exact 694-byte prefix and
+separate complete readback pass. The frozen automated and complete reviewed
+gates remain **0/1**: unsupported Python verification and a pipeline fail
+classification, cache diagnostics remain failed constituents, and the fresh
+post-generation check lacks the required post-append absence proof.
+
+Raw review confirms that the later extension action was performed after the
+write/readback and before reporting; this differs from v10's omitted action.
+Its null output and absent certificate do not satisfy the frozen v11 gate.
+Inherited early null-absence, conditional context-read and terminal-discovery
+proofs are observed; the new `if test -f` / `printf` grammar was not chosen.
+Historical scores remain untouched, and no rerun manufactures grammar coverage.
+
+Usage is 305,997 input and 1,506 output tokens, with 36.142 seconds latency.
+Input exceeds the planning heuristic, which was not a cap or price. The CLI
+changed from 0.163 to 0.164; a non-model compatibility/sandbox check preceded
+collection, and versions remain separate. Private evidence and separate reviews
+retain their provenance and blinding limits. The single authorization is
+consumed; leave inline remains default and OPT-004 remains incomplete.

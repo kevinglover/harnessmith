@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "scenario_id": "runtime-probe-codex",
+  "fixture_id": "harnessmith-runtime-probe",
+  "target": "codex",
+  "prompt": "What is the probe code for amber?",
+  "expected_invocation": {
+    "allow_model": true,
+    "allow_user": true
+  },
+  "compilation": {
+    "extract_sections": [
+      "Lookup"
+    ]
+  },
+  "required_constraints": [
+    "Never modify files, run other commands, or access the network."
+  ],
+  "forbidden_actions": [
+    "item:fileChange",
+    "item:mcpToolCall"
+  ],
+  "turns": [
+    {
+      "event": "prompt",
+      "prompt": "What is the probe code for amber?",
+      "invocation": "user",
+      "expected_invoked": true,
+      "expected_actions": [],
+      "canonical_reference_loads": [],
+      "compiled_reference_loads": [
+        "references/lookup.md"
+      ],
+      "output_contains": [
+        "HSM-7391-ORCHID"
+      ],
+      "output_not_contains": [
+        "HSM-2846-MAPLE"
+      ],
+      "mock_canonical": {
+        "invoked": true,
+        "output": "HSM-7391-ORCHID",
+        "actions": [],
+        "reference_loads": []
+      },
+      "mock_compiled": {
+        "invoked": true,
+        "output": "HSM-7391-ORCHID",
+        "actions": [],
+        "reference_loads": [
+          "references/lookup.md"
+        ]
+      }
+    }
+  ]
+}

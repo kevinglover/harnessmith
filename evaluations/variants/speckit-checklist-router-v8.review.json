@@ -1,0 +1,48 @@
+{
+  "kind": "reviewed-semantic-redesign",
+  "version": 8,
+  "source_sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45",
+  "previous_package": {
+    "path": "evaluations/variants/speckit-checklist-router-v7",
+    "review_sha256": "89fc65b25a4b888ab350d88a6988da149b92777aa4a86d18168272eff1539c84",
+    "files": {
+      "SKILL.md": "5140dcdfef91e48d8066610c3bdbd91362e26f9e5bd8916b00131eb3ef0484ec",
+      "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "references/project-generation.md": "5aed088203616ec54dc66226da07c2ae7b04f415c353630e4d878df96aef69c3"
+    }
+  },
+  "files": {
+    "SKILL.md": "e3c19198c29fe52cbfcb2489b78bb9331d69b3b1322290a6271b181a0017f611",
+    "references/anti-examples-what-not-to-do.md": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+    "references/example-checklist-types-sample-items.md": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+    "references/project-generation.md": "f2f15d9d879ce35a0e26cdad624ad8caa207884da6a9f9645faa272af0551594"
+  },
+  "verbatim_source_spans": {
+    "references/example-checklist-types-sample-items.md": [
+      [
+        "## Example Checklist Types & Sample Items",
+        "## Anti-Examples: What NOT To Do"
+      ]
+    ],
+    "references/anti-examples-what-not-to-do.md": [
+      [
+        "## Anti-Examples: What NOT To Do",
+        "## Post-Execution Checks"
+      ]
+    ]
+  },
+  "semantic_changes": [
+    "V8 is an authored semantic revision of router v7, not byte-equivalent to the original skill or a proven content-preserving compiler transformation.",
+    "Discovery frontmatter, shared rules and both example references remain byte-identical. Only the two example references retain complete verbatim-source mappings.",
+    "The generation route and step8 explicitly require a fresh extension-state check in a separate tool action after the completed checklist write and separate full final readback, before reporting, for creation and append even if the initial configuration was absent.",
+    "Earlier absence and saved checklist state cannot substitute for this later action. An unverified check must be reported as a limitation, without claiming it passed.",
+    "Every prior hook selection, rendering, authorization and condition rule, command-separation requirement, setup argument, content/clarification instruction, append preservation and factual/Git narration rule remains unchanged. No shell spelling or fixture-specific path is prescribed by the new guidance."
+  ],
+  "validation_scope": {
+    "offline": "Exact source and predecessor/package pins, unchanged discovery/shared rules/example references and complete predecessor bytes outside two focused checkpoint edits. Synthetic parser/checker/collector regressions validate instrument behavior separately; they do not prove live instruction compliance.",
+    "live_sessions": 0,
+    "fidelity_claim": "Unvalidated candidate; no live reliability, semantic equivalence, efficiency or promotion claim."
+  },
+  "evidence_basis": "docs/workflow-fidelity-v10-results.md"
+}

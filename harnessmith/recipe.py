@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 from .errors import SkillCompilerError
+from .load_policy import ConditionalSection, parse_conditional_sections
 from .targets import TARGET_NAMES
 
 
@@ -24,6 +25,7 @@ _TOP_LEVEL_KEYS = {
     "extract_sections",
     "optimizations",
     "budgets",
+    "conditional_sections",
 }
 _BUDGET_KEYS = {"root_tokens", "normal_path_tokens"}
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -42,6 +44,7 @@ class Recipe:
     optimizations: Tuple[str, ...]
     max_root_tokens: Optional[int]
     max_normal_path_tokens: Optional[int]
+    conditional_sections: Tuple[ConditionalSection, ...] = ()
 
 
 def load_recipe(path: Path) -> Recipe:
@@ -59,8 +62,13 @@ def load_recipe(path: Path) -> Recipe:
     unknown = sorted(set(data) - _TOP_LEVEL_KEYS)
     if unknown:
         raise SkillCompilerError("recipe has unknown keys: %s" % ", ".join(unknown))
-    if data.get("schema_version") != 1:
-        raise SkillCompilerError("recipe schema_version must be 1")
+    version = data.get("schema_version")
+    if type(version) is not int or version not in (1, 2):
+        raise SkillCompilerError("recipe schema_version must be 1 or 2")
+    if version == 1 and "conditional_sections" in data:
+        raise SkillCompilerError(
+            "conditional_sections requires recipe schema_version 2"
+        )
 
     target = data.get("target")
     if target is not None and target not in TARGETS:
@@ -71,8 +79,7 @@ def load_recipe(path: Path) -> Recipe:
     invocation = data.get("invocation", "source")
     if invocation not in INVOCATION_POLICIES:
         raise SkillCompilerError(
-            "recipe invocation must be one of: %s"
-            % ", ".join(INVOCATION_POLICIES)
+            "recipe invocation must be one of: %s" % ", ".join(INVOCATION_POLICIES)
         )
 
     source_sha256 = data.get("source_sha256")
@@ -85,12 +92,23 @@ def load_recipe(path: Path) -> Recipe:
     if len(set(extract_sections)) != len(extract_sections):
         raise SkillCompilerError("recipe extract_sections contains duplicates")
 
+    conditional_sections = parse_conditional_sections(
+        data.get("conditional_sections", {})
+    )
+    if conditional_sections and not source_sha256:
+        raise SkillCompilerError(
+            "conditional extraction requires a pinned source_sha256"
+        )
+    if any(item.section not in extract_sections for item in conditional_sections):
+        raise SkillCompilerError(
+            "conditional section must also appear in extract_sections"
+        )
+
     optimizations = _string_tuple(data, "optimizations")
     unknown_optimizations = sorted(set(optimizations) - set(OPTIMIZATIONS))
     if unknown_optimizations:
         raise SkillCompilerError(
-            "recipe has unknown optimizations: %s"
-            % ", ".join(unknown_optimizations)
+            "recipe has unknown optimizations: %s" % ", ".join(unknown_optimizations)
         )
     if len(set(optimizations)) != len(optimizations):
         raise SkillCompilerError("recipe optimizations contains duplicates")
@@ -116,6 +134,7 @@ def load_recipe(path: Path) -> Recipe:
         optimizations=optimizations,
         max_root_tokens=max_root_tokens,
         max_normal_path_tokens=max_normal_path_tokens,
+        conditional_sections=conditional_sections,
     )
 
 
