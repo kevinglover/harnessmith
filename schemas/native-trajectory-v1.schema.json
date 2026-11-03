@@ -1,0 +1,2123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harnessmith.dev/schemas/native-trajectory-v1.schema.json",
+  "title": "Native trajectory v1 (prospective; not runtime qualification)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "trajectory_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "target": {
+      "enum": [
+        "generic",
+        "codex",
+        "claude",
+        "cursor"
+      ]
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "host_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "mode": {
+      "enum": [
+        "native",
+        "mock"
+      ]
+    },
+    "capture_status": {
+      "enum": [
+        "complete",
+        "interrupted",
+        "incomplete"
+      ]
+    },
+    "capture_elapsed_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "thread.started"
+              },
+              "data": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "thread.disconnected"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "process_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "process_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "thread.resumed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "previous_process_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "process_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "previous_process_id",
+                  "process_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "thread.forked"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "parent_thread_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "parent_event_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "parent_thread_id",
+                  "parent_event_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "turn.started"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "turn_role": {
+                    "enum": [
+                      "task",
+                      "control"
+                    ]
+                  },
+                  "prompt_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "turn_role",
+                  "prompt_ref"
+                ],
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "properties": {
+                      "turn_role": {
+                        "const": "task"
+                      },
+                      "prompt_ref": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "\\S"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "turn_role": {
+                        "const": "control"
+                      },
+                      "prompt_ref": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "turn.completed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "completed",
+                      "failed",
+                      "interrupted"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "approval.requested"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "approval_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "approval_id",
+                  "action_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "approval.decided"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "approval_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "decision": {
+                    "enum": [
+                      "grant",
+                      "deny"
+                    ]
+                  }
+                },
+                "required": [
+                  "approval_id",
+                  "decision"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "action.proposed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "input_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "action_id",
+                  "operation",
+                  "input_ref"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "action.started"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "approval_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "path": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "input_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "dispatch": {
+                    "enum": [
+                      "tool",
+                      "skill_command",
+                      "host_hook",
+                      "boundary_probe"
+                    ]
+                  }
+                },
+                "required": [
+                  "action_id",
+                  "approval_id",
+                  "operation",
+                  "path",
+                  "input_ref",
+                  "dispatch"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "action.completed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "status": {
+                    "enum": [
+                      "succeeded",
+                      "failed",
+                      "cancelled"
+                    ]
+                  },
+                  "exit_code": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "output_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "action_id",
+                  "status",
+                  "exit_code",
+                  "output_ref"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "interrupt.requested"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "request_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "request_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "interrupt.completed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "request_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "status": {
+                    "enum": [
+                      "cancelled",
+                      "already_complete"
+                    ]
+                  }
+                },
+                "required": [
+                  "request_id",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "compaction.started"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "compaction_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "trigger": {
+                    "enum": [
+                      "explicit",
+                      "idle",
+                      "automatic"
+                    ]
+                  }
+                },
+                "required": [
+                  "compaction_id",
+                  "trigger"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "compaction.completed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "compaction_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "compaction_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "permission.snapshot"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "policy_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "allow_read": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "uniqueItems": true
+                  },
+                  "allow_write": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "uniqueItems": true
+                  },
+                  "network": {
+                    "type": "boolean"
+                  },
+                  "approval_policy": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "policy_id",
+                  "allow_read",
+                  "allow_write",
+                  "network",
+                  "approval_policy"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "invocation.observed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "skill_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "package_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "channel": {
+                    "enum": [
+                      "explicit",
+                      "implicit",
+                      "abstained"
+                    ]
+                  },
+                  "evidence_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "skill_id",
+                  "package_sha256",
+                  "channel",
+                  "evidence_ref"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "output.recorded"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "output_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "output_ref"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "discovery.snapshot"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "catalog_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "evidence_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "catalog_sha256",
+                  "evidence_ref",
+                  "complete"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "elapsed_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "thread_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "turn_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "causal_event_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "origin": {
+                "enum": [
+                  "native",
+                  "controller",
+                  "mock"
+                ]
+              },
+              "raw_ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "kind": {
+                "const": "read.observed"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  },
+                  "blob_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "byte_start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "byte_end": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  },
+                  "category": {
+                    "enum": [
+                      "package_reference",
+                      "project_context",
+                      "target",
+                      "other"
+                    ]
+                  }
+                },
+                "required": [
+                  "action_id",
+                  "path",
+                  "blob_sha256",
+                  "byte_start",
+                  "byte_end",
+                  "complete",
+                  "category"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "event_id",
+              "sequence",
+              "elapsed_ms",
+              "thread_id",
+              "turn_id",
+              "causal_event_id",
+              "origin",
+              "raw_ref",
+              "kind",
+              "data"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "usage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "interval_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "thread_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "meter_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "counter_epoch": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "basis": {
+            "enum": [
+              "delta",
+              "cumulative"
+            ]
+          },
+          "baseline_reason": {
+            "enum": [
+              "request_delta",
+              "fresh",
+              "inherited",
+              "reset",
+              "continuation"
+            ]
+          },
+          "work_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "raw_ref": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "normalization_ref": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "unavailable_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "baseline": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "cached_input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "cache_write_input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "output_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "reasoning_output_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "input_tokens",
+                  "cached_input_tokens",
+                  "cache_write_input_tokens",
+                  "output_tokens",
+                  "reasoning_output_tokens"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "final": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "cached_input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "cache_write_input_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "output_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "reasoning_output_tokens": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "input_tokens",
+                  "cached_input_tokens",
+                  "cache_write_input_tokens",
+                  "output_tokens",
+                  "reasoning_output_tokens"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "interval_id",
+          "thread_id",
+          "meter_id",
+          "counter_epoch",
+          "basis",
+          "baseline_reason",
+          "work_ids",
+          "raw_ref",
+          "normalization_ref",
+          "unavailable_reason",
+          "baseline",
+          "final"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "trajectory_id",
+    "target",
+    "surface",
+    "host_version",
+    "mode",
+    "capture_status",
+    "capture_elapsed_ms",
+    "events",
+    "usage"
+  ],
+  "additionalProperties": false
+}

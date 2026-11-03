@@ -216,6 +216,15 @@ are separate outcomes. Existing cohorts are reused within their recorded scope;
 new collection still requires its own exact approval. The plan itself launches
 no sessions and changes no instruments or historical grades.
 
+Offline implementation has begun with a [host capability inventory](opt-004-host-inventory.md)
+and [installed Codex protocol record](opt-004-codex-capability.md). These identify
+candidate native controls and prelaunch blockers; they do not qualify new live
+adapters or change the historical cohorts. The
+[prospective cases and paired packages](opt-004-case-contracts.md) have separate
+offline preparation/verification commands. The additive
+[native trajectory contract](opt-004-native-contract.md) supplies structural and
+causal validation; legacy mock scenario loading remains unchanged.
+
 [OPT-004 status](opt-004-status.md) maps the actual acceptance criteria to reports,
 provenance and open coverage. It does not mark the wider task complete.
 The prospective [v2 promotion rubric](../evaluations/variants/router-quality-rubric-v2.md)

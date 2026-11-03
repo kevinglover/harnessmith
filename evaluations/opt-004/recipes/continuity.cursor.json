@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "invocation": "source",
+  "optimizations": [],
+  "extract_sections": [
+    "Procedure examples"
+  ],
+  "budgets": {},
+  "target": "cursor",
+  "source_sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30"
+}

@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "before_checklist": [
+      {
+        "extension": "opt004-pre-fail",
+        "command": "opt004.pre-fail",
+        "description": "Synthetic pre-fail fixture",
+        "optional": false,
+        "prompt": "Run this optional fixture hook?"
+      }
+    ]
+  }
+}

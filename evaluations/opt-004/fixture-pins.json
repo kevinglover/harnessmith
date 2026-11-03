@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "hash_encoding": "sha256 of UTF-8 canonical JSON inventory (sorted keys, compact separators); inventory includes path, bytes, mode, sha256",
+  "workspace": {
+    "path": "evaluations/opt-004/workspace",
+    "inventory_sha256": "3068e3e19bf42dd85d216d24ca346e4a775ad02473cc4449f9fc6d20d1b0792a",
+    "files": [
+      {
+        "path": "append/specs/001-invitations/checklists/security.md",
+        "sha256": "e19ec3a35212ee2086fc9c25aee38ab6d44adcb4cbe5e70055f8d7cd403d53dd",
+        "mode": "0o644",
+        "bytes": 694
+      },
+      {
+        "path": "common/.opt004/changed-requirement.txt",
+        "sha256": "344b21aaf9af9fbfdba747323dd5c94362120b90006a727e2b2b0f23fd308751",
+        "mode": "0o644",
+        "bytes": 93
+      },
+      {
+        "path": "common/.opt004/fixture_action.py",
+        "sha256": "347b189e36bc439ce3879850bfb882a79bd29e98d2955ffbbdcc8dd5713dc9ab",
+        "mode": "0o755",
+        "bytes": 1255
+      },
+      {
+        "path": "common/.specify/memory/constitution.md",
+        "sha256": "efca5d508851bb7e0fc66049731feb92ecb2559e46163c88b2eb0c5de94ede35",
+        "mode": "0o644",
+        "bytes": 237
+      },
+      {
+        "path": "common/.specify/scripts/bash/check-prerequisites.sh",
+        "sha256": "d797a2e980bcc3f974651659a2b5af4e8a901ff2c29b01bf1c77cdc097b75a92",
+        "mode": "0o755",
+        "bytes": 527
+      },
+      {
+        "path": "common/.specify/templates/checklist-template.md",
+        "sha256": "dc2bf8bf2d7d9a4ac3814e29e3a413fd5c94ad0efa573ff05f9b97804d81b2e5",
+        "mode": "0o644",
+        "bytes": 469
+      },
+      {
+        "path": "common/specs/001-invitations/plan.md",
+        "sha256": "022ebcd543108729b64e5b62469880e9c82d8b9f6229ae0d4330606bdae50660",
+        "mode": "0o644",
+        "bytes": 172
+      },
+      {
+        "path": "common/specs/001-invitations/spec.md",
+        "sha256": "6e115ecb8c4428ed9c4b7e2bfa3b8848becbdae6237d9e21aed9178eced4beba",
+        "mode": "0o644",
+        "bytes": 688
+      },
+      {
+        "path": "common/specs/001-invitations/tasks.md",
+        "sha256": "585360b7a517f9b9ab61a86c41936d6f3c52939b3420885700501bd9d5643d32",
+        "mode": "0o644",
+        "bytes": 172
+      },
+      {
+        "path": "hooks/H1/.specify/extensions.yml",
+        "sha256": "d18f4b1471aae7e673b7ee8148b0226577ee41028b830f72ae1c633ab428b620",
+        "mode": "0o644",
+        "bytes": 277
+      },
+      {
+        "path": "hooks/H2/.specify/extensions.yml",
+        "sha256": "d18f4b1471aae7e673b7ee8148b0226577ee41028b830f72ae1c633ab428b620",
+        "mode": "0o644",
+        "bytes": 277
+      },
+      {
+        "path": "hooks/H3/.specify/extensions.yml",
+        "sha256": "ff6bc8cf31f8b0f26d61823cdec94f7b0eac9856186345d5fabd1f7f5d89eed7",
+        "mode": "0o644",
+        "bytes": 279
+      },
+      {
+        "path": "hooks/H4/.specify/extensions.yml",
+        "sha256": "7564b7eca5e8186b743637983e64bb411b4c1d0453de10a19e510fc6c1295d05",
+        "mode": "0o644",
+        "bytes": 281
+      },
+      {
+        "path": "hooks/W3/.specify/extensions.yml",
+        "sha256": "fd458e4214df784a08c214106fb648385c1887a14dacb7e248129f69a66068dc",
+        "mode": "0o644",
+        "bytes": 1269
+      }
+    ]
+  },
+  "hook_skills": {
+    "path": "evaluations/opt-004/hook-skills",
+    "inventory_sha256": "51f1e7ffb89af35ac5578ef290aadffb1bb838711c84f9eda712f1432e264b1e",
+    "files": [
+      {
+        "path": "opt004-conditional/SKILL.md",
+        "sha256": "091bde1f0fca261fa1cad806a622c4eacdabfde6e31d93cd3c013090af2c69dc",
+        "mode": "0o644",
+        "bytes": 295
+      },
+      {
+        "path": "opt004-disabled/SKILL.md",
+        "sha256": "27cb13e7222e940b2d37660ced6106a1eab43a6c518494906a7bf1eff4b3f07d",
+        "mode": "0o644",
+        "bytes": 286
+      },
+      {
+        "path": "opt004-optional/SKILL.md",
+        "sha256": "7d7f9ac6d857cb0cd557c833d74f3e2cda08116a896339858027dab7f3776f10",
+        "mode": "0o644",
+        "bytes": 286
+      },
+      {
+        "path": "opt004-post/SKILL.md",
+        "sha256": "3abdca585af215133dd87aeaf9a7ad3e158915c8dce4eecebea1ff3588862406",
+        "mode": "0o644",
+        "bytes": 274
+      },
+      {
+        "path": "opt004-post-fail/SKILL.md",
+        "sha256": "1c252b8f42f24fa421540346a56cdbf44551ed158c4539afe2339e98632fa901",
+        "mode": "0o644",
+        "bytes": 289
+      },
+      {
+        "path": "opt004-pre/SKILL.md",
+        "sha256": "ff797cf5d3c3b84148b964e4ecdbb557a3f1c2cffdfe7b6184f3d4e3073b2fd9",
+        "mode": "0o644",
+        "bytes": 271
+      },
+      {
+        "path": "opt004-pre-fail/SKILL.md",
+        "sha256": "ec94106a813e2be0530110f1507e62c49da8fda2cbf44996fd80f42066e1ad24",
+        "mode": "0o644",
+        "bytes": 286
+      }
+    ]
+  },
+  "catalog_skills": {
+    "path": "evaluations/opt-004/catalog/skills",
+    "inventory_sha256": "76daefab3b0e97c0800c5fd0ba51ad36de5760f87911cb453b332a2afdcb3db4",
+    "files": [
+      {
+        "path": "a-api-contract-review/SKILL.md",
+        "sha256": "ab19774100bff9321e80ff781154ac7c75ca036143bb22aa93aac4461ae6034b",
+        "mode": "0o644",
+        "bytes": 286
+      },
+      {
+        "path": "b-api-test-plan/SKILL.md",
+        "sha256": "396a9fe9c05a8d36db98c67a3903c52bb2e79f0867ec4d30a718e833c9f6e46d",
+        "mode": "0o644",
+        "bytes": 278
+      },
+      {
+        "path": "c-release-checklist/SKILL.md",
+        "sha256": "dd6e4a0ce81af14c2595f27138efa7e60ee78693287da7ad5bdfe624af4ceb82",
+        "mode": "0o644",
+        "bytes": 273
+      },
+      {
+        "path": "d-requirements-summary/SKILL.md",
+        "sha256": "c9463575a16571207be0cbd1b136b14bcb9f5425586cb43e44e23af8f90f3da6",
+        "mode": "0o644",
+        "bytes": 273
+      },
+      {
+        "path": "e-security-code-review/SKILL.md",
+        "sha256": "c808fcb939581635006c1c309b8866025e6b9bf45484393390c78aa2deb6cd9f",
+        "mode": "0o644",
+        "bytes": 289
+      },
+      {
+        "path": "f-task-checklist/SKILL.md",
+        "sha256": "e8647e2b04cc89e1a8590f098b71a9c0a98d4c810814cf88b669a071862cbec4",
+        "mode": "0o644",
+        "bytes": 263
+      },
+      {
+        "path": "g-ui-review/SKILL.md",
+        "sha256": "df561c9bb733dec481c69a15a82ba397f0b457285b169e49d3efe27446d42aa5",
+        "mode": "0o644",
+        "bytes": 257
+      },
+      {
+        "path": "z-a-baking/SKILL.md",
+        "sha256": "5c11a519eb671efa9cbe9fe423cf8272813a8c89b27e32c30ccd8908d274eb0e",
+        "mode": "0o644",
+        "bytes": 247
+      },
+      {
+        "path": "z-b-gardening/SKILL.md",
+        "sha256": "6cb5fc0e32549af40f947ba6d5de5ace0351db2bcb1163e7f1035c49e392033b",
+        "mode": "0o644",
+        "bytes": 241
+      },
+      {
+        "path": "z-c-music/SKILL.md",
+        "sha256": "64edfd4e06f2ee2bcaff771353583abba746d957deadd640e96023ca769cc1a7",
+        "mode": "0o644",
+        "bytes": 233
+      },
+      {
+        "path": "z-d-travel/SKILL.md",
+        "sha256": "0d59ea1aab61f259f98ecf30cba977b33ff63257aa38044ad2a79a69ec596595",
+        "mode": "0o644",
+        "bytes": 233
+      },
+      {
+        "path": "z-e-poetry/SKILL.md",
+        "sha256": "f9977dad59742d1fcefa48e2487a223ba215a10c908c5bb700d7907580cda9fe",
+        "mode": "0o644",
+        "bytes": 234
+      },
+      {
+        "path": "z-f-language/SKILL.md",
+        "sha256": "002e0a8f7b4b4a89b97a3aace6042b87b35f5c876c1ca1b0571e0067cbd7d265",
+        "mode": "0o644",
+        "bytes": 251
+      },
+      {
+        "path": "z-g-fitness/SKILL.md",
+        "sha256": "fc1ec24017e79cfba2599e5d4607467c4fba72b9c28384864771fd996b081843",
+        "mode": "0o644",
+        "bytes": 244
+      },
+      {
+        "path": "z-h-astronomy/SKILL.md",
+        "sha256": "84214a7c852d5d140a41193d43ba5604809a5c7f6c278d7a65cf3c71a28c2b32",
+        "mode": "0o644",
+        "bytes": 254
+      }
+    ]
+  },
+  "contracts_sha256": "c78eb2079d45c130ec1df08cf32119d2e2f6a6238ebb28a0a830e7230fb620d6",
+  "catalog_sha256": "0bf1a25defb699411b382cdab26dea8ee5347f6f8ed8c1abaa747f9fd0ee0239",
+  "packages_index_sha256": "d910b27174aa0b073a6edfe536b796d2154633ef6042be97a943f167aa55c5ca",
+  "preparer_sha256": "26cb1eaa58baafa711f612d5528e4597fff5fa5849cde8875947a14afd3d410b"
+}

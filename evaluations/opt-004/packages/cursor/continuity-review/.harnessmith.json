@@ -1,0 +1,54 @@
+{
+  "compiler": {
+    "name": "harnessmith",
+    "version": "0.1.0"
+  },
+  "files": {
+    "SKILL.md": "cd0e35f4dd022298021ccc31fd09659d30a0b94b7a0bbf417283727999213c5e",
+    "references/procedure-examples.md": "7f062e51ea63f70fdfa2ea6f22aeb5bd768ee87c5f35752693a5a39a9e7800a0"
+  },
+  "metrics": {
+    "compiled_root_chars": 1240,
+    "compiled_root_token_estimate": 310,
+    "conditional_reference_chars": 0,
+    "conditional_reference_token_estimate": 0,
+    "mandatory_reference_chars": 468,
+    "mandatory_reference_token_estimate": 117,
+    "normal_path_instruction_chars": 1708,
+    "normal_path_instruction_token_estimate": 427,
+    "normal_path_reduction_percent": -26,
+    "packaged_instruction_chars": 1708,
+    "packaged_instruction_token_estimate": 427,
+    "reference_chars": 468,
+    "reference_token_estimate": 117,
+    "root_char_reduction": 118,
+    "root_reduction_percent": 9,
+    "script_chars": 0,
+    "script_token_estimate": 0,
+    "source_skill_chars": 1358,
+    "source_skill_token_estimate": 340
+  },
+  "recipe": {
+    "path": "evaluations/opt-004/recipes/continuity.cursor.json",
+    "sha256": "b39d0e5206c5514fa09335f3775edb6b342409c4fa88dfaecd03bcb8f6802b46"
+  },
+  "schema_version": 1,
+  "source": {
+    "path": "evaluations/opt-004/sources/continuity-review/SKILL.md",
+    "sha256": "a9e02d7b95992354e092899149f0594c5430bb4efa67fdbb38db5ac11db00e30"
+  },
+  "target": "cursor",
+  "transformations": [
+    {
+      "heading": "Procedure examples",
+      "output": "references/procedure-examples.md",
+      "section_id": "Procedure examples[1]",
+      "source_lines": [
+        18,
+        24
+      ],
+      "source_sha256": "e838197a0c130814f608cb9989458229be1ad4ca20ef227e76a057dfdd4cc891",
+      "type": "extract-section"
+    }
+  ]
+}

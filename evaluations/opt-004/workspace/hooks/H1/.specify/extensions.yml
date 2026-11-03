@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "after_checklist": [
+      {
+        "extension": "opt004-optional",
+        "command": "opt004.optional",
+        "description": "Synthetic optional fixture",
+        "optional": true,
+        "prompt": "Run this optional fixture hook?"
+      }
+    ]
+  }
+}

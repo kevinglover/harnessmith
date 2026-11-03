@@ -1,0 +1,61 @@
+{
+  "compiler": {
+    "name": "harnessmith",
+    "version": "0.1.0"
+  },
+  "files": {
+    "SKILL.md": "35c397628e60cb335ce9293dab49dfd34eb604388e1c76225c8160a26cc9fcbd",
+    "references/review-examples.md": "973c30126d838e6543664fb308e175b6464aab76efc073ab588132e2a8fbb7b7"
+  },
+  "metrics": {
+    "compiled_root_chars": 680,
+    "compiled_root_token_estimate": 170,
+    "conditional_reference_chars": 0,
+    "conditional_reference_token_estimate": 0,
+    "mandatory_reference_chars": 235,
+    "mandatory_reference_token_estimate": 59,
+    "normal_path_instruction_chars": 915,
+    "normal_path_instruction_token_estimate": 229,
+    "normal_path_reduction_percent": -46,
+    "packaged_instruction_chars": 915,
+    "packaged_instruction_token_estimate": 229,
+    "reference_chars": 235,
+    "reference_token_estimate": 59,
+    "root_char_reduction": -53,
+    "root_reduction_percent": -8,
+    "script_chars": 0,
+    "script_token_estimate": 0,
+    "source_skill_chars": 627,
+    "source_skill_token_estimate": 157
+  },
+  "recipe": {
+    "path": "evaluations/opt-004/recipes/explicit.cursor.json",
+    "sha256": "5e22e7494908708f55efdee26d1512b77a8e28569408984afec8919cbca8ee2a"
+  },
+  "schema_version": 1,
+  "source": {
+    "path": "evaluations/opt-004/sources/explicit-review/SKILL.md",
+    "sha256": "9dfead2322dd5c3d3aabc014393d5d56d62f823af1fe6f9c24c7e58bde3a7e20"
+  },
+  "target": "cursor",
+  "transformations": [
+    {
+      "dropped": [
+        "user-invocable"
+      ],
+      "reason": "not supported by target; defaults or presentation-only metadata preserved behavior",
+      "type": "frontmatter-filter"
+    },
+    {
+      "heading": "Review examples",
+      "output": "references/review-examples.md",
+      "section_id": "Review examples[1]",
+      "source_lines": [
+        13,
+        16
+      ],
+      "source_sha256": "1c238c6cfc7f5e81e0b8e41fde8f2c7342a720d29ff3103dc799eb797a3ea0a8",
+      "type": "extract-section"
+    }
+  ]
+}

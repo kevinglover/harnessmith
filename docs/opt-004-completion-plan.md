@@ -1,10 +1,12 @@
 # OPT-004 completion plan — 2026-11-02
 
-Status: **offline plan; implementation and live collection remain pending**.
+Status: **S1 offline preparation in progress; live collection remains pending**.
 The user chose to **keep the full scope and stage the work**, including live
 Codex, Claude and Cursor evidence. This plan authorizes **zero live sessions**.
-The completed v11 authorization is consumed. No collector, instrument, scenario,
-router, source skill or historical evidence changes as part of this plan.
+The completed v11 authorization is consumed. The original S0 planning task
+changed no collector, instrument, scenario, router, source skill or historical
+evidence. The later S1 implementation checkpoint below records additive offline
+work; it grants no live authorization and leaves historical instruments frozen.
 
 This is the prospective completion checklist. The dated entries in
 [OPT-004 status](opt-004-status.md) remain historical evidence. The latest
@@ -287,10 +289,69 @@ entry to the status ledger and link the audit. Preserve the dated history,
 including v11's 0/1. Completing this plan's evidence work would not promote the
 authored router, alter the original skill or change the leave-inline default.
 
-## Current task outcome
+## S0 planning outcome (historical)
 
 S0 is documented and the full-scope choice is recorded. S1–S7 are pending.
 This task produces the plan and navigation links only. It runs no new benchmark,
 preparation, provider session, hook, historical normalization or score calculation.
 The next implementation deliverable is **O1–O2: a capability inventory and exact
 prospective contracts**, followed by stage-specific offline qualification.
+
+## S1 implementation checkpoint — 2026-11-02
+
+The subsequent request to work on this plan begins its offline implementation.
+The [host inventory](opt-004-host-inventory.md) records local availability,
+official documentation, candidate controls, usage boundaries and unresolved
+access. The [Codex record](opt-004-codex-capability.md) pins the installed binary
+and selected generated protocol schemas. These are capability inputs, not live
+observations or qualified adapters.
+
+The [prospective case contracts](opt-004-case-contracts.md) now contain exact task
+prompts and per-turn reference expectations for all 19 cases, synthetic project
+and hook fixtures, the fixed 16-skill catalog and 11 actual compiler-generated
+packages. Source, recipe, package and fixture bytes/modes are pinned. The
+[additive native trajectory contract](opt-004-native-contract.md) represents
+approval/action causality, lifecycle identity, effective permission snapshots,
+task versus internal control turns, elapsed time and attributable usage. Old
+turn contracts and collectors remain unchanged.
+
+| Work | Current disposition | Remaining exit condition |
+| --- | --- | --- |
+| O1 | Offline inventory recorded; local Codex schema pinned; Claude/Cursor access and accounting gaps explicit. | Resolve version-specific surface, capability and usage questions needed by each stage. |
+| O2 | Fixture/package/case preparation and native event contract implemented; partial. | Qualify exact host bindings, permission enforcement, Codex D3 equal canonical policy and lifecycle accounting; resolve L5 timing. |
+| O3 | Partial: [November 3 retention foundation](opt-004-capture.md) tested with synthetic sources. | Native transports/normalizers, independent invocation attribution, permission/accounting bindings and durable stage scheduling remain open. |
+| O4 | Pending. | One bounded operation-verification design/qualification cycle with fresh controls. |
+| O5 | Structural synthetic tests and package-pin checks pass; full qualification pending. | Native fake-server controls, permission isolation, immutable stage manifest and independent instrument review. |
+| O6 | Pending. | Approved-stage reviews and final independent evidence audit. |
+
+The installed Codex CLI is `0.164.0-alpha.11.1`, a separate configuration from
+the historical `0.163.0-alpha.11.1` cohorts. Claude and Cursor installations were
+not found within the inventory's stated search boundaries; their versions and
+account access remain unverified. Resume/fork counter baselines and compaction
+usage attribution remain launch blockers wherever the inventory says unresolved.
+
+Claude L5 has an additional timing/surface conflict: the documented native idle
+compaction requires about an hour of inactivity on eligible interactive
+surfaces. It cannot fit this plan's 180-second whole-trajectory limit. L5 stays
+required and unobserved. Resolving it needs version-specific evidence that fits
+the current contract or an explicit plan revision; this checkpoint changes
+neither the deadline nor the retained scope. See the inventory's primary source.
+
+The prepared Codex D3 compiled package represents explicit-only policy in native
+metadata, while the unedited canonical fixture lacks that metadata. An equal
+host-level policy or an explicit treatment decision is still needed; compilation
+alone cannot close this comparability gap. Generic's explicit-only rejection is
+an offline control, never a live-host limitation finding.
+
+O1 documentation and O2 preparation do not close S1: new collectors, bounded
+workflow verification, qualification controls and independent instrument review
+are still required. S2–S7 remain pending. No new live attempts, fixture-hook
+executions, model judges or historical regrades have occurred in this checkpoint.
+
+Validation for this increment: 26 focused native-contract tests pass; the
+offline verifier regenerates all 11 compiled packages and checks source/recipe/
+fixture pins, the 16-entry catalog and unchanged 312/330/498 collection ceilings.
+Fresh changed-content, executable-mode, missing-file and extra-file controls
+are rejected. Repository schema/documentation checks and whitespace checks pass.
+These are preparation checks, not full O5 fake-server qualification. Ruff and
+mypy were unavailable in the inspected local environments and were not run.

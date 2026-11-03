@@ -1,0 +1,85 @@
+{
+  "compiler": {
+    "name": "harnessmith",
+    "version": "0.1.0"
+  },
+  "files": {
+    "SKILL.md": "6a714b28af33101d81bf76bad17b851aa51dbeb3ad677a0dd1b09256e72f9639",
+    "references/anti-examples-what-not-to-do.md": "f94e0ec7578b157dd8cf9c1fef30127a3df8af2fb890e99b91236b918f774e3c",
+    "references/example-checklist-types-sample-items.md": "598fe2e3641b3c9c5744098444224e65404451dc5af2520ac84c15df0118f95c"
+  },
+  "metrics": {
+    "compiled_root_chars": 20212,
+    "compiled_root_token_estimate": 5053,
+    "conditional_reference_chars": 3608,
+    "conditional_reference_token_estimate": 902,
+    "mandatory_reference_chars": 0,
+    "mandatory_reference_token_estimate": 0,
+    "normal_path_instruction_chars": 20212,
+    "normal_path_instruction_token_estimate": 5053,
+    "normal_path_reduction_percent": 11,
+    "packaged_instruction_chars": 23820,
+    "packaged_instruction_token_estimate": 5955,
+    "reference_chars": 3608,
+    "reference_token_estimate": 902,
+    "root_char_reduction": 2482,
+    "root_reduction_percent": 11,
+    "script_chars": 0,
+    "script_token_estimate": 0,
+    "source_skill_chars": 22694,
+    "source_skill_token_estimate": 5674
+  },
+  "recipe": {
+    "path": "evaluations/opt-004/recipes/checklist.generic.json",
+    "sha256": "bd792c6ed778b077a1b44b0e9ce314aba970e4f42b43218e1016458cb5ce8208"
+  },
+  "schema_version": 2,
+  "source": {
+    "path": "skills/speckit-checklist/SKILL.md",
+    "sha256": "1498921d8bfef7bb158a5dce91fac71bb7b5f2cdc64972c7e2f8d289baa10a45"
+  },
+  "target": "generic",
+  "transformations": [
+    {
+      "dropped": [
+        "argument-hint",
+        "user-invocable",
+        "disable-model-invocation"
+      ],
+      "reason": "not supported by target; defaults or presentation-only metadata preserved behavior",
+      "type": "frontmatter-filter"
+    },
+    {
+      "heading": "Example Checklist Types & Sample Items",
+      "load_policy": {
+        "optional": true,
+        "rationale": "Illustrative domain examples; the root already defines item structure, quality dimensions, traceability and reviewer ownership.",
+        "when": "The user requests sample checklist questions or examples from this section, or the core requirements-quality rules are insufficient to construct the requested items."
+      },
+      "output": "references/example-checklist-types-sample-items.md",
+      "section_id": "Example Checklist Types & Sample Items[1]",
+      "source_lines": [
+        284,
+        326
+      ],
+      "source_sha256": "92360cdc82f8a220b2d72d266bdd14200806b254f9194f74f88f279fa8fea82c",
+      "type": "extract-section"
+    },
+    {
+      "heading": "Anti-Examples: What NOT To Do",
+      "load_policy": {
+        "optional": true,
+        "rationale": "Illustrative wrong/right pairs; the root already prohibits implementation testing and states the required question patterns.",
+        "when": "The user requests this section or its examples, or asks to compare or correct implementation-test wording into requirements-quality questions."
+      },
+      "output": "references/anti-examples-what-not-to-do.md",
+      "section_id": "Anti-Examples: What NOT To Do[1]",
+      "source_lines": [
+        327,
+        357
+      ],
+      "source_sha256": "166c0e94e3d7ee41a3744e3cd89273cfb8c1bd727525fd6fabfc8219a3371704",
+      "type": "extract-section"
+    }
+  ]
+}

@@ -1,5 +1,29 @@
 # OPT-004 evidence and remaining acceptance work
 
+Offline implementation update, 2026-11-03: O3 now has an additive
+[durable capture foundation](opt-004-capture.md), with raw-before-decoding
+retention, exclusive per-attempt journals, before/after workspace snapshots,
+typed partial results and read-only crash recovery. All 38 focused capture and
+native-contract tests pass, as does the existing package/contract verifier.
+This is synthetic qualification only; native transports, invocation attribution,
+permission/accounting bindings and stage scheduling remain open. O3 is partial,
+S1 is not complete, and this increment launches zero live attempts.
+
+Offline implementation update, 2026-11-02: S1 has begun with the
+[prospective host inventory](opt-004-host-inventory.md) and a
+[pinned Codex capability record](opt-004-codex-capability.md). The
+[case preparation](opt-004-case-contracts.md) adds 19 prospective contracts,
+16 catalog entries, 11 pinned compiler packages and synthetic fixtures. A new
+[native event contract](opt-004-native-contract.md) has focused synthetic
+integrity/usage controls; it is not a live collector. O2 remains partial. The inventory
+separates documented controls from runtime qualification, records missing local
+Claude/Cursor installations within explicit search boundaries, and identifies
+the Claude L5 idle-time conflict with the 180-second trajectory limit. All
+required cells remain retained; S1 qualification and live stages remain open.
+This update authorizes and consumes zero live attempts. Historical instruments,
+cohorts and v11's frozen 0/1 are unchanged. See the
+[current implementation checkpoint](opt-004-completion-plan.md#s1-implementation-checkpoint--2026-11-02).
+
 Planning update, 2026-11-02: the user chose to retain the full Codex/Claude/Cursor
 scope and stage the remaining work. The [completion plan](opt-004-completion-plan.md)
 defines a finite acceptance matrix, separates evidence completeness from behavior
